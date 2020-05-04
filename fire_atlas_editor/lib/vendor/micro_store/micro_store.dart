@@ -3,6 +3,8 @@ import 'package:flutter/widgets.dart';
 class MicroStore<T> {
   T state;
 
+  MicroStore(this.state);
+
   List<void Function(MicroStore<T>)> _listeners = [];
 
   void listen(void Function(MicroStore<T>) listener) {
@@ -13,10 +15,14 @@ class MicroStore<T> {
     _listeners.remove(listener);
   }
 
-  void setState(T Function(T) fn) {
-    state = fn(state);
+  void dispatch(MicroStoreAction<T> action) {
+    state = action.perform(state);
     _listeners.forEach((l) => l.call(this));
   }
+}
+
+abstract class MicroStoreAction<T> {
+  T perform(T state);
 }
 
 class MicroStoreProvider<T> extends StatefulWidget {

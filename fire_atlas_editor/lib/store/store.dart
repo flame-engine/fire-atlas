@@ -5,5 +5,6 @@ class FireAtlasState {
   FireAtlas currentAtlas;
 }
 
-final store = MicroStore<FireAtlasState>();
-
+class Store {
+  static MicroStore<FireAtlasState> instance;
+}

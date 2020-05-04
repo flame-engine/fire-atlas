@@ -8,6 +8,8 @@ import '../../../widgets/container.dart';
 class Toolbar extends StatelessWidget {
   @override
   Widget build(_) {
+    final store = Store.instance;
+
     return MicroStoreProvider(
         store: store,
         child: FContainer(

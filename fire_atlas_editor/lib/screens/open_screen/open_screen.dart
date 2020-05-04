@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../vendor/micro_store/micro_store.dart';
 import '../../store/store.dart';
-import '../../models/fire_atlas.dart';
+import '../../store/actions/atlas_actions.dart';
 
 import './widgets/atlas_options_container.dart';
 
@@ -41,15 +41,13 @@ class _OpenScreenState extends State<OpenScreen> {
               _showCreateAtlasModal = false;
             });
 
-            store.setState((_) {
-              final atlas = FireAtlas()
-                  ..id = atlasName
-                  ..imageData = imageData
-                  ..tileSize = tileSize;
-
-              return FireAtlasState()
-                  ..currentAtlas = atlas;
-            });
+            Store.instance.dispatch(
+                SetAtlasAction(
+                    id: atlasName,
+                    imageData: imageData,
+                    tileSize: tileSize,
+                ),
+            );
           },
           onCancel: () {
             setState(() {
@@ -61,7 +59,7 @@ class _OpenScreenState extends State<OpenScreen> {
 
     return Scaffold(
         body: MicroStoreProvider(
-            store: store,
+            store: Store.instance,
             child: Stack(children: children),
         )
     );
