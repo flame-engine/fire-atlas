@@ -1,5 +1,5 @@
-name: flame_texture_atlas_editor
-description: Editor to create Flame texture atlas
+name: fire_atlas_editor
+description: Editor to create Fire atlas textures
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 

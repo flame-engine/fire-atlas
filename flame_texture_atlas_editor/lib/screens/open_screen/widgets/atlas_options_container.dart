@@ -8,6 +8,14 @@ import 'dart:ui';
 import '../../../widgets/simple_sprite_widget.dart';
 
 class AtlasOptionsContainer extends StatefulWidget {
+  final void Function() onCancel;
+  final Function(String, int, String) onConfirm;
+
+  AtlasOptionsContainer({
+    this.onCancel,
+    this.onConfirm,
+  });
+
   @override
   State createState() => _AtlaOptionsContainerState();
 }
@@ -62,9 +70,12 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
 
       return;
     }
+
+    widget.onConfirm(atlasName, int.parse(tileSizeRaw), _imageData);
   }
 
   void _cancel() {
+    widget.onCancel();
   }
 
   @override

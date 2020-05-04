@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../vendor/micro_store/micro_store.dart';
+import '../../store/store.dart';
+import '../../models/fire_atlas.dart';
+
 import './widgets/atlas_options_container.dart';
 
 class OpenScreen extends StatefulWidget {
@@ -30,11 +34,36 @@ class _OpenScreenState extends State<OpenScreen> {
     );
 
     if (_showCreateAtlasModal) {
-      children.add(Center(child: AtlasOptionsContainer()));
+      children.add(Center(child: AtlasOptionsContainer(
+          onConfirm: (String atlasName, int tileSize, String imageData) {
+            Navigator.of(context).pushNamed('/editor');
+            setState(() {
+              _showCreateAtlasModal = false;
+            });
+
+            store.setState((_) {
+              final atlas = FireAtlas()
+                  ..id = atlasName
+                  ..imageData = imageData
+                  ..tileSize = tileSize;
+
+              return FireAtlasState()
+                  ..currentAtlas = atlas;
+            });
+          },
+          onCancel: () {
+            setState(() {
+              _showCreateAtlasModal = false;
+            });
+          },
+      )));
     }
 
     return Scaffold(
-        body: Stack(children: children),
+        body: MicroStoreProvider(
+            store: store,
+            child: Stack(children: children),
+        )
     );
   }
 }
