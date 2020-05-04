@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
+import '../../../widgets/container.dart';
 
 class SelectionCanvas extends StatelessWidget {
   @override
   Widget build(_) {
-    return Container(color: Color(0xFFF00FFF));
+    return FContainer();
   }
 }

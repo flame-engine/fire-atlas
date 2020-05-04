@@ -1,9 +1,10 @@
-
 import 'package:flutter/material.dart';
+
+import '../../../widgets/container.dart';
 
 class SelectionList extends StatelessWidget {
   @override
   Widget build(_) {
-    return Container(color: Color(0xFFFFFF00));
+    return FContainer();
   }
 }

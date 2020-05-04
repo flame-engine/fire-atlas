@@ -9,34 +9,36 @@ class EditorScreen extends StatelessWidget {
   @override
   Widget build(_) {
     return Scaffold(
-        body: Column(
+        body: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Toolbar(),
-
               // Body
               Expanded(
-                  child: Row(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        Toolbar(),
                         Expanded(
                             child: SelectionCanvas(),
                         ),
-                        Container(
-                            width: 400,
-                            child: Column(
-                                children: [
-                                  Expanded(
-                                      child: Preview(),
-                                  ),
-                                  Expanded(
-                                      child: SelectionList(),
-                                  ),
-                                ],
-                            ),
+                      ],
+                  ),
+              ),
+              Container(
+                  width: 400,
+                  child: Column(
+                      children: [
+                        Expanded(
+                            flex: 4,
+                            child: Preview(),
+                        ),
+                        Expanded(
+                            flex: 6,
+                            child: SelectionList(),
                         ),
                       ],
                   ),
-              )
+              ),
             ],
         ),
     );
