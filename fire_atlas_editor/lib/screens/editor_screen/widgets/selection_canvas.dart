@@ -22,7 +22,15 @@ class SelectionCanvas extends StatelessWidget {
           if (snapshot.hasData) {
             return MicroStoreProvider(
                 store: store,
-                child: _CanvasBoard(sprite: Sprite.fromImage(snapshot.data)),
+                child: LayoutBuilder(
+                    builder: (ctx, constraints) {
+                      final size = Size(constraints.maxWidth, constraints.maxHeight);
+                      return _CanvasBoard(
+                          sprite: Sprite.fromImage(snapshot.data),
+                          size: size,
+                      );
+                    },
+                ),
             );
           } else if (snapshot.hasError) {
             return Text('Something wrong happened :(');
@@ -33,24 +41,90 @@ class SelectionCanvas extends StatelessWidget {
   }
 }
 
+enum CanvasTools {
+  SELECTION,
+  MOVE,
+}
+
+class _ToolButton extends StatelessWidget {
+
+  final bool selected;
+  final String label;
+  final void Function() onSelect;
+
+  _ToolButton({
+    this.selected = false,
+    this.label,
+    this.onSelect,
+  });
+
+  @override
+  Widget build(ctx) {
+    final theme = Theme.of(ctx);
+
+    return GestureDetector(
+        onTap: onSelect,
+        child: Container(
+            child: Text(label),
+            padding: EdgeInsets.all(10),
+            margin: EdgeInsets.all(5),
+            color: selected ? theme.primaryColor : theme.buttonColor,
+        ),
+    );
+  }
+}
+
 class _CanvasBoard extends StatefulWidget {
   Sprite sprite;
+  Size size;
 
-  _CanvasBoard({ this.sprite });
+  _CanvasBoard({ this.sprite, this.size });
 
   @override
   State createState() => _CanvasBoardState();
 }
 
-enum CanvasTools {
-  SELECTION,
-  MOVE,
-  SCALE_UP,
-  SCALE_DOWN,
-}
-
 class _CanvasBoardState extends State<_CanvasBoard> {
-  CanvasTools _currentTool = CanvasTools.SELECTION;
+  CanvasTools _currentTool = CanvasTools.MOVE;
+
+  Offset _dragStart = Offset.zero;
+  Offset _lastDrag = Offset.zero;
+
+  double _translateX = 0.0;
+  double _translateY = 0.0;
+
+  double _scale = 1.0;
+
+  void _handleMove(double x, double y) {
+    if (_currentTool == CanvasTools.MOVE) {
+      _translateX += x;
+      _translateY += y;
+    }
+  }
+
+  void _zoomIn() {
+    setState(() {
+      _scale += 0.2;
+    });
+  }
+
+  void _zoomOut() {
+    setState(() {
+      _scale -= 0.2;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scale = (widget.size.width - 200) / widget.sprite.size.x;
+
+    final middleX = widget.size.width / 2;
+
+    _translateX = middleX - (widget.sprite.size.x * _scale) / 2;
+    _translateY = 100;
+  }
 
   @override
   Widget build(ctx) {
@@ -59,22 +133,57 @@ class _CanvasBoardState extends State<_CanvasBoard> {
         children: [
           Row(
               children: [
-                GestureDetector(
-                    onTap: () {
-                      setState(() => _currentTool = CanvasTools.SELECTION);
-                    },
-                    child: Text('Selection'),
+                _ToolButton(
+                    onSelect: () =>  setState(() => _currentTool = CanvasTools.MOVE),
+                    label: 'Move',
+                    selected: _currentTool == CanvasTools.MOVE
                 ),
-                GestureDetector(
-                    onTap: () {
-                      setState(() => _currentTool = CanvasTools.MOVE);
-                    },
-                    child: Text('Move'),
+                _ToolButton(
+                    onSelect: () =>  setState(() => _currentTool = CanvasTools.SELECTION),
+                    label: 'Selection',
+                    selected: _currentTool == CanvasTools.SELECTION
+                ),
+                _ToolButton(
+                    onSelect: _zoomIn,
+                    label: 'Zoom In',
+                ),
+                _ToolButton(
+                    onSelect: _zoomOut,
+                    label: 'Zoom Out',
                 ),
               ],
           ),
           Expanded(
-              child: _CanvasSprite(sprite: widget.sprite),
+              child: GestureDetector(
+                  child: ClipRect(
+                      child: _CanvasSprite(
+                          sprite: widget.sprite,
+                          translateX: _translateX,
+                          translateY: _translateY,
+                          scale: _scale,
+                      ),
+                  ),
+                  onPanStart: (details) {
+                    setState(() {
+                      _lastDrag = _dragStart = details.localPosition;
+                    });
+                  },
+                  onPanUpdate: (details) {
+                    setState(() {
+                      final x = details.localPosition.dx - _lastDrag.dx;
+                      final y = details.localPosition.dy - _lastDrag.dy;
+
+                      _handleMove(x, y);
+
+                      _lastDrag = details.localPosition;
+                    });
+                  },
+                  onPanEnd: (details) {
+                    setState(() {
+                      _lastDrag = _dragStart = null;
+                    });
+                  },
+              ),
           ),
         ],
     );
@@ -83,40 +192,56 @@ class _CanvasBoardState extends State<_CanvasBoard> {
 
 class _CanvasSprite extends StatelessWidget {
   final Sprite sprite;
+  final double translateX;
+  final double translateY;
+  final double scale;
 
-  _CanvasSprite({ this.sprite });
+  _CanvasSprite({ this.sprite, this.translateX, this.translateY, this.scale });
 
   @override
   Widget build(_) {
     return Container(
-        child: CustomPaint(painter: _CanvasSpritePainer(sprite)),
+        child: CustomPaint(painter: _CanvasSpritePainer(
+            sprite,
+            translateX,
+            translateY,
+            scale,
+        )),
     );
   }
 }
 
 class _CanvasSpritePainer extends CustomPainter {
   final Sprite _sprite;
+  final double _x;
+  final double _y;
+  final double _scale;
 
-  _CanvasSpritePainer(this._sprite);
+  _CanvasSpritePainer(this._sprite, this._x, this._y, this._scale);
 
   @override
-  bool shouldRepaint(_CanvasSpritePainer old) => old._sprite != _sprite;
+  bool shouldRepaint(_CanvasSpritePainer old) => 
+    old._sprite != _sprite ||
+    old._x != _x ||
+    old._y != _y ||
+    old._scale != _scale;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final widthRate = size.width / _sprite.size.x;
-    final heightRate = size.height / _sprite.size.y;
-
-    final rate = min(widthRate, heightRate);
+    canvas.save();
+    canvas.translate(_x, _y);
+    canvas.scale(_scale, _scale);
 
     _sprite.renderRect(
         canvas,
         Rect.fromLTWH(
             0,
             0,
-            _sprite.size.x * rate,
-            _sprite.size.y * rate,
+            _sprite.size.x,
+            _sprite.size.y,
         )
     );
+
+    canvas.restore();
   }
 }
