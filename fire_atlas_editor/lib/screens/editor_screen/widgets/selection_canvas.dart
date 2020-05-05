@@ -27,6 +27,7 @@ class SelectionCanvas extends StatelessWidget {
                       final size = Size(constraints.maxWidth, constraints.maxHeight);
                       return _CanvasBoard(
                           sprite: Sprite.fromImage(snapshot.data),
+                          tileSize: store.state.currentAtlas.tileSize,
                           size: size,
                       );
                     },
@@ -75,10 +76,11 @@ class _ToolButton extends StatelessWidget {
 }
 
 class _CanvasBoard extends StatefulWidget {
-  Sprite sprite;
-  Size size;
+  final Sprite sprite;
+  final Size size;
+  final int tileSize;
 
-  _CanvasBoard({ this.sprite, this.size });
+  _CanvasBoard({ this.sprite, this.size, this.tileSize });
 
   @override
   State createState() => _CanvasBoardState();
@@ -86,6 +88,9 @@ class _CanvasBoard extends StatefulWidget {
 
 class _CanvasBoardState extends State<_CanvasBoard> {
   CanvasTools _currentTool = CanvasTools.MOVE;
+
+  Offset _selectionStart = null;
+  Offset _selectionEnd = null;
 
   Offset _dragStart = Offset.zero;
   Offset _lastDrag = Offset.zero;
@@ -95,11 +100,43 @@ class _CanvasBoardState extends State<_CanvasBoard> {
 
   double _scale = 1.0;
 
-  void _handleMove(double x, double y) {
-    if (_currentTool == CanvasTools.MOVE) {
-      _translateX += x;
-      _translateY += y;
-    }
+  void _handleMove(DragUpdateDetails details) {
+    setState(() {
+      final x = details.localPosition.dx - _lastDrag.dx;
+      final y = details.localPosition.dy - _lastDrag.dy;
+
+      if (_currentTool == CanvasTools.MOVE) {
+        _translateX += x;
+        _translateY += y;
+      }
+
+      _lastDrag = details.localPosition;
+    });
+  }
+
+  Offset _calculateIndexClick(Offset offset) {
+    final int x = ((offset.dx - _translateX) /  (widget.tileSize * _scale)).floor();
+    final int y = ((offset.dy - _translateY) /  (widget.tileSize * _scale)).floor();
+
+    return Offset(x.toDouble(), y.toDouble());
+  }
+
+  void _handleMoveEnd() {
+    setState(() {
+      if (_currentTool == CanvasTools.MOVE) {
+        _lastDrag = _dragStart = null;
+      }
+    });
+  }
+
+  void _handleMoveStart(DragStartDetails details) {
+    setState(() {
+      _lastDrag = _dragStart = details.localPosition;
+
+      if (_currentTool == CanvasTools.SELECTION) {
+        print(_calculateIndexClick(_dragStart));
+      }
+    });
   }
 
   void _zoomIn() {
@@ -161,27 +198,19 @@ class _CanvasBoardState extends State<_CanvasBoard> {
                           translateX: _translateX,
                           translateY: _translateY,
                           scale: _scale,
+                          tileSize: widget.tileSize,
+                          selectionStart: _selectionStart,
+                          selectionEnd: _selectionEnd,
                       ),
                   ),
                   onPanStart: (details) {
-                    setState(() {
-                      _lastDrag = _dragStart = details.localPosition;
-                    });
+                    _handleMoveStart(details);
                   },
                   onPanUpdate: (details) {
-                    setState(() {
-                      final x = details.localPosition.dx - _lastDrag.dx;
-                      final y = details.localPosition.dy - _lastDrag.dy;
-
-                      _handleMove(x, y);
-
-                      _lastDrag = details.localPosition;
-                    });
+                    _handleMove(details);
                   },
                   onPanEnd: (details) {
-                    setState(() {
-                      _lastDrag = _dragStart = null;
-                    });
+                    _handleMoveEnd();
                   },
               ),
           ),
@@ -195,17 +224,33 @@ class _CanvasSprite extends StatelessWidget {
   final double translateX;
   final double translateY;
   final double scale;
+  final int tileSize;
+  final Offset selectionStart;
+  final Offset selectionEnd;
 
-  _CanvasSprite({ this.sprite, this.translateX, this.translateY, this.scale });
+  _CanvasSprite({
+    this.sprite,
+    this.translateX,
+    this.translateY,
+    this.scale,
+    this.tileSize,
+    this.selectionStart,
+    this.selectionEnd,
+  });
 
   @override
-  Widget build(_) {
+  Widget build(ctx) {
     return Container(
         child: CustomPaint(painter: _CanvasSpritePainer(
             sprite,
             translateX,
             translateY,
             scale,
+            tileSize,
+            selectionStart,
+            selectionEnd,
+
+            Theme.of(ctx).primaryColor,
         )),
     );
   }
@@ -216,15 +261,33 @@ class _CanvasSpritePainer extends CustomPainter {
   final double _x;
   final double _y;
   final double _scale;
+  final int _tileSize;
+  final Offset _selectionStart;
+  final Offset _selectionEnd;
 
-  _CanvasSpritePainer(this._sprite, this._x, this._y, this._scale);
+  Color _selectionColor;
+
+  _CanvasSpritePainer(
+      this._sprite,
+      this._x,
+      this._y,
+      this._scale,
+
+      this._tileSize,
+
+      this._selectionStart,
+      this._selectionEnd,
+      this._selectionColor,
+  );
 
   @override
   bool shouldRepaint(_CanvasSpritePainer old) => 
     old._sprite != _sprite ||
     old._x != _x ||
     old._y != _y ||
-    old._scale != _scale;
+    old._scale != _scale ||
+    old._selectionStart != _selectionStart ||
+    old._selectionEnd != _selectionEnd;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -241,6 +304,21 @@ class _CanvasSpritePainer extends CustomPainter {
             _sprite.size.y,
         )
     );
+
+    if (_selectionStart != null && _selectionEnd != null) {
+      canvas.drawRect(
+          Rect.fromLTWH(
+              (_selectionStart.dx * _tileSize),
+              (_selectionStart.dy * _tileSize),
+              (_selectionEnd.dx * _tileSize),
+              (_selectionEnd.dy * _tileSize),
+          ),
+          Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 1
+            ..color = _selectionColor,
+      );
+    }
 
     canvas.restore();
   }
