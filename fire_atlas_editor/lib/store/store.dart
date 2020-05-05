@@ -3,6 +3,7 @@ import '../models/fire_atlas.dart';
 
 class FireAtlasState {
   FireAtlas currentAtlas;
+  Selection selectedSelection;
 }
 
 class Store {

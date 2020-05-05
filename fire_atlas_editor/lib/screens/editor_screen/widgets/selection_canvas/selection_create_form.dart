@@ -88,14 +88,17 @@ class _SelectionCreateFormState extends State<SelectionCreateForm> {
               onSelect: () {
 
                 if (selectionNameController.text.isNotEmpty) {
+                  final w = (widget.selectionEnd.dx - widget.selectionStart.dx).toInt();
+                  final h = (widget.selectionEnd.dy - widget.selectionStart.dy).toInt();
+
                   Store.instance.dispatch(
                       AddSelectionAction(
                           selection: SpriteSelection()
                           ..id = selectionNameController.text 
                           ..x = widget.selectionStart.dx.toInt()
                           ..y = widget.selectionStart.dy.toInt()
-                          ..w = (widget.selectionEnd.dx - widget.selectionStart.dx).toInt()
-                          ..h = (widget.selectionEnd.dy - widget.selectionStart.dy).toInt()
+                          ..w = w
+                          ..h = h
                       )
                   );
 
