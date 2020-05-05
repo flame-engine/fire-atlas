@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './widgets/toolbar.dart';
-import './widgets/selection_canvas.dart';
+import './widgets/selection_canvas/selection_canvas.dart';
 import './widgets/selection_list.dart';
 import './widgets/preview.dart';
 

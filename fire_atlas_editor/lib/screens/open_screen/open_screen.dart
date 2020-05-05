@@ -60,7 +60,7 @@ class _OpenScreenState extends State<OpenScreen> {
     return Scaffold(
         body: MicroStoreProvider(
             store: Store.instance,
-            child: Stack(children: children),
+            builder: (ctx, store) => Stack(children: children),
         )
     );
   }

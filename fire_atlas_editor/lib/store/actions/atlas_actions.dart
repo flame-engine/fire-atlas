@@ -27,3 +27,19 @@ class SetAtlasAction extends MicroStoreAction<FireAtlasState> {
     return state;
   }
 }
+
+class AddSelectionAction extends MicroStoreAction<FireAtlasState> {
+
+  Selection selection;
+
+  AddSelectionAction({
+    @required this.selection,
+  });
+
+  @override
+  FireAtlasState perform(FireAtlasState state) {
+    state.currentAtlas.selections.add(selection);
+
+    return state;
+  }
+}

@@ -27,12 +27,12 @@ abstract class MicroStoreAction<T> {
 
 class MicroStoreProvider<T> extends StatefulWidget {
   final MicroStore<T> store;
-  final Widget child;
+  final Widget Function(BuildContext, MicroStore<T>) builder;
 
   MicroStoreProvider({
     Key key,
     this.store,
-    this.child,
+    this.builder,
   }): super(key: key);
 
   @override
@@ -63,5 +63,5 @@ class _MicroStoreProviderState<T> extends State<MicroStoreProvider<T>> {
   }
 
   @override
-  Widget build(context) => widget.child;
+  Widget build(context) => widget.builder(context, widget.store);
 }
