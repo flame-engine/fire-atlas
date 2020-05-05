@@ -87,7 +87,7 @@ class _CanvasBoard extends StatefulWidget {
 }
 
 class _CanvasBoardState extends State<_CanvasBoard> {
-  CanvasTools _currentTool = CanvasTools.MOVE;
+  CanvasTools _currentTool = CanvasTools.SELECTION;
 
   Offset _selectionStart = null;
   Offset _selectionEnd = null;
@@ -100,6 +100,13 @@ class _CanvasBoardState extends State<_CanvasBoard> {
 
   double _scale = 1.0;
 
+  Offset _calculateIndexClick(Offset offset) {
+    final int x = ((offset.dx - _translateX) /  (widget.tileSize * _scale)).floor();
+    final int y = ((offset.dy - _translateY) /  (widget.tileSize * _scale)).floor();
+
+    return Offset(x.toDouble(), y.toDouble());
+  }
+
   void _handleMove(DragUpdateDetails details) {
     setState(() {
       final x = details.localPosition.dx - _lastDrag.dx;
@@ -108,24 +115,20 @@ class _CanvasBoardState extends State<_CanvasBoard> {
       if (_currentTool == CanvasTools.MOVE) {
         _translateX += x;
         _translateY += y;
+      } else if (_currentTool == CanvasTools.SELECTION) {
+        _selectionEnd = _calculateIndexClick(details.localPosition);
       }
 
       _lastDrag = details.localPosition;
     });
   }
 
-  Offset _calculateIndexClick(Offset offset) {
-    final int x = ((offset.dx - _translateX) /  (widget.tileSize * _scale)).floor();
-    final int y = ((offset.dy - _translateY) /  (widget.tileSize * _scale)).floor();
-
-    return Offset(x.toDouble(), y.toDouble());
-  }
-
   void _handleMoveEnd() {
     setState(() {
-      if (_currentTool == CanvasTools.MOVE) {
-        _lastDrag = _dragStart = null;
+      if (_currentTool == CanvasTools.SELECTION) {
+        _selectionEnd = _calculateIndexClick(_lastDrag);
       }
+      _lastDrag = _dragStart = null;
     });
   }
 
@@ -134,7 +137,8 @@ class _CanvasBoardState extends State<_CanvasBoard> {
       _lastDrag = _dragStart = details.localPosition;
 
       if (_currentTool == CanvasTools.SELECTION) {
-        print(_calculateIndexClick(_dragStart));
+        _selectionStart = _calculateIndexClick(_dragStart);
+        _selectionEnd = _selectionStart;
       }
     });
   }
@@ -171,14 +175,14 @@ class _CanvasBoardState extends State<_CanvasBoard> {
           Row(
               children: [
                 _ToolButton(
-                    onSelect: () =>  setState(() => _currentTool = CanvasTools.MOVE),
-                    label: 'Move',
-                    selected: _currentTool == CanvasTools.MOVE
-                ),
-                _ToolButton(
                     onSelect: () =>  setState(() => _currentTool = CanvasTools.SELECTION),
                     label: 'Selection',
                     selected: _currentTool == CanvasTools.SELECTION
+                ),
+                _ToolButton(
+                    onSelect: () =>  setState(() => _currentTool = CanvasTools.MOVE),
+                    label: 'Move',
+                    selected: _currentTool == CanvasTools.MOVE
                 ),
                 _ToolButton(
                     onSelect: _zoomIn,
@@ -281,7 +285,7 @@ class _CanvasSpritePainer extends CustomPainter {
   );
 
   @override
-  bool shouldRepaint(_CanvasSpritePainer old) => 
+  bool shouldRepaint(_CanvasSpritePainer old) =>
     old._sprite != _sprite ||
     old._x != _x ||
     old._y != _y ||
@@ -306,12 +310,13 @@ class _CanvasSpritePainer extends CustomPainter {
     );
 
     if (_selectionStart != null && _selectionEnd != null) {
+      final size = _selectionEnd - _selectionStart + Offset(1, 1);
       canvas.drawRect(
           Rect.fromLTWH(
               (_selectionStart.dx * _tileSize),
               (_selectionStart.dy * _tileSize),
-              (_selectionEnd.dx * _tileSize),
-              (_selectionEnd.dy * _tileSize),
+              (size.dx * _tileSize),
+              (size.dy * _tileSize),
           ),
           Paint()
             ..style = PaintingStyle.stroke
