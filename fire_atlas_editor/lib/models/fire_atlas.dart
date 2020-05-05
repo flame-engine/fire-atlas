@@ -1,8 +1,6 @@
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 
-import 'dart:math';
-
 abstract class Selection {
   String id;
   int x;
@@ -37,8 +35,8 @@ class FireAtlas {
         image,
         x: selection.x.toDouble() * tileSize,
         y: selection.y.toDouble() * tileSize,
-        width: max(1, selection.w.toDouble()) * tileSize,
-        height: max(1, selection.h.toDouble()) * tileSize,
+        width: (1 + selection.w.toDouble()) * tileSize,
+        height:(1 + selection.h.toDouble()) * tileSize,
     );
   }
 }
