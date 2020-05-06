@@ -37,6 +37,8 @@ class CanvasBoardState extends State<CanvasBoard> {
 
   double _scale = 1.0;
 
+  bool _showCreateSelection = false;
+
   Offset _calculateIndexClick(Offset offset) {
     final int x = ((offset.dx - _translateX) /  (widget.tileSize * _scale)).floor();
     final int y = ((offset.dy - _translateY) /  (widget.tileSize * _scale)).floor();
@@ -106,22 +108,18 @@ class CanvasBoardState extends State<CanvasBoard> {
 
   void _createItem() {
     if (_selectionStart != null && _selectionEnd != null) {
-      showModalBottomSheet(
-          context: context,
-          isDismissible: true,
-          builder: (builder) {
-            return SelectionCreateForm(
-                selectionStart: _selectionStart,
-                selectionEnd: _selectionEnd,
-            );
-          }
-      );
+      setState(() {
+        _showCreateSelection = true;
+      });
     }
   }
 
   @override
   Widget build(ctx) {
-    return Column(
+    List<Widget> children = [];
+
+    children.add(
+      Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
@@ -175,6 +173,25 @@ class CanvasBoardState extends State<CanvasBoard> {
               ),
           ),
         ],
+      ),
     );
+
+    if (_showCreateSelection) {
+      children.add(
+          Center(
+              child: SelectionCreateForm(
+                  selectionStart: _selectionStart,
+                  selectionEnd: _selectionEnd,
+                  onComplete: () {
+                    setState(() {
+                      _showCreateSelection = false;
+                    });
+                  }
+              ),
+          )
+      );
+    }
+
+    return Stack(children: children);
   }
 }

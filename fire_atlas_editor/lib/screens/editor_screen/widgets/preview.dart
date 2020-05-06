@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../widgets/container.dart';
 import '../../../widgets/simple_sprite_widget.dart';
+import '../../../widgets/simple_animation_widget.dart';
 
 import '../../../vendor/micro_store/micro_store.dart';
 import '../../../store/store.dart';
@@ -21,6 +22,11 @@ class Preview extends StatelessWidget {
               child = SimpleSpriteLoaderWidget(
                   center: true,
                   future: store.state.currentAtlas.getSprite(store.state.selectedSelection.id)
+              );
+            } else if (store.state.selectedSelection is AnimationSelection) {
+              child = SimpleAnimationLoaderWidget(
+                  center: true,
+                  future: store.state.currentAtlas.getAnimation(store.state.selectedSelection.id)
               );
             }
           }

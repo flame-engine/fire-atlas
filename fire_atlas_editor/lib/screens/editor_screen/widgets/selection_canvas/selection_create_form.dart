@@ -11,10 +11,12 @@ import '../../../../models/fire_atlas.dart';
 class SelectionCreateForm extends StatefulWidget {
   final Offset selectionStart;
   final Offset selectionEnd;
+  final VoidCallback onComplete;
 
   SelectionCreateForm({
     @required this.selectionStart,
     @required this.selectionEnd,
+    @required this.onComplete,
   });
 
   @override
@@ -31,11 +33,25 @@ class _SelectionCreateFormState extends State<SelectionCreateForm> {
   SelectionType _selectionType;
 
   final selectionNameController = TextEditingController();
+  final frameCountController = TextEditingController();
+  final stepTimeController = TextEditingController();
 
   void _chooseSelectionType(SelectionType _type) {
     setState(() {
       _selectionType = _type;
     });
+  }
+
+  T _fillSelectionBaseValues <T extends Selection> (T selection) {
+    final w = (widget.selectionEnd.dx - widget.selectionStart.dx).toInt();
+    final h = (widget.selectionEnd.dy - widget.selectionStart.dy).toInt();
+
+    return selection
+        ..id = selectionNameController.text 
+        ..x = widget.selectionStart.dx.toInt()
+        ..y = widget.selectionStart.dy.toInt()
+        ..w = w
+        ..h = h;
   }
 
   @override
@@ -47,18 +63,23 @@ class _SelectionCreateFormState extends State<SelectionCreateForm> {
         ..add(Text('Create new selection item'));
 
     children
-        ..add(SizedBox(height: 50))
-        ..add(Text('Selection name:'))
-        ..add(Divider())
-        ..add(Container(
-              width: 200,
-              child: TextField(controller: selectionNameController)
-        ));
+        ..add(SizedBox(height: 20))
+        ..add(
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Selection name:'),
+                  Container(
+                      width: 200,
+                      child: TextField(controller: selectionNameController)
+                  )
+                ]
+            )
+        );
 
     children
         ..add(SizedBox(height: 50))
-        ..add(Text('Selection type'))
-        ..add(Divider());
+        ..add(Text('Selection type'));
 
     children.add(
         Container(
@@ -88,21 +109,68 @@ class _SelectionCreateFormState extends State<SelectionCreateForm> {
               onSelect: () {
 
                 if (selectionNameController.text.isNotEmpty) {
-                  final w = (widget.selectionEnd.dx - widget.selectionStart.dx).toInt();
-                  final h = (widget.selectionEnd.dy - widget.selectionStart.dy).toInt();
-
                   Store.instance.dispatch(
                       AddSelectionAction(
-                          selection: SpriteSelection()
-                          ..id = selectionNameController.text 
-                          ..x = widget.selectionStart.dx.toInt()
-                          ..y = widget.selectionStart.dy.toInt()
-                          ..w = w
-                          ..h = h
+                          selection: _fillSelectionBaseValues(SpriteSelection())
                       )
                   );
 
-                  Navigator.of(ctx).pop();
+                  widget.onComplete();
+                }
+              }
+          )
+      );
+    } else if (_selectionType == SelectionType.ANIMATION) {
+      children
+          ..add(
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Frame count:'),
+                    Container(
+                        width: 200,
+                        child: TextField(controller: frameCountController)
+                    )
+                  ]
+              )
+            )
+          ..add(SizedBox(height: 10));
+
+      children
+          ..add(
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Step time (in millis):'),
+                    Container(
+                        width: 200,
+                        child: TextField(controller: stepTimeController)
+                    )
+                  ]
+              )
+            )
+          ..add(SizedBox(height: 10));
+
+      children.add(
+          FButton(
+              label: 'Create animation',
+              onSelect: () {
+
+                if (selectionNameController.text.isNotEmpty &&
+                    // Check if is number
+                    frameCountController.text.isNotEmpty &&
+                    stepTimeController.text.isNotEmpty) {
+                  Store.instance.dispatch(
+                      AddSelectionAction(
+                          selection: _fillSelectionBaseValues<AnimationSelection>(AnimationSelection())
+                          ..frameCount = int.parse(frameCountController.text)
+                          ..stepTime = int.parse(stepTimeController.text) / 1000
+                          // Add a field to this
+                          ..loop = true
+                      )
+                  );
+
+                  widget.onComplete();
                 }
               }
           )
@@ -111,6 +179,7 @@ class _SelectionCreateFormState extends State<SelectionCreateForm> {
 
     return FContainer(
         width: 400,
+        color: Theme.of(context).dialogBackgroundColor,
         child: Column(
             children: children,
         )
