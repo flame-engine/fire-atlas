@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../vendor/micro_store/micro_store.dart';
 import '../../../store/store.dart';
-import '../../../models/fire_atlas.dart';
 import '../../../store/actions/editor_actions.dart';
 
-import '../../../widgets/container.dart';
-import '../../../widgets/icon_button.dart';
-
+import '../../../widgets/slide_container.dart';
+import '../../../widgets/color_badge.dart';
 
 class MessagesBoard extends StatelessWidget {
   @override
@@ -18,7 +16,13 @@ class MessagesBoard extends StatelessWidget {
 
           return Column(
               children: store.state.messages.map((message) {
-                return _Message(message: message);
+                return _Message(
+                    key: Key(message.message),
+                    message: message,
+                    onVanish: () {
+                      store.dispatch(DismissMessageAction(message: message));
+                    }
+                );
               }).toList().cast()
           );
         },
@@ -28,10 +32,13 @@ class MessagesBoard extends StatelessWidget {
 
 class _Message extends StatelessWidget {
   final Message message;
+  final VoidCallback onVanish;
 
   _Message({
     this.message,
-  });
+    this.onVanish,
+    Key key,
+  }): super(key: key);
 
   @override
   Widget build(ctx) {
@@ -39,11 +46,21 @@ class _Message extends StatelessWidget {
         ? Theme.of(ctx).hintColor
         : Theme.of(ctx).errorColor;
 
-    return Container(
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.all(5),
-        color: color,
-        child: Text(message.message),
+    return SlideContainer(
+        key: key,
+        curve: Curves.easeOutQuad,
+        onFinish: (controller) {
+          Future.delayed(Duration(milliseconds: 2500)).then((_) {
+            controller.reverse().whenComplete(() {
+              onVanish();
+            });
+          });
+        },
+        from: Offset(1.2, 0.0),
+        child: ColorBadge(
+            color: color,
+            label: message.message,
+        )
     );
   }
 }
