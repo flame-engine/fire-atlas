@@ -6,6 +6,7 @@ import 'dart:html';
 import 'dart:ui';
 
 import '../../../widgets/simple_sprite_widget.dart';
+import '../../../utils/validators.dart';
 
 class AtlasOptionsContainer extends StatefulWidget {
   final void Function() onCancel;
@@ -39,11 +40,6 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
       _error = null;
     });
 
-    RegExp regExp = new RegExp(
-        r"^[0-9]+",
-        caseSensitive: false,
-        multiLine: false,
-    );
     final tileSizeRaw = tileSizeController.text;
     final atlasName = atlasNameController.text;
 
@@ -55,7 +51,7 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
       return;
     }
 
-    if (!regExp.hasMatch(tileSizeRaw)) {
+    if (!isValidNumber(tileSizeRaw)) {
       setState(() {
         _error = 'Tile size is required, and must be a number';
       });

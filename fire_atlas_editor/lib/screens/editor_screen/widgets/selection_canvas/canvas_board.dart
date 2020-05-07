@@ -122,6 +122,13 @@ class CanvasBoardState extends State<CanvasBoard> {
               400,
           )
       );
+    } else {
+      Store.instance.dispatch(
+          CreateMessageAction(
+              type: MessageType.ERROR,
+              message: 'Nothing is selected',
+          )
+      );
     }
   }
 

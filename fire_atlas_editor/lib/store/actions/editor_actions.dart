@@ -29,3 +29,43 @@ class CloseEditorModal extends MicroStoreAction<FireAtlasState> {
   }
 }
 
+class CreateMessageAction extends MicroStoreAction<FireAtlasState> {
+  final MessageType type;
+  final String message;
+
+  CreateMessageAction({
+    this.type,
+    this.message,
+  });
+
+  @override
+  FireAtlasState perform(state) {
+    final messageObj = Message()
+          ..type  = type
+          ..message = message;
+
+    state.messages.add(messageObj);
+
+    Future.delayed(Duration(milliseconds: 2500)).then((_) {
+      store.dispatch(DismissMessageAction(
+          message: messageObj,
+      ));
+    });
+
+    return state;
+  }
+}
+
+class DismissMessageAction extends MicroStoreAction<FireAtlasState> {
+  final Message message;
+
+  DismissMessageAction({
+    this.message,
+  });
+
+  @override
+  FireAtlasState perform(state)  => state
+      ..messages.removeWhere((m) => m == message);
+}
+
+

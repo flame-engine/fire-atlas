@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-import '../../../../widgets/container.dart';
 import '../../../../widgets/button.dart';
 
+import '../../../../utils/validators.dart';
 import '../../../../store/store.dart';
 import '../../../../store/actions/atlas_actions.dart';
+import '../../../../store/actions/editor_actions.dart';
 import '../../../../models/fire_atlas.dart';
 
 class SelectionCreateForm extends StatefulWidget {
@@ -52,6 +53,73 @@ class _SelectionCreateFormState extends State<SelectionCreateForm> {
         ..y = widget.selectionStart.dy.toInt()
         ..w = w
         ..h = h;
+  }
+
+  void _createSprite() {
+    if (selectionNameController.text.isNotEmpty) {
+      Store.instance.dispatch(
+          AddSelectionAction(
+              selection: _fillSelectionBaseValues(SpriteSelection())
+          )
+      );
+
+      widget.onComplete();
+    } else {
+      Store.instance.dispatch(
+          CreateMessageAction(
+              type: MessageType.ERROR,
+              message: 'You must inform the selection name',
+          ),
+      );
+    }
+  }
+
+  void _createAnimation() {
+    if (selectionNameController.text.isNotEmpty &&
+        frameCountController.text.isNotEmpty &&
+        stepTimeController.text.isNotEmpty) {
+
+      if (!isValidNumber(frameCountController.text)) {
+        Store.instance.dispatch(
+            CreateMessageAction(
+                type: MessageType.ERROR,
+                message: 'Frame count is not a valid number',
+            ),
+        );
+
+        return;
+      }
+
+      if (!isValidNumber(stepTimeController.text)) {
+        Store.instance.dispatch(
+            CreateMessageAction(
+                type: MessageType.ERROR,
+                message: 'Step time is not a valid number',
+            ),
+        );
+
+        return;
+      }
+
+      Store.instance.dispatch(
+          AddSelectionAction(
+              selection: _fillSelectionBaseValues<AnimationSelection>(AnimationSelection())
+              ..frameCount = int.parse(frameCountController.text)
+              ..stepTime = int.parse(stepTimeController.text) / 1000
+              // Add a field to this
+              ..loop = true
+          )
+      );
+
+      widget.onComplete();
+    } else {
+      Store.instance.dispatch(
+          CreateMessageAction(
+              type: MessageType.ERROR,
+              message: 'All fields are required',
+          ),
+      );
+    }
   }
 
   @override
@@ -106,18 +174,7 @@ class _SelectionCreateFormState extends State<SelectionCreateForm> {
       children.add(
           FButton(
               label: 'Create sprite',
-              onSelect: () {
-
-                if (selectionNameController.text.isNotEmpty) {
-                  Store.instance.dispatch(
-                      AddSelectionAction(
-                          selection: _fillSelectionBaseValues(SpriteSelection())
-                      )
-                  );
-
-                  widget.onComplete();
-                }
-              }
+              onSelect: _createSprite,
           )
       );
     } else if (_selectionType == SelectionType.ANIMATION) {
@@ -154,25 +211,7 @@ class _SelectionCreateFormState extends State<SelectionCreateForm> {
       children.add(
           FButton(
               label: 'Create animation',
-              onSelect: () {
-
-                if (selectionNameController.text.isNotEmpty &&
-                    // Check if is number
-                    frameCountController.text.isNotEmpty &&
-                    stepTimeController.text.isNotEmpty) {
-                  Store.instance.dispatch(
-                      AddSelectionAction(
-                          selection: _fillSelectionBaseValues<AnimationSelection>(AnimationSelection())
-                          ..frameCount = int.parse(frameCountController.text)
-                          ..stepTime = int.parse(stepTimeController.text) / 1000
-                          // Add a field to this
-                          ..loop = true
-                      )
-                  );
-
-                  widget.onComplete();
-                }
-              }
+              onSelect: _createAnimation,
           )
       );
     }

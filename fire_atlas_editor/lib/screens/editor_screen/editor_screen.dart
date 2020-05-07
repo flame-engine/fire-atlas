@@ -5,6 +5,7 @@ import './widgets/selection_canvas/selection_canvas.dart';
 import './widgets/selection_list.dart';
 import './widgets/preview.dart';
 import './widgets/moda_container.dart';
+import './widgets/messages_board.dart';
 
 class EditorScreen extends StatelessWidget {
   @override
@@ -47,6 +48,11 @@ class EditorScreen extends StatelessWidget {
             children: [
               Positioned.fill(child: body),
               Positioned.fill(child: ModalContainer()),
+              Positioned(
+                  right: 10,
+                  top: 10,
+                  child: MessagesBoard(),
+              ),
             ]
         ),
     );

@@ -16,12 +16,14 @@ class MicroStore<T> {
   }
 
   void dispatch(MicroStoreAction<T> action) {
+    action.store = this;
     state = action.perform(state);
     _listeners.forEach((l) => l.call(this));
   }
 }
 
 abstract class MicroStoreAction<T> {
+  MicroStore<T> store;
   T perform(T state);
 }
 
