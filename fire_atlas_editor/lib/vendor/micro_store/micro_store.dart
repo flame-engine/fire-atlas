@@ -25,9 +25,11 @@ abstract class MicroStoreAction<T> {
   T perform(T state);
 }
 
+typedef MicroStoreProviderBuilder<T> = Widget Function(BuildContext, MicroStore<T>);
+
 class MicroStoreProvider<T> extends StatefulWidget {
   final MicroStore<T> store;
-  final Widget Function(BuildContext, MicroStore<T>) builder;
+  final MicroStoreProviderBuilder<T> builder;
 
   MicroStoreProvider({
     Key key,
@@ -36,7 +38,7 @@ class MicroStoreProvider<T> extends StatefulWidget {
   }): super(key: key);
 
   @override
-  State createState() => _MicroStoreProviderState();
+  State createState() => _MicroStoreProviderState<T>();
 }
 
 class _MicroStoreProviderState<T> extends State<MicroStoreProvider<T>> {
