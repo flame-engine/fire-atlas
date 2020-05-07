@@ -34,7 +34,7 @@ class SelectionList extends StatelessWidget {
                                   child: Text(
                                       '${selection.id}',
                                       style: TextStyle(
-                                          fontWeight: (store.state.selectedSelection.id == selection.id)
+                                          fontWeight: (store.state.selectedSelection?.id == selection.id)
                                             ? FontWeight.bold
                                             : FontWeight.normal)
                                   ),

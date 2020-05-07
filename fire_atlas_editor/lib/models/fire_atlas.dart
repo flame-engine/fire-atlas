@@ -8,14 +8,57 @@ abstract class Selection {
   int y;
   int w;
   int h;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> json = {}
+      ..['id'] = id
+      ..['x'] = x
+      ..['y'] = y
+      ..['w'] = w
+      ..['h'] = h;
+
+    return json;
+  }
+
+  fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    x = json['x'];
+    y = json['y'];
+    w = json['w'];
+    h = json['h'];
+  }
 }
 
-class SpriteSelection extends Selection { }
+class SpriteSelection extends Selection {
+  @override
+  Map<String, dynamic> toJson() {
+    return super.toJson()
+        ..['type'] = 'sprite';
+  }
+}
 
 class AnimationSelection extends Selection {
   int frameCount;
   double stepTime;
   bool loop;
+
+  @override
+  void fromJson(Map<String, dynamic> json) {
+    super.fromJson(json);
+
+    frameCount = json['frameCount'];
+    stepTime = json['stepTime'];
+    loop = json['loop'];
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return super.toJson()
+        ..['frameCount'] = frameCount
+        ..['stepTime'] = stepTime 
+        ..['loop'] = loop
+        ..['type'] = 'animation';
+  }
 }
 
 class FireAtlas {
@@ -24,6 +67,40 @@ class FireAtlas {
   String imageData;
 
   Map<String, Selection> selections = {};
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> selectionsJson = {};
+    selections.entries.forEach((entry) {
+      selectionsJson[entry.key] = entry.value.toJson();
+    });
+
+    final Map<String, dynamic> json = {}
+      ..['id'] = id
+      ..['tileSize'] = tileSize
+      ..['imageData'] = imageData
+      ..['selections'] = selectionsJson;
+
+    return json;
+  }
+
+  static FireAtlas fromJson(Map<String, dynamic> json) {
+    final atlas = FireAtlas()
+        ..id = json['id']
+        ..tileSize = json['tileSize']
+        ..imageData = json['imageData'];
+
+    json['selections'].entries.forEach((entry) {
+      Selection selection = entry.value['type'] == 'animation'
+          ? AnimationSelection()
+          : SpriteSelection();
+
+      selection.fromJson(entry.value);
+
+      atlas.selections[entry.key] = selection;
+    });
+
+    return atlas;
+  }
 
   Future<Sprite> getSprite(String selectionId) async {
     final selection = selections[selectionId];

@@ -2,6 +2,7 @@ import 'package:meta/meta.dart';
 import '../../vendor/micro_store/micro_store.dart';
 import '../../store/store.dart';
 import '../../models/fire_atlas.dart';
+import '../../services/storage.dart';
 
 class SetAtlasAction extends MicroStoreAction<FireAtlasState> {
 
@@ -40,6 +41,7 @@ class AddSelectionAction extends MicroStoreAction<FireAtlasState> {
   FireAtlasState perform(FireAtlasState state) {
     state.currentAtlas.selections[selection.id] = selection;
     state.selectedSelection = selection;
+    state.hasChanges = true;
 
     return state;
   }
@@ -58,5 +60,32 @@ class SelectSelectionAction extends MicroStoreAction<FireAtlasState> {
     state.selectedSelection = selection;
 
     return state;
+  }
+}
+
+class SaveAction extends MicroStoreAction<FireAtlasState> {
+
+  @override
+  FireAtlasState perform(FireAtlasState state) {
+    FireAtlasStorage.saveProject(state.currentAtlas);
+
+    state.hasChanges = false;
+
+    return state;
+  }
+
+}
+
+class LoadAtlasAction extends MicroStoreAction<FireAtlasState> {
+  String id;
+
+  LoadAtlasAction(this.id);
+
+  @override
+  FireAtlasState perform(state) {
+    final json = FireAtlasStorage.loadProject(id);
+
+    return state
+        ..currentAtlas = FireAtlas.fromJson(json);
   }
 }

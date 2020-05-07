@@ -7,9 +7,32 @@ import './widgets/preview.dart';
 import './widgets/moda_container.dart';
 import './widgets/messages_board.dart';
 
+import '../../widgets/button.dart';
+import '../../store/store.dart';
+
 class EditorScreen extends StatelessWidget {
   @override
-  Widget build(_) {
+  Widget build(ctx) {
+
+    if (Store.instance.state.currentAtlas == null) {
+      // TODO improve this
+      return Scaffold(
+          body: Center(
+              child: Column(
+                  children: [
+                    Text('No atlas selected'),
+                    FButton(
+                        label: 'Back',
+                        onSelect: () {
+                          Navigator.of(ctx).pop();
+                        },
+                    ),
+                  ],
+              ),
+          ),
+      );
+    }
+
     final body = Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

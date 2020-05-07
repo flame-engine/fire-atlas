@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../vendor/micro_store/micro_store.dart';
 import '../../../store/store.dart';
+import '../../../store/actions/atlas_actions.dart';
 
 import '../../../widgets/container.dart';
 import '../../../widgets/icon_button.dart';
@@ -20,8 +21,9 @@ class Toolbar extends StatelessWidget {
                       children: [
                         FIconButton(
                             iconData: Icons.save,
+                            disabled: !store.state.hasChanges,
                             onPress: () {
-                              print('asd');
+                              store.dispatch(SaveAction());
                             }
                         ),
                       ]

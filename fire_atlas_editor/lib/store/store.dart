@@ -18,6 +18,7 @@ class ModalState {
 
 class FireAtlasState {
   FireAtlas currentAtlas;
+  bool hasChanges = false;
   Selection selectedSelection;
   ModalState modal;
   List<Message> messages = [];
