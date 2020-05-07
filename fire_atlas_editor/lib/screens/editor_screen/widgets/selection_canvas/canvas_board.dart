@@ -6,6 +6,9 @@ import '../../../../widgets/button.dart';
 import './canvas_sprite.dart';
 import './selection_create_form.dart';
 
+import '../../../../store/store.dart';
+import '../../../../store/actions/editor_actions.dart';
+
 enum CanvasTools {
   SELECTION,
   MOVE,
@@ -36,8 +39,6 @@ class CanvasBoardState extends State<CanvasBoard> {
   double _translateY = 0.0;
 
   double _scale = 1.0;
-
-  bool _showCreateSelection = false;
 
   Offset _calculateIndexClick(Offset offset) {
     final int x = ((offset.dx - _translateX) /  (widget.tileSize * _scale)).floor();
@@ -108,9 +109,19 @@ class CanvasBoardState extends State<CanvasBoard> {
 
   void _createItem() {
     if (_selectionStart != null && _selectionEnd != null) {
-      setState(() {
-        _showCreateSelection = true;
-      });
+
+      Store.instance.dispatch(
+          OpenEditorModal(
+              SelectionCreateForm(
+                  selectionStart: _selectionStart,
+                  selectionEnd: _selectionEnd,
+                  onComplete: () {
+                    Store.instance.dispatch(CloseEditorModal());
+                  }
+              ),
+              400,
+          )
+      );
     }
   }
 
@@ -175,22 +186,6 @@ class CanvasBoardState extends State<CanvasBoard> {
         ],
       ),
     );
-
-    if (_showCreateSelection) {
-      children.add(
-          Center(
-              child: SelectionCreateForm(
-                  selectionStart: _selectionStart,
-                  selectionEnd: _selectionEnd,
-                  onComplete: () {
-                    setState(() {
-                      _showCreateSelection = false;
-                    });
-                  }
-              ),
-          )
-      );
-    }
 
     return Stack(children: children);
   }

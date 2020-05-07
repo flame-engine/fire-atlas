@@ -177,9 +177,8 @@ class _SelectionCreateFormState extends State<SelectionCreateForm> {
       );
     }
 
-    return FContainer(
+    return Container(
         width: 400,
-        color: Theme.of(context).dialogBackgroundColor,
         child: Column(
             children: children,
         )

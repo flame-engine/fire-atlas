@@ -6,11 +6,13 @@ class FIconButton extends StatefulWidget {
   final IconData iconData;
   final VoidCallback onPress;
   final bool disabled;
+  final Color color;
 
   FIconButton({
     @required this.iconData,
     @required this.onPress,
     this.disabled = false,
+    this.color,
   });
 
   @override
@@ -44,7 +46,7 @@ class _FIconButtonState extends State<FIconButton> {
 
   @override
   Widget build(ctx) {
-    final color = Theme.of(ctx).primaryColor;
+    final color = widget.color ?? Theme.of(ctx).primaryColor;
     return GestureDetector(
         onTapDown: (_) => _pressStart(),
         onTapUp: (_) => _pressReleased(),
