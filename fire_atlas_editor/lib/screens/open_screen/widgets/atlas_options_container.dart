@@ -11,6 +11,7 @@ import '../../../widgets/text.dart';
 import '../../../widgets/container.dart';
 import '../../../widgets/button.dart';
 import '../../../widgets/simple_sprite_widget.dart';
+import '../../../widgets/input_text_row.dart';
 import '../../../utils/validators.dart';
 
 class AtlasOptionsContainer extends StatefulWidget {
@@ -103,20 +104,16 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
                         flex: 5,
                         child: Column(
                             children: [
-                              Text('Atlas name:'),
-                              TextField(
-                                  controller: atlasNameController,
+                              InputTextRow(
+                                  label: 'Atlas name:',
+                                  inputController: atlasNameController,
                               ),
                               SizedBox(height: 40),
-                              Text('Tile size:'),
-                              TextField(
-                                  controller: tileSizeController,
+                              InputTextRow(
+                                  label: 'Tile size:',
+                                  inputController: tileSizeController,
                               ),
-                              SizedBox(height: 40),
-                              Container(
-                                  child: _error != null ? Text(_error) : null
-                              ),
-                            ]
+                            ],
                         )
                     ),
                     Expanded(
@@ -133,6 +130,7 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
                     ),
                 ]
               )),
+              SizedBox(height: 20),
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

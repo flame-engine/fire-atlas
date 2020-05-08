@@ -4,6 +4,7 @@ import '../../../vendor/micro_store/micro_store.dart';
 import '../../../store/store.dart';
 import '../../../store/actions/atlas_actions.dart';
 
+import '../../../widgets/text.dart';
 import '../../../widgets/container.dart';
 
 class SelectionList extends StatelessWidget {
@@ -12,11 +13,12 @@ class SelectionList extends StatelessWidget {
     return MicroStoreProvider(
         store: Store.instance,
         builder: (ctx, store) => FContainer(
+            padding: EdgeInsets.all(5),
             child: SingleChildScrollView( 
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: store.state.currentAtlas?.selections?.length == 0
-                      ? [Text('No selections yet')]
+                    children: [FSubtitleTitle(title: 'Selections')]..addAll(store.state.currentAtlas?.selections?.length == 0
+                      ? [FLabel(label: 'No selections yet')]
                       : store.state.currentAtlas.selections.values.map((selection) {
                           return Container(
                               margin: EdgeInsets.all(10),
@@ -40,7 +42,7 @@ class SelectionList extends StatelessWidget {
                                   ),
                               ),
                           );
-                        }).toList().cast<Widget>(),
+                        }).toList().cast<Widget>()),
                 ),
             ),
         ),

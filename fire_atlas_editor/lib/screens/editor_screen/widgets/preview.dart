@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../widgets/text.dart';
 import '../../../widgets/container.dart';
 import '../../../widgets/simple_sprite_widget.dart';
 import '../../../widgets/simple_animation_widget.dart';
@@ -36,7 +37,7 @@ class Preview extends StatelessWidget {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text('Preview'),
+                    FSubtitleTitle(title: 'Preview'),
                     Expanded(
                         child: Container(
                             padding: EdgeInsets.all(10),

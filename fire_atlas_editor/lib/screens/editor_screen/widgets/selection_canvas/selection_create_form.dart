@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../widgets/text.dart';
 import '../../../../widgets/button.dart';
+import '../../../../widgets/input_text_row.dart';
 
 import '../../../../utils/validators.dart';
 import '../../../../store/store.dart';
@@ -128,26 +130,16 @@ class _SelectionCreateFormState extends State<SelectionCreateForm> {
 
     children
         ..add(SizedBox(height: 5))
-        ..add(Text('Create new selection item'));
-
-    children
-        ..add(SizedBox(height: 20))
+        ..add(FTitle(title: 'New selection item'))
         ..add(
-            Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Selection name:'),
-                  Container(
-                      width: 200,
-                      child: TextField(controller: selectionNameController)
-                  )
-                ]
-            )
-        );
-
-    children
-        ..add(SizedBox(height: 50))
-        ..add(Text('Selection type'));
+            InputTextRow(
+                label: 'Selection name:',
+                inputController: selectionNameController,
+            ),
+        )
+        ..add(SizedBox(height: 10))
+        ..add(Text('Selection type'))
+        ..add(SizedBox(height: 10));
 
     children.add(
         Container(
@@ -171,42 +163,33 @@ class _SelectionCreateFormState extends State<SelectionCreateForm> {
     );
 
     if (_selectionType == SelectionType.SPRITE) {
-      children.add(
-          FButton(
-              label: 'Create sprite',
-              onSelect: _createSprite,
-          )
-      );
+      children
+          ..add(SizedBox(height: 20))
+          ..add(
+              FButton(
+                  label: 'Create sprite',
+                  onSelect: _createSprite,
+              )
+          );
     } else if (_selectionType == SelectionType.ANIMATION) {
       children
+          ..add(SizedBox(height: 10))
           ..add(
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Frame count:'),
-                    Container(
-                        width: 200,
-                        child: TextField(controller: frameCountController)
-                    )
-                  ]
-              )
+              InputTextRow(
+                  label: 'Frame count:',
+                  inputController: frameCountController,
+              ),
             )
           ..add(SizedBox(height: 10));
 
       children
           ..add(
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Step time (in millis):'),
-                    Container(
-                        width: 200,
-                        child: TextField(controller: stepTimeController)
-                    )
-                  ]
-              )
+              InputTextRow(
+                  label: 'Step time (in millis):',
+                  inputController: stepTimeController,
+              ),
             )
-          ..add(SizedBox(height: 10));
+          ..add(SizedBox(height: 20));
 
       children.add(
           FButton(
@@ -218,6 +201,7 @@ class _SelectionCreateFormState extends State<SelectionCreateForm> {
 
     return Container(
         width: 400,
+        padding: EdgeInsets.only(left: 20, right: 20),
         child: Column(
             children: children,
         )

@@ -7,6 +7,7 @@ class FContainer extends StatelessWidget {
   final Widget child;
   final Color color;
   final EdgeInsets margin;
+  final EdgeInsets padding;
 
   FContainer({
     this.child,
@@ -14,6 +15,7 @@ class FContainer extends StatelessWidget {
     this.width,
     this.color,
     this.margin = const EdgeInsets.all(2.5),
+    this.padding,
   });
 
   @override
@@ -28,6 +30,7 @@ class FContainer extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(5),
         ),
+        padding: padding,
         margin: margin,
         width: width,
         height: height,

@@ -2,25 +2,31 @@ import 'package:flutter/material.dart';
 
 class FLabel extends StatelessWidget {
   final String label;
+  final double fontSize;
 
   FLabel({
     this.label,
+    this.fontSize,
   });
 
   @override
   Widget build(BuildContext ctx) {
     return Text(
         label,
-        style: Theme.of(ctx).textTheme.bodyText2,
+        style: Theme.of(ctx).textTheme.bodyText2
+          .copyWith(fontSize: fontSize),
     );
   }
 }
 
-class FTitle extends StatelessWidget {
-  final String title;
 
-  FTitle({
+class _FTitle extends StatelessWidget {
+  final String title;
+  final TextStyle style;
+
+  _FTitle({
     this.title,
+    this.style,
   });
 
   @override
@@ -42,8 +48,30 @@ class FTitle extends StatelessWidget {
         ),
         child: Center(child: Text(
             title,
-            style: Theme.of(ctx).textTheme.headline4,
+            style: style,
         ))
     );
   }
+}
+
+class FTitle extends StatelessWidget {
+  final String title;
+
+  FTitle({
+    this.title,
+  });
+
+  @override
+  Widget build(BuildContext ctx) => _FTitle(title: title, style: Theme.of(ctx).textTheme.headline4);
+}
+
+class FSubtitleTitle extends StatelessWidget {
+  final String title;
+
+  FSubtitleTitle({
+    this.title,
+  });
+
+  @override
+  Widget build(BuildContext ctx) => _FTitle(title: title, style: Theme.of(ctx).textTheme.headline6);
 }
