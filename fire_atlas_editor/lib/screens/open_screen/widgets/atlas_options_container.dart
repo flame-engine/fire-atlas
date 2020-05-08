@@ -5,6 +5,10 @@ import 'package:flame/sprite.dart';
 import 'dart:html';
 import 'dart:ui';
 
+import '../../../store/store.dart';
+import '../../../store/actions/editor_actions.dart';
+import '../../../widgets/text.dart';
+import '../../../widgets/container.dart';
 import '../../../widgets/button.dart';
 import '../../../widgets/simple_sprite_widget.dart';
 import '../../../utils/validators.dart';
@@ -45,26 +49,32 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
     final atlasName = atlasNameController.text;
 
     if (atlasName.isEmpty) {
-      setState(() {
-        _error = 'Atlas name is required';
-      });
-
+      Store.instance.dispatch(
+          CreateMessageAction(
+              message: 'Atlas name is required',
+              type: MessageType.ERROR,
+          )
+      );
       return;
     }
 
     if (!isValidNumber(tileSizeRaw)) {
-      setState(() {
-        _error = 'Tile size is required, and must be a number';
-      });
-
+      Store.instance.dispatch(
+          CreateMessageAction(
+              message: 'Tile size is required, and must be a number',
+              type: MessageType.ERROR,
+          )
+      );
       return;
     }
 
     if (_imageData == null) {
-      setState(() {
-        _error = 'An image must be selected';
-      });
-
+      Store.instance.dispatch(
+          CreateMessageAction(
+              message: 'An image must be selected',
+              type: MessageType.ERROR,
+          )
+      );
       return;
     }
 
@@ -81,9 +91,11 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
         width: 600,
         height: 400,
         color: Theme.of(ctx).dialogBackgroundColor,
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(20),
         child: Column(
             children: [
+              FTitle(title: 'New atlas'),
+              SizedBox(height: 20),
               Expanded(child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -149,47 +161,51 @@ class _ImageSelectionContainer extends StatelessWidget {
   @override
   Widget build(_) {
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-              child: imageData != null
-                  ? FutureBuilder<Image>(
-                      // todo image name
-                      future: Flame.images.fromBase64('', imageData),
-                      builder: (ctx, snapshot) {
-                        if (snapshot.hasData) {
-                          return SimpleSpriteWidget(
-                              sprite: Sprite.fromImage(snapshot.data)
-                          );
-                        } else if (snapshot.hasError) {
-                          return Text('Something wrong happened :(');
-                        } else {
-                          return Text('Loading');
-                        }
-                      }
-                  )
-                  : Center(child: Text('No image selected')),
+              child: FContainer(margin:
+                  EdgeInsets.only(left: 30, right: 2.5, top: 2.5, bottom: 2.5),
+                  child: imageData != null
+                      ? FutureBuilder<Image>(
+                          // todo image name
+                          future: Flame.images.fromBase64('', imageData),
+                          builder: (ctx, snapshot) {
+                            if (snapshot.hasData) {
+                              return SizedBox(width: 200, child: SimpleSpriteWidget(
+                                  sprite: Sprite.fromImage(snapshot.data)
+                              ));
+                            } else if (snapshot.hasError) {
+                              return Text('Something wrong happened :(');
+                            } else {
+                              return Text('Loading');
+                            }
+                          }
+                      )
+                      : Center(child: Text('No image selected')),
+                  ),
           ),
-          FButton(
-              label: 'Select image',
-              onSelect: () {
-                InputElement uploadInput = FileUploadInputElement();
-                uploadInput.click();
+          Container(
+              child: FButton(
+                  label: 'Select image',
+                  onSelect: () {
+                    InputElement uploadInput = FileUploadInputElement();
+                    uploadInput.click();
 
-                uploadInput.onChange.listen((e) {
-                  // read file content as dataURL
-                  final files = uploadInput.files;
-                  if (files.length == 1) {
-                    final file = files[0];
-                    final reader = new FileReader();
+                    uploadInput.onChange.listen((e) {
+                      // read file content as dataURL
+                      final files = uploadInput.files;
+                      if (files.length == 1) {
+                        final file = files[0];
+                        final reader = new FileReader();
 
-                    reader.onLoadEnd.listen((e) {
-                      onSelectImage(reader.result);
+                        reader.onLoadEnd.listen((e) {
+                          onSelectImage(reader.result);
+                        });
+                        reader.readAsDataUrl(file);
+                      }
                     });
-                    reader.readAsDataUrl(file);
                   }
-                });
-              }
+              )
           )
         ]
     );

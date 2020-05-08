@@ -4,13 +4,13 @@ import '../../store/store.dart';
 import '../../models/fire_atlas.dart';
 import '../../services/storage.dart';
 
-class SetAtlasAction extends MicroStoreAction<FireAtlasState> {
+class CreateAtlasAction extends MicroStoreAction<FireAtlasState> {
 
   String id;
   String imageData;
   int tileSize;
 
-  SetAtlasAction({
+  CreateAtlasAction({
     @required this.id,
     @required this.imageData,
     @required this.tileSize,
@@ -23,7 +23,9 @@ class SetAtlasAction extends MicroStoreAction<FireAtlasState> {
         ..imageData = imageData
         ..tileSize = tileSize;
 
-    state.currentAtlas = atlas;
+    state
+        ..currentAtlas = atlas
+        ..hasChanges = true;
 
     return state;
   }

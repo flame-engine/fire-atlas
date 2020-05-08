@@ -8,6 +8,7 @@ import '../../widgets/icon_button.dart';
 import '../../widgets/button.dart';
 import '../../widgets/container.dart';
 import '../../widgets/scaffold.dart';
+import '../../widgets/text.dart';
 
 import './widgets/atlas_options_container.dart';
 
@@ -25,9 +26,15 @@ class _OpenScreenState extends State<OpenScreen> {
 
     List<Widget> containerChildren = [];
 
-    containerChildren.add(Text('Recent projects:'));
+    containerChildren.add(FTitle(title: 'Recent projects:'));
 
-    FireAtlasStorage.listProjects().forEach((p) {
+    final projects = FireAtlasStorage.listProjects();
+
+    if (projects.isEmpty) {
+      containerChildren.add(Center(child: FLabel(label: 'No projects created yet')));
+    }
+
+    projects.forEach((p) {
       containerChildren.add(
           Container(
               margin: EdgeInsets.only(left: 10, right: 10, top: 5),
@@ -65,7 +72,10 @@ class _OpenScreenState extends State<OpenScreen> {
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(children: containerChildren),
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: containerChildren
+                            ),
                             FButton(
                                 label: 'New atlas',
                                 onSelect: () {
@@ -77,7 +87,7 @@ class _OpenScreenState extends State<OpenScreen> {
                                                 Store.instance.dispatch(CloseEditorModal());
 
                                                 Store.instance.dispatch(
-                                                    SetAtlasAction(
+                                                    CreateAtlasAction(
                                                         id: atlasName,
                                                         imageData: imageData,
                                                         tileSize: tileSize,
