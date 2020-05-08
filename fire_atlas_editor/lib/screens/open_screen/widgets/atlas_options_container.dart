@@ -5,6 +5,7 @@ import 'package:flame/sprite.dart';
 import 'dart:html';
 import 'dart:ui';
 
+import '../../../widgets/button.dart';
 import '../../../widgets/simple_sprite_widget.dart';
 import '../../../utils/validators.dart';
 
@@ -123,13 +124,13 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    RaisedButton(
-                        child: Text('Cancel'),
-                        onPressed: _cancel,
+                    FButton(
+                        label: 'Cancel',
+                        onSelect: _cancel,
                     ),
-                    RaisedButton(
-                        child: Text('Ok'),
-                        onPressed: _confirm,
+                    FButton(
+                        label: 'Ok',
+                        onSelect: _confirm,
                     ),
                   ]
               ),
@@ -169,9 +170,9 @@ class _ImageSelectionContainer extends StatelessWidget {
                   )
                   : Center(child: Text('No image selected')),
           ),
-          RaisedButton(
-              child: Text('Select image'),
-              onPressed: () {
+          FButton(
+              label: 'Select image',
+              onSelect: () {
                 InputElement uploadInput = FileUploadInputElement();
                 uploadInput.click();
 
