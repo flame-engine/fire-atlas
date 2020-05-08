@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../../vendor/micro_store/micro_store.dart';
 import '../../store/store.dart';
 import '../../store/actions/atlas_actions.dart';
+import '../../store/actions/editor_actions.dart';
 import '../../services/storage.dart';
 import '../../widgets/icon_button.dart';
 import '../../widgets/button.dart';
 import '../../widgets/container.dart';
+import '../../widgets/scaffold.dart';
 
 import './widgets/atlas_options_container.dart';
 
@@ -16,8 +17,6 @@ class OpenScreen extends StatefulWidget {
 }
 
 class _OpenScreenState extends State<OpenScreen> {
-
-  bool _showCreateAtlasModal = false;
 
   @override
   Widget build(_) {
@@ -70,11 +69,30 @@ class _OpenScreenState extends State<OpenScreen> {
                             FButton(
                                 label: 'New atlas',
                                 onSelect: () {
-                                  setState(() {
-                                    _showCreateAtlasModal = true;
-                                  });
+                                  Store.instance.dispatch(
+                                      OpenEditorModal(
+                                          AtlasOptionsContainer(
+                                              onConfirm: (String atlasName, int tileSize, String imageData) {
+                                                Navigator.of(context).pushNamed('/editor');
+                                                Store.instance.dispatch(CloseEditorModal());
+
+                                                Store.instance.dispatch(
+                                                    SetAtlasAction(
+                                                        id: atlasName,
+                                                        imageData: imageData,
+                                                        tileSize: tileSize,
+                                                    ),
+                                                );
+                                              },
+                                              onCancel: () {
+                                                Store.instance.dispatch(CloseEditorModal());
+                                              },
+                                          ),
+                                          500,
+                                      )
+                                  );
                                 }
-                            )
+                            ),
                           ]
                       ),
               )),
@@ -82,36 +100,8 @@ class _OpenScreenState extends State<OpenScreen> {
             ],
         ))
     );
-
-    if (_showCreateAtlasModal) {
-      children.add(Center(child: AtlasOptionsContainer(
-          onConfirm: (String atlasName, int tileSize, String imageData) {
-            Navigator.of(context).pushNamed('/editor');
-            setState(() {
-              _showCreateAtlasModal = false;
-            });
-
-            Store.instance.dispatch(
-                SetAtlasAction(
-                    id: atlasName,
-                    imageData: imageData,
-                    tileSize: tileSize,
-                ),
-            );
-          },
-          onCancel: () {
-            setState(() {
-              _showCreateAtlasModal = false;
-            });
-          },
-      )));
-    }
-
-    return Scaffold(
-        body: MicroStoreProvider(
-            store: Store.instance,
-            builder: (ctx, store) => Stack(children: children),
-        )
+    return FScaffold(
+        child: Stack(children: children),
     );
   }
 }

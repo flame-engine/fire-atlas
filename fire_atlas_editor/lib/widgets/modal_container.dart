@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../vendor/micro_store/micro_store.dart';
-import '../../../store/store.dart';
-import '../../../store/actions/editor_actions.dart';
+import '../vendor/micro_store/micro_store.dart';
+import '../store/store.dart';
+import '../store/actions/editor_actions.dart';
 
-import '../../../widgets/container.dart';
-import '../../../widgets/icon_button.dart';
+import './container.dart';
+import './icon_button.dart';
 
 class ModalContainer extends StatelessWidget {
   @override

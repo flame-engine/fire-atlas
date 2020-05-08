@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../vendor/micro_store/micro_store.dart';
-import '../../../store/store.dart';
-import '../../../store/actions/editor_actions.dart';
+import '../vendor/micro_store/micro_store.dart';
+import '../store/store.dart';
+import '../store/actions/editor_actions.dart';
 
-import '../../../widgets/slide_container.dart';
-import '../../../widgets/color_badge.dart';
+import './slide_container.dart';
+import './color_badge.dart';
 
 class MessagesBoard extends StatelessWidget {
   @override
