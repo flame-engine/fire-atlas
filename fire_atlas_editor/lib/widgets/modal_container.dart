@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tinycolor/tinycolor.dart';
 
 import '../vendor/micro_store/micro_store.dart';
 import '../store/store.dart';
@@ -20,7 +21,9 @@ class ModalContainer extends StatelessWidget {
                   Positioned.fill(
                       child: Opacity(
                           opacity: 0.9,
-                          child: Container(color: Theme.of(ctx).dialogBackgroundColor),
+                          child: Container(
+                              color: TinyColor(Theme.of(ctx).dialogBackgroundColor).darken(80).color,
+                          ),
                       ),
                   ),
                   Positioned(

@@ -138,6 +138,7 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
                         label: 'Cancel',
                         onSelect: _cancel,
                     ),
+                    SizedBox(width: 20),
                     FButton(
                         label: 'Ok',
                         onSelect: _confirm,
