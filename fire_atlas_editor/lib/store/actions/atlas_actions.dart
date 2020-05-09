@@ -65,6 +65,18 @@ class SelectSelectionAction extends MicroStoreAction<FireAtlasState> {
   }
 }
 
+class RemoveSelectedSelectionAction extends MicroStoreAction<FireAtlasState> {
+
+  @override
+  FireAtlasState perform(FireAtlasState state) {
+    state.currentAtlas.selections.remove(state.selectedSelection.id);
+    state.selectedSelection = null;
+    state.hasChanges = true;
+
+    return state;
+  }
+}
+
 class SaveAction extends MicroStoreAction<FireAtlasState> {
 
   @override

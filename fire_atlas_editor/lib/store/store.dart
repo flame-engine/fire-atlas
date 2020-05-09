@@ -14,6 +14,7 @@ class Message {
 class ModalState {
   Widget child;
   double width;
+  double height;
 }
 
 class FireAtlasState {

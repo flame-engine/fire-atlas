@@ -33,6 +33,7 @@ class ModalContainer extends StatelessWidget {
                       bottom: 100,
                       child: Center(child: Opacity(opacity: 1, child: FContainer(
                           width: store.state.modal.width,
+                          height: store.state.modal.height,
                           color: Theme.of(ctx).dialogBackgroundColor,
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,

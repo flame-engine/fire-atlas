@@ -6,14 +6,16 @@ import '../../store/store.dart';
 class OpenEditorModal extends MicroStoreAction<FireAtlasState> {
   final Widget modal;
   final double width;
+  final double height;
 
-  OpenEditorModal(this.modal, this.width);
+  OpenEditorModal(this.modal, this.width, [this.height]);
 
   @override
   FireAtlasState perform(state) {
     state.modal = ModalState()
         ..child = modal
-        ..width = width;
+        ..width = width
+        ..height = height;
 
     return state;
   }
