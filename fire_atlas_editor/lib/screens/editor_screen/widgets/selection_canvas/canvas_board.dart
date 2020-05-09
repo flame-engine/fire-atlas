@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flame/sprite.dart';
 
 import '../../../../widgets/button.dart';
+import '../../../../widgets/icon_button.dart';
 
 import './canvas_sprite.dart';
 import './selection_form.dart';
@@ -139,27 +140,27 @@ class CanvasBoardState extends State<CanvasBoard> {
         children: [
           Row(
               children: [
-                FButton(
-                    onSelect: () =>  setState(() => _currentTool = CanvasTools.SELECTION),
-                    label: 'Selection',
-                    selected: _currentTool == CanvasTools.SELECTION
+                FIconButton(
+                    onPress: () =>  setState(() => _currentTool = CanvasTools.SELECTION),
+                    iconData: Icons.select_all,
+                    disabled: _currentTool == CanvasTools.SELECTION
                 ),
-                FButton(
-                    onSelect: () =>  setState(() => _currentTool = CanvasTools.MOVE),
-                    label: 'Move',
-                    selected: _currentTool == CanvasTools.MOVE
+                FIconButton(
+                    onPress: () =>  setState(() => _currentTool = CanvasTools.MOVE),
+                    iconData: Icons.open_with,
+                    disabled: _currentTool == CanvasTools.MOVE
                 ),
-                FButton(
-                    onSelect: _zoomIn,
-                    label: 'Zoom In',
+                FIconButton(
+                    iconData: Icons.zoom_in,
+                    onPress: _zoomIn,
                 ),
-                FButton(
-                    onSelect: _zoomOut,
-                    label: 'Zoom Out',
+                FIconButton(
+                    iconData: Icons.zoom_out,
+                    onPress: _zoomOut,
                 ),
-                FButton(
-                    onSelect: _createItem,
-                    label: 'Create item',
+                FIconButton(
+                    iconData: Icons.add_box,
+                    onPress: _createItem,
                 ),
               ],
           ),
