@@ -4,7 +4,7 @@ import 'package:flame/sprite.dart';
 import '../../../../widgets/button.dart';
 
 import './canvas_sprite.dart';
-import './selection_create_form.dart';
+import './selection_form.dart';
 
 import '../../../../store/store.dart';
 import '../../../../store/actions/editor_actions.dart';
@@ -112,12 +112,9 @@ class CanvasBoardState extends State<CanvasBoard> {
 
       Store.instance.dispatch(
           OpenEditorModal(
-              SelectionCreateForm(
+              SelectionForm(
                   selectionStart: _selectionStart,
                   selectionEnd: _selectionEnd,
-                  onComplete: () {
-                    Store.instance.dispatch(CloseEditorModal());
-                  }
               ),
               400,
           )

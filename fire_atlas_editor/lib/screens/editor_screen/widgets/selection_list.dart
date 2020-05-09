@@ -11,6 +11,7 @@ import '../../../widgets/container.dart';
 import '../../../widgets/icon_button.dart';
 
 import './delete_selection_modal.dart';
+import './selection_canvas/selection_form.dart';
 
 class SelectionList extends StatelessWidget {
   @override
@@ -53,12 +54,20 @@ class SelectionList extends StatelessWidget {
                                           ),
                                           Row(
                                               children: [
-                                                FIconButton(
+                                                selection is AnimationSelection ? FIconButton(
                                                     iconData: Icons.edit,
                                                     onPress: () {
-                                                      print('edit');
+                                                      _select(selection);
+                                                      Store.instance.dispatch(
+                                                          OpenEditorModal(
+                                                              SelectionForm(
+                                                                  editingSelection: selection,
+                                                              ),
+                                                              400,
+                                                          )
+                                                      );
                                                     },
-                                                ),
+                                                ) : Container(),
                                                 FIconButton(
                                                     iconData: Icons.cancel,
                                                     onPress: () {

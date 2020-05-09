@@ -5,10 +5,12 @@ import './text.dart';
 class InputTextRow extends StatelessWidget {
   final TextEditingController inputController;
   final String label;
+  final bool enabled;
 
   InputTextRow({
     this.inputController,
     this.label,
+    this.enabled = true,
   });
 
   @override
@@ -18,7 +20,7 @@ class InputTextRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FLabel(label: label, fontSize: 12),
-          TextField(controller: inputController),
+          TextField(controller: inputController, enabled: enabled),
         ],
     );
   }

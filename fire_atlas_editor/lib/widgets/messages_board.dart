@@ -43,7 +43,7 @@ class _Message extends StatelessWidget {
   @override
   Widget build(ctx) {
     final color = message.type == MessageType.INFO
-        ? Theme.of(ctx).hintColor
+        ? Color(0xFF34b4eb) 
         : Theme.of(ctx).errorColor;
 
     return SlideContainer(

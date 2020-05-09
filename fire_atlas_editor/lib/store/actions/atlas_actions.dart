@@ -4,6 +4,8 @@ import '../../store/store.dart';
 import '../../models/fire_atlas.dart';
 import '../../services/storage.dart';
 
+import './editor_actions.dart';
+
 class CreateAtlasAction extends MicroStoreAction<FireAtlasState> {
 
   String id;
@@ -31,11 +33,11 @@ class CreateAtlasAction extends MicroStoreAction<FireAtlasState> {
   }
 }
 
-class AddSelectionAction extends MicroStoreAction<FireAtlasState> {
+class SetSelectionAction extends MicroStoreAction<FireAtlasState> {
 
   Selection selection;
 
-  AddSelectionAction({
+  SetSelectionAction({
     @required this.selection,
   });
 
@@ -84,6 +86,11 @@ class SaveAction extends MicroStoreAction<FireAtlasState> {
     FireAtlasStorage.saveProject(state.currentAtlas);
 
     state.hasChanges = false;
+
+    store.dispatch(CreateMessageAction(
+        message: 'Atlas saved!',
+        type: MessageType.INFO,
+    ));
 
     return state;
   }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 
 import '../../../../widgets/text.dart';
 import '../../../../widgets/button.dart';
@@ -11,19 +10,20 @@ import '../../../../store/actions/atlas_actions.dart';
 import '../../../../store/actions/editor_actions.dart';
 import '../../../../models/fire_atlas.dart';
 
-class SelectionCreateForm extends StatefulWidget {
+class SelectionForm extends StatefulWidget {
   final Offset selectionStart;
   final Offset selectionEnd;
-  final VoidCallback onComplete;
 
-  SelectionCreateForm({
-    @required this.selectionStart,
-    @required this.selectionEnd,
-    @required this.onComplete,
+  final AnimationSelection editingSelection;
+
+  SelectionForm({
+    this.selectionStart,
+    this.selectionEnd,
+    this.editingSelection,
   });
 
   @override
-  State createState() => _SelectionCreateFormState();
+  State createState() => _SelectionFormState();
 }
 
 enum SelectionType {
@@ -31,13 +31,26 @@ enum SelectionType {
   ANIMATION,
 }
 
-class _SelectionCreateFormState extends State<SelectionCreateForm> {
+class _SelectionFormState extends State<SelectionForm> {
 
   SelectionType _selectionType;
 
   final selectionNameController = TextEditingController();
   final frameCountController = TextEditingController();
   final stepTimeController = TextEditingController();
+
+  @override
+  initState() {
+    super.initState();
+
+    if (widget.editingSelection != null) {
+      selectionNameController.text = widget.editingSelection.id;
+      frameCountController.text = widget.editingSelection.frameCount.toString();
+      stepTimeController.text = (widget.editingSelection.stepTime * 1000).toString();
+
+      _selectionType = SelectionType.ANIMATION;
+    }
+  }
 
   void _chooseSelectionType(SelectionType _type) {
     setState(() {
@@ -60,12 +73,12 @@ class _SelectionCreateFormState extends State<SelectionCreateForm> {
   void _createSprite() {
     if (selectionNameController.text.isNotEmpty) {
       Store.instance.dispatch(
-          AddSelectionAction(
+          SetSelectionAction(
               selection: _fillSelectionBaseValues(SpriteSelection())
           )
       );
 
-      widget.onComplete();
+      Store.instance.dispatch(CloseEditorModal());
     } else {
       Store.instance.dispatch(
           CreateMessageAction(
@@ -103,9 +116,12 @@ class _SelectionCreateFormState extends State<SelectionCreateForm> {
         return;
       }
 
+      final selectionToSave =
+          widget.editingSelection ?? _fillSelectionBaseValues<AnimationSelection>(AnimationSelection());
+
       Store.instance.dispatch(
-          AddSelectionAction(
-              selection: _fillSelectionBaseValues<AnimationSelection>(AnimationSelection())
+          SetSelectionAction(
+              selection: selectionToSave
               ..frameCount = int.parse(frameCountController.text)
               ..stepTime = int.parse(stepTimeController.text) / 1000
               // Add a field to this
@@ -113,7 +129,8 @@ class _SelectionCreateFormState extends State<SelectionCreateForm> {
           )
       );
 
-      widget.onComplete();
+                  
+      Store.instance.dispatch(CloseEditorModal());
     } else {
       Store.instance.dispatch(
           CreateMessageAction(
@@ -130,37 +147,41 @@ class _SelectionCreateFormState extends State<SelectionCreateForm> {
 
     children
         ..add(SizedBox(height: 5))
-        ..add(FTitle(title: 'New selection item'))
+        ..add(FTitle(title: '${widget.editingSelection == null ? 'New' : 'Edit'} selection item'))
         ..add(
             InputTextRow(
                 label: 'Selection name:',
                 inputController: selectionNameController,
+                enabled: widget.editingSelection == null,
             ),
         )
-        ..add(SizedBox(height: 10))
-        ..add(Text('Selection type'))
         ..add(SizedBox(height: 10));
 
-    children.add(
-        Container(
-            width: 200,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  FButton(
-                      label: 'Sprite',
-                      selected: _selectionType == SelectionType.SPRITE,
-                      onSelect: () => _chooseSelectionType(SelectionType.SPRITE),
-                  ),
-                  FButton(
-                      label: 'Animation',
-                      selected: _selectionType == SelectionType.ANIMATION,
-                      onSelect: () => _chooseSelectionType(SelectionType.ANIMATION),
-                  ),
-                ]
-            )
-        ),
-    );
+    if (widget.editingSelection == null) {
+      children
+          ..add(Text('Selection type'))
+          ..add(SizedBox(height: 10))
+          ..add(
+              Container(
+                  width: 200,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        FButton(
+                            label: 'Sprite',
+                            selected: _selectionType == SelectionType.SPRITE,
+                            onSelect: () => _chooseSelectionType(SelectionType.SPRITE),
+                        ),
+                        FButton(
+                            label: 'Animation',
+                            selected: _selectionType == SelectionType.ANIMATION,
+                            onSelect: () => _chooseSelectionType(SelectionType.ANIMATION),
+                        ),
+                      ]
+                  )
+              ),
+          );
+    }
 
     if (_selectionType == SelectionType.SPRITE) {
       children
@@ -193,7 +214,7 @@ class _SelectionCreateFormState extends State<SelectionCreateForm> {
 
       children.add(
           FButton(
-              label: 'Create animation',
+              label: '${widget.editingSelection == null ? 'Create' : 'Save'} animation',
               onSelect: _createAnimation,
           )
       );
