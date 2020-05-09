@@ -6,7 +6,6 @@ import './screens/open_screen/open_screen.dart';
 import './screens/editor_screen/editor_screen.dart';
 
 import './store/store.dart';
-import './models/fire_atlas.dart';
 
 void main() {
   Store.instance = MicroStore<FireAtlasState>(FireAtlasState());
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fire Atlas Editor',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primaryColor: Color(0xffd20101),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: OpenScreen(),
