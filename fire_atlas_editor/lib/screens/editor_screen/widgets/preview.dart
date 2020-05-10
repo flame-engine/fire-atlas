@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 import '../../../widgets/text.dart';
 import '../../../widgets/container.dart';
@@ -7,7 +8,6 @@ import '../../../widgets/simple_animation_widget.dart';
 
 import '../../../vendor/micro_store/micro_store.dart';
 import '../../../store/store.dart';
-import '../../../models/fire_atlas.dart';
 
 class Preview extends StatelessWidget {
   @override

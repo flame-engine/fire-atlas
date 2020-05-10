@@ -1,6 +1,12 @@
+library flame_fire_atlas;
+
 import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/animation.dart';
+
+import 'package:archive/archive.dart';
+
+import 'dart:convert';
 
 abstract class Selection {
   String id;
@@ -102,6 +108,22 @@ class FireAtlas {
     return atlas;
   }
 
+  String serialize() {
+    String raw = jsonEncode(toJson());
+
+    List<int> stringBytes = utf8.encode(raw);
+    List<int> gzipBytes = GZipEncoder().encode(stringBytes);
+    print(gzipBytes.length);
+    return base64Encode(gzipBytes);
+  }
+
+  static FireAtlas deserialize(String raw) {
+    final zipedBytes = base64Decode(raw);
+    final unzipedBytes = GZipDecoder().decodeBytes(zipedBytes);
+    final unzipedString = utf8.decode(unzipedBytes);
+    return fromJson(jsonDecode(unzipedString));
+  }
+
   Future<Sprite> getSprite(String selectionId) async {
     final selection = selections[selectionId];
 
@@ -153,3 +175,4 @@ class FireAtlas {
     );
   }
 }
+

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 import '../../../vendor/micro_store/micro_store.dart';
-import '../../../models/fire_atlas.dart';
 import '../../../store/store.dart';
 import '../../../store/actions/atlas_actions.dart';
 import '../../../store/actions/editor_actions.dart';
@@ -63,6 +63,7 @@ class SelectionList extends StatelessWidget {
                                                               SelectionForm(
                                                                   editingSelection: selection,
                                                               ),
+                                                              400,
                                                               400,
                                                           )
                                                       );

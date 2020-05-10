@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 import '../../../../widgets/text.dart';
 import '../../../../widgets/button.dart';
@@ -8,7 +9,6 @@ import '../../../../utils/validators.dart';
 import '../../../../store/store.dart';
 import '../../../../store/actions/atlas_actions.dart';
 import '../../../../store/actions/editor_actions.dart';
-import '../../../../models/fire_atlas.dart';
 
 class SelectionForm extends StatefulWidget {
   final Offset selectionStart;

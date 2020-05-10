@@ -1,23 +1,22 @@
 import 'dart:html';
-import 'dart:convert';
 
-import '../models/fire_atlas.dart';
+import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 class FireAtlasStorage {
   static final Storage _localStorage = window.localStorage;
 
-  static Map<String, dynamic> loadProject(String id) {
+  static FireAtlas loadProject(String id) {
     final jsonRaw = _localStorage['ATLAS_$id'];
 
     if (jsonRaw != null) {
-      return jsonDecode(jsonRaw);
+      return FireAtlas.deserialize(jsonRaw);
     }
 
     return null;
   }
 
   static void saveProject(FireAtlas atlas) {
-    final data = jsonEncode(atlas.toJson());
+    final data = atlas.serialize();
 
     _localStorage['ATLAS_${atlas.id}'] = data;
   }

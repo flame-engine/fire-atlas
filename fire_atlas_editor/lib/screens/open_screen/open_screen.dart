@@ -99,6 +99,7 @@ class _OpenScreenState extends State<OpenScreen> {
                                               },
                                           ),
                                           500,
+                                          500,
                                       )
                                   );
                                 }

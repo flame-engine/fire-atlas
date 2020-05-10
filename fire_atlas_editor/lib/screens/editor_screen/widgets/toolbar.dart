@@ -36,8 +36,14 @@ class Toolbar extends StatelessWidget {
                                   OpenEditorModal(
                                       ChangeImageModal(),
                                       400,
+                                      500,
                                   ),
                               );
+                            }
+                        ),
+                        FIconButton(
+                            iconData: Icons.get_app,
+                            onPress: () {
                             }
                         ),
                       ]

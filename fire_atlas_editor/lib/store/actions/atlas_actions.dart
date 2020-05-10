@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 import '../../vendor/micro_store/micro_store.dart';
 import '../../store/store.dart';
-import '../../models/fire_atlas.dart';
+import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 import '../../services/storage.dart';
 
 import './editor_actions.dart';
@@ -116,10 +116,5 @@ class LoadAtlasAction extends MicroStoreAction<FireAtlasState> {
   LoadAtlasAction(this.id);
 
   @override
-  FireAtlasState perform(state) {
-    final json = FireAtlasStorage.loadProject(id);
-
-    return state
-        ..currentAtlas = FireAtlas.fromJson(json);
-  }
+  FireAtlasState perform(state) => state..currentAtlas = FireAtlasStorage.loadProject(id);
 }
