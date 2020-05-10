@@ -4,10 +4,12 @@ class FButton extends StatelessWidget {
 
   final bool selected;
   final String label;
+  final bool disabled;
   final void Function() onSelect;
 
   FButton({
     this.selected = false,
+    this.disabled = false,
     this.label,
     this.onSelect,
   });
@@ -18,10 +20,16 @@ class FButton extends StatelessWidget {
 
     final color = selected ? theme.primaryColor : theme.buttonColor;
 
-    return RaisedButton(
-        color: color,
-        onPressed: onSelect,
-        child: Text(label),
+    return Opacity(
+        opacity: disabled ? 0.6 : 1,
+        child: RaisedButton(
+            color: color,
+            onPressed: () {
+              if (!disabled)
+                onSelect();
+            },
+            child: Text(label),
+        )
     );
   }
 }

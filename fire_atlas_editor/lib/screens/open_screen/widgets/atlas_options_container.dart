@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart' hide Image;
 import 'package:flame/flame.dart';
-import 'package:flame/sprite.dart';
-
-import 'dart:html';
-import 'dart:ui';
 
 import '../../../store/store.dart';
 import '../../../store/actions/editor_actions.dart';
 import '../../../widgets/text.dart';
-import '../../../widgets/container.dart';
 import '../../../widgets/button.dart';
-import '../../../widgets/simple_sprite_widget.dart';
 import '../../../widgets/input_text_row.dart';
+import '../../../widgets/image_selection_container.dart';
+
 import '../../../utils/validators.dart';
 
 class AtlasOptionsContainer extends StatefulWidget {
@@ -30,7 +26,6 @@ class AtlasOptionsContainer extends StatefulWidget {
 class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
 
   String _imageData;
-  String _error;
 
   final tileSizeController = TextEditingController();
   final atlasNameController = TextEditingController();
@@ -42,10 +37,6 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
   }
 
   void _confirm() {
-    setState(() {
-      _error = null;
-    });
-
     final tileSizeRaw = tileSizeController.text;
     final atlasName = atlasNameController.text;
 
@@ -118,7 +109,7 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
                     ),
                     Expanded(
                         flex: 5,
-                        child: _ImageSelectionContainer(
+                        child: ImageSelectionContainer(
                             imageData: _imageData,
                             onSelectImage: (imageData) {
                               Flame.images.clearCache();
@@ -147,66 +138,6 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
               ),
           ]
         ),
-    );
-  }
-}
-
-class _ImageSelectionContainer extends StatelessWidget {
-  final String imageData;
-  final void Function(String) onSelectImage;
-
-  _ImageSelectionContainer({ this.imageData, this.onSelectImage });
-
-  @override
-  Widget build(_) {
-    return Column(
-        children: [
-          Expanded(
-              child: FContainer(margin:
-                  EdgeInsets.only(left: 30, right: 2.5, top: 2.5, bottom: 2.5),
-                  child: imageData != null
-                      ? FutureBuilder<Image>(
-                          // todo image name
-                          future: Flame.images.fromBase64('', imageData),
-                          builder: (ctx, snapshot) {
-                            if (snapshot.hasData) {
-                              return SizedBox(width: 200, child: SimpleSpriteWidget(
-                                  sprite: Sprite.fromImage(snapshot.data)
-                              ));
-                            } else if (snapshot.hasError) {
-                              return Text('Something wrong happened :(');
-                            } else {
-                              return Text('Loading');
-                            }
-                          }
-                      )
-                      : Center(child: Text('No image selected')),
-                  ),
-          ),
-          Container(
-              child: FButton(
-                  label: 'Select image',
-                  onSelect: () {
-                    InputElement uploadInput = FileUploadInputElement();
-                    uploadInput.click();
-
-                    uploadInput.onChange.listen((e) {
-                      // read file content as dataURL
-                      final files = uploadInput.files;
-                      if (files.length == 1) {
-                        final file = files[0];
-                        final reader = new FileReader();
-
-                        reader.onLoadEnd.listen((e) {
-                          onSelectImage(reader.result);
-                        });
-                        reader.readAsDataUrl(file);
-                      }
-                    });
-                  }
-              )
-          )
-        ]
     );
   }
 }

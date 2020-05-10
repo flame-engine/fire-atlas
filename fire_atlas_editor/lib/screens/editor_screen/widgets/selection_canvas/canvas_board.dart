@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flame/sprite.dart';
 
-import '../../../../widgets/button.dart';
 import '../../../../widgets/icon_button.dart';
 
 import './canvas_sprite.dart';

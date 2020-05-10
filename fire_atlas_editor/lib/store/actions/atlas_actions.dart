@@ -33,6 +33,19 @@ class CreateAtlasAction extends MicroStoreAction<FireAtlasState> {
   }
 }
 
+class UpdateAtlasAction extends MicroStoreAction<FireAtlasState> {
+  final FireAtlas Function(FireAtlas) updateFn;
+
+  UpdateAtlasAction({ this.updateFn });
+
+  @override
+  FireAtlasState perform(state) =>
+    state
+        ..currentAtlas = updateFn(state.currentAtlas)
+        ..hasChanges = true;
+        
+}
+
 class SetSelectionAction extends MicroStoreAction<FireAtlasState> {
 
   Selection selection;

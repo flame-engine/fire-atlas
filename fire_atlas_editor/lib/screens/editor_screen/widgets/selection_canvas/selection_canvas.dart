@@ -11,16 +11,16 @@ import './canvas_board.dart';
 class SelectionCanvas extends StatelessWidget {
   @override
   Widget build(_) {
-    return FContainer(child: FutureBuilder(
-        future: Flame.images.fromBase64(
-            Store.instance.state.currentAtlas.id,
-            Store.instance.state.currentAtlas.imageData,
-        ),
-        builder: (ctx, snapshot) {
-          if (snapshot.hasData) {
-            return MicroStoreProvider(
-                store: Store.instance,
-                builder: (ctx, store) => LayoutBuilder(
+    return MicroStoreProvider<FireAtlasState>(
+        store: Store.instance,
+        builder: (ctx, store) => FContainer(child: FutureBuilder(
+            future: Flame.images.fromBase64(
+                store.state.currentAtlas.id,
+                store.state.currentAtlas.imageData,
+            ),
+            builder: (ctx, snapshot) {
+              if (snapshot.hasData) {
+                return LayoutBuilder(
                     builder: (ctx, constraints) {
                       final size = Size(constraints.maxWidth, constraints.maxHeight);
                       return CanvasBoard(
@@ -29,14 +29,14 @@ class SelectionCanvas extends StatelessWidget {
                           size: size,
                       );
                     },
-                ),
-            );
-          } else if (snapshot.hasError) {
-            return Text('Something wrong happened :(');
-          }
-          return Text('Something wrong happened :(');
-        }
-    ));
+                );
+              } else if (snapshot.hasError) {
+                return Text('Something wrong happened :(');
+              }
+              return Text('Something wrong happened :(');
+            }
+        ))
+    );
   }
 }
 
