@@ -46,8 +46,8 @@ class _OpenScreenState extends State<OpenScreen> {
                           Text(p),
                           FIconButton(
                               iconData: Icons.folder_open,
-                              onPress: () {
-                                Store.instance.dispatch(LoadAtlasAction(p));
+                              onPress: () async {
+                                await Store.instance.dispatchAsync(LoadAtlasAction(p));
                                 Navigator.of(context).pushNamed('/editor');
                               }
                           ),
@@ -82,17 +82,17 @@ class _OpenScreenState extends State<OpenScreen> {
                                   Store.instance.dispatch(
                                       OpenEditorModal(
                                           AtlasOptionsContainer(
-                                              onConfirm: (String atlasName, int tileSize, String imageData) {
-                                                Navigator.of(context).pushNamed('/editor');
+                                              onConfirm: (String atlasName, int tileSize, String imageData) async {
                                                 Store.instance.dispatch(CloseEditorModal());
 
-                                                Store.instance.dispatch(
+                                                await Store.instance.dispatchAsync(
                                                     CreateAtlasAction(
                                                         id: atlasName,
                                                         imageData: imageData,
                                                         tileSize: tileSize,
                                                     ),
                                                 );
+                                                Navigator.of(context).pushNamed('/editor');
                                               },
                                               onCancel: () {
                                                 Store.instance.dispatch(CloseEditorModal());

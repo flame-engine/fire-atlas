@@ -18,6 +18,16 @@ class MicroStore<T> {
   void dispatch(MicroStoreAction<T> action) {
     action.store = this;
     state = action.perform(state);
+    _notifyListeners();
+  }
+
+  Future<void> dispatchAsync(AsyncMicroStoreAction<T> action) async {
+    action.store = this;
+    state = await action.perform(state);
+    _notifyListeners();
+  }
+
+  void _notifyListeners() {
     _listeners.forEach((l) => l.call(this));
   }
 }
@@ -25,6 +35,11 @@ class MicroStore<T> {
 abstract class MicroStoreAction<T> {
   MicroStore<T> store;
   T perform(T state);
+}
+
+abstract class AsyncMicroStoreAction<T> {
+  MicroStore<T> store;
+  Future<T> perform(T state);
 }
 
 typedef MicroStoreProviderBuilder<T> = Widget Function(BuildContext, MicroStore<T>);

@@ -7,6 +7,7 @@ import 'package:flame/animation.dart';
 import 'package:archive/archive.dart';
 
 import 'dart:convert';
+import 'dart:ui';
 
 abstract class Selection {
   String id;
@@ -71,8 +72,22 @@ class FireAtlas {
   String id;
   int tileSize;
   String imageData;
+  Image _image;
 
   Map<String, Selection> selections = {};
+
+  /// Loads the atlas into memory so it can be used
+  ///
+  /// [clearImageData] Can be set to false to avoid clearing the stored information about the image on this object, this is true by default, its use is intended to enable serializing this object
+  ///
+  Future<void> load({ bool clearImageData = true }) async {
+    _image = await Flame.images.fromBase64(id, imageData);
+
+    // Clear memory
+    if (clearImageData) {
+      imageData = null;
+    }
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> selectionsJson = {};
@@ -108,6 +123,13 @@ class FireAtlas {
     return atlas;
   }
 
+  static Future<FireAtlas> fromAsset(String fileName) async {
+    final bytes = await Flame.assets.readBinaryFile(fileName);
+    final atlas = FireAtlas.deserialize(bytes);
+    await atlas.load();
+    return atlas;
+  }
+
   List<int> serialize() {
     String raw = jsonEncode(toJson());
 
@@ -122,15 +144,19 @@ class FireAtlas {
     return fromJson(jsonDecode(unzipedString));
   }
 
-  Future<Sprite> getSprite(String selectionId) async {
+  void _assertImageLoaded() {
+    assert(_image != null, 'Atlas is not loaded yet, call "load" before using it');
+  }
+
+  Sprite getSprite(String selectionId) {
     final selection = selections[selectionId];
 
+    _assertImageLoaded();
     assert(selection != null, 'There is no selection with the id "$selectionId" on this atlas');
     assert(selection is SpriteSelection, 'Selection "$selectionId" is not a Sprite');
 
-    final image = await Flame.images.fromBase64(id, imageData);
     return Sprite.fromImage(
-        image,
+        _image,
         x: selection.x.toDouble() * tileSize,
         y: selection.y.toDouble() * tileSize,
         width: (1 + selection.w.toDouble()) * tileSize,
@@ -138,13 +164,12 @@ class FireAtlas {
     );
   }
 
-  Future<Animation> getAnimation(String selectionId) async {
+  Animation getAnimation(String selectionId) {
     final selection = selections[selectionId];
 
+    _assertImageLoaded();
     assert(selection != null, 'There is no selection with the id "$selectionId" on this atlas');
     assert(selection is AnimationSelection, 'Selection "$selectionId" is not an Animation');
-
-    final image = await Flame.images.fromBase64(id, imageData);
 
     final initialX = selection.x.toDouble();
 
@@ -158,7 +183,7 @@ class FireAtlas {
     final sprites = List.generate(animationSelection.frameCount, (i) {
       final x = (initialX + i) * frameSize;
       return Sprite.fromImage(
-         image,
+         _image,
          x: x * tileSize,
          y: selection.y.toDouble() * tileSize,
          width: width,

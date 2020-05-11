@@ -12,7 +12,7 @@ import '../../../store/store.dart';
 class Preview extends StatelessWidget {
   @override
   Widget build(_) {
-    return MicroStoreProvider(
+    return MicroStoreProvider<FireAtlasState>(
         store: Store.instance,
         builder: (ctx, store) {
 
@@ -20,18 +20,16 @@ class Preview extends StatelessWidget {
 
           if (store.state.selectedSelection != null) {
             if (store.state.selectedSelection is SpriteSelection) {
-              child = SimpleSpriteLoaderWidget(
+              child = SimpleSpriteWidget(
                   center: true,
-                  future: store.state.currentAtlas.getSprite(store.state.selectedSelection.id)
+                  sprite: store.state.currentAtlas.getSprite(store.state.selectedSelection.id)
               );
             } else if (store.state.selectedSelection is AnimationSelection) {
-              child = SimpleAnimationLoaderWidget(
-                  center: true,
-                  future: store.state.currentAtlas.getAnimation(store.state.selectedSelection.id)
+              child = AnimationPlayerWidget(
+                  animation: store.state.currentAtlas.getAnimation(store.state.selectedSelection.id)
               );
             }
           }
-          
 
           return FContainer(
               child: Column(

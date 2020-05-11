@@ -6,7 +6,7 @@ import '../../services/storage.dart';
 
 import './editor_actions.dart';
 
-class CreateAtlasAction extends MicroStoreAction<FireAtlasState> {
+class CreateAtlasAction extends AsyncMicroStoreAction<FireAtlasState> {
 
   String id;
   String imageData;
@@ -19,11 +19,13 @@ class CreateAtlasAction extends MicroStoreAction<FireAtlasState> {
   });
 
   @override
-  FireAtlasState perform(FireAtlasState state) {
+  Future<FireAtlasState> perform(FireAtlasState state) async {
     final atlas = FireAtlas()
         ..id = id
         ..imageData = imageData
         ..tileSize = tileSize;
+
+    await atlas.load(clearImageData: false);
 
     state
         ..currentAtlas = atlas
@@ -33,17 +35,21 @@ class CreateAtlasAction extends MicroStoreAction<FireAtlasState> {
   }
 }
 
-class UpdateAtlasAction extends MicroStoreAction<FireAtlasState> {
-  final FireAtlas Function(FireAtlas) updateFn;
+class UpdateAtlasImageAction extends AsyncMicroStoreAction<FireAtlasState> {
+  final String imageData;
 
-  UpdateAtlasAction({ this.updateFn });
+  UpdateAtlasImageAction({ this.imageData });
 
   @override
-  FireAtlasState perform(state) =>
+  Future<FireAtlasState> perform(state) async {
     state
-        ..currentAtlas = updateFn(state.currentAtlas)
+        ..currentAtlas.imageData = imageData
         ..hasChanges = true;
-        
+
+    await state.currentAtlas.load(clearImageData: false);
+
+    return state;
+  }
 }
 
 class SetSelectionAction extends MicroStoreAction<FireAtlasState> {
@@ -110,11 +116,17 @@ class SaveAction extends MicroStoreAction<FireAtlasState> {
 
 }
 
-class LoadAtlasAction extends MicroStoreAction<FireAtlasState> {
+class LoadAtlasAction extends AsyncMicroStoreAction<FireAtlasState> {
   String id;
 
   LoadAtlasAction(this.id);
 
   @override
-  FireAtlasState perform(state) => state..currentAtlas = FireAtlasStorage.loadProject(id);
+  Future<FireAtlasState> perform(state) async {
+    final atlas = FireAtlasStorage.loadProject(id);
+
+    await atlas.load(clearImageData: false);
+
+    return state..currentAtlas = atlas;
+  }
 }

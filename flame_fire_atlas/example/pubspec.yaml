@@ -1,7 +1,7 @@
-name: fire_atlas_editor
-description: Editor to create Fire atlas textures
+name: example
+description: Example app to showcase flame fire atlas package
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 
 version: 1.0.0+1
 
@@ -12,11 +12,10 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^0.1.3
-  tinycolor: ^1.0.2
   flame:
-    path: ../../flame
+    path: ../../../flame
   flame_fire_atlas:
-    path: ../flame_fire_atlas
+    path: ../
 
 dev_dependencies:
   flutter_test:
@@ -24,3 +23,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/caveace.fa

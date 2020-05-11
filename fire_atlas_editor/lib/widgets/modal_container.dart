@@ -29,8 +29,8 @@ class ModalContainer extends StatelessWidget {
                   Positioned(
                       left: 0,
                       right: 0,
-                      top: 100,
-                      bottom: 100,
+                      top: 10,
+                      bottom: 10,
                       child: Center(child: Opacity(opacity: 1, child: FContainer(
                           width: store.state.modal.width,
                           height: store.state.modal.height,

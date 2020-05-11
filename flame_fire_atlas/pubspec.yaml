@@ -10,7 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flame: ^0.20.2
+  flame:
+    path: ../../flame
   archive: ^2.0.13
 
 dev_dependencies:

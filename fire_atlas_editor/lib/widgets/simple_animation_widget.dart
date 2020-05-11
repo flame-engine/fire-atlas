@@ -9,11 +9,9 @@ import 'dart:math';
 
 class SimpleAnimationLoaderWidget extends StatelessWidget {
   final Future<Animation> future;
-  final bool center;
 
   SimpleAnimationLoaderWidget({
     this.future,
-    this.center = false,
   });
 
   @override
