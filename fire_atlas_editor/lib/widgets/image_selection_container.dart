@@ -8,6 +8,7 @@ import 'dart:ui';
 import './container.dart';
 import './simple_sprite_widget.dart';
 import './button.dart';
+import '../utils/select_file.dart';
 
 class ImageSelectionContainer extends StatelessWidget {
   final String imageData;
@@ -50,22 +51,7 @@ class ImageSelectionContainer extends StatelessWidget {
               child: FButton(
                   label: 'Select image',
                   onSelect: () {
-                    InputElement uploadInput = FileUploadInputElement();
-                    uploadInput.click();
-
-                    uploadInput.onChange.listen((e) {
-                      // read file content as dataURL
-                      final files = uploadInput.files;
-                      if (files.length == 1) {
-                        final file = files[0];
-                        final reader = new FileReader();
-
-                        reader.onLoadEnd.listen((e) {
-                          onSelectImage(reader.result);
-                        });
-                        reader.readAsDataUrl(file);
-                      }
-                    });
+                    selectFile(onSelectImage);
                   }
               )
           )

@@ -9,6 +9,7 @@ import '../../widgets/button.dart';
 import '../../widgets/container.dart';
 import '../../widgets/scaffold.dart';
 import '../../widgets/text.dart';
+import '../../utils/select_file.dart';
 
 import './widgets/atlas_options_container.dart';
 
@@ -19,6 +20,41 @@ class OpenScreen extends StatefulWidget {
 
 class _OpenScreenState extends State<OpenScreen> {
 
+  List<String> _projects = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _projects = FireAtlasStorage.listProjects();
+  }
+
+  void _importAtlas() {
+    selectFile((fileData) {
+      try {
+        final base64 = fileData.substring(fileData.indexOf(',') + 1);
+        final atlas = FireAtlasStorage.readBase64Project(base64);
+        FireAtlasStorage.saveProject(atlas);
+        setState(() {
+          _projects.add(atlas.id);
+        });
+        Store.instance.dispatch(
+            CreateMessageAction(
+                message: '"${atlas.id}" successfully imported',
+                type: MessageType.INFO,
+            ),
+        );
+      } catch (e) {
+        print(e);
+        Store.instance.dispatch(
+            CreateMessageAction(
+                message: 'Error importing atlas',
+                type: MessageType.ERROR,
+            ),
+        );
+      }
+    });
+  }
+
   @override
   Widget build(_) {
 
@@ -28,13 +64,11 @@ class _OpenScreenState extends State<OpenScreen> {
 
     containerChildren.add(FTitle(title: 'Recent projects:'));
 
-    final projects = FireAtlasStorage.listProjects();
-
-    if (projects.isEmpty) {
+    if (_projects.isEmpty) {
       containerChildren.add(Center(child: FLabel(label: 'No projects created yet')));
     }
 
-    projects.forEach((p) {
+    _projects.forEach((p) {
       containerChildren.add(
           Container(
               margin: EdgeInsets.only(left: 10, right: 10, top: 5),
@@ -76,33 +110,43 @@ class _OpenScreenState extends State<OpenScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: containerChildren
                             ),
-                            FButton(
-                                label: 'New atlas',
-                                onSelect: () {
-                                  Store.instance.dispatch(
-                                      OpenEditorModal(
-                                          AtlasOptionsContainer(
-                                              onConfirm: (String atlasName, int tileSize, String imageData) async {
-                                                Store.instance.dispatch(CloseEditorModal());
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  FButton(
+                                      label: 'Import atlas',
+                                      onSelect: _importAtlas,
+                                  ),
+                                  SizedBox(width: 10),
+                                  FButton(
+                                      label: 'New atlas',
+                                      onSelect: () {
+                                        Store.instance.dispatch(
+                                            OpenEditorModal(
+                                                AtlasOptionsContainer(
+                                                    onConfirm: (String atlasName, int tileSize, String imageData) async {
+                                                      Store.instance.dispatch(CloseEditorModal());
 
-                                                await Store.instance.dispatchAsync(
-                                                    CreateAtlasAction(
-                                                        id: atlasName,
-                                                        imageData: imageData,
-                                                        tileSize: tileSize,
-                                                    ),
-                                                );
-                                                Navigator.of(context).pushNamed('/editor');
-                                              },
-                                              onCancel: () {
-                                                Store.instance.dispatch(CloseEditorModal());
-                                              },
-                                          ),
-                                          500,
-                                          500,
-                                      )
-                                  );
-                                }
+                                                      await Store.instance.dispatchAsync(
+                                                          CreateAtlasAction(
+                                                              id: atlasName,
+                                                              imageData: imageData,
+                                                              tileSize: tileSize,
+                                                          ),
+                                                      );
+                                                      Navigator.of(context).pushNamed('/editor');
+                                                    },
+                                                    onCancel: () {
+                                                      Store.instance.dispatch(CloseEditorModal());
+                                                    },
+                                                ),
+                                                500,
+                                                500,
+                                            )
+                                        );
+                                      }
+                                  ),
+                                ],
                             ),
                           ]
                       ),
