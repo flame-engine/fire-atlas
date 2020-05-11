@@ -13,6 +13,7 @@ import './change_image_modal.dart';
 
 import '../../../widgets/container.dart';
 import '../../../widgets/icon_button.dart';
+import '../../../widgets/text.dart';
 
 class Toolbar extends StatelessWidget {
 
@@ -30,40 +31,51 @@ class Toolbar extends StatelessWidget {
   }
 
   @override
-  Widget build(_) {
+  Widget build(ctx) {
     return MicroStoreProvider<FireAtlasState>(
         store: Store.instance,
         builder: (ctx, store) => FContainer(
             height: 60,
             child: Column(
                 children: [
-                  Text('Working on: ${store.state.currentAtlas?.id}'),
+                  FLabel(label: 'Working on: ${store.state.currentAtlas?.id}', fontSize: 12),
                   Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        FIconButton(
-                            iconData: Icons.save,
-                            disabled: !store.state.hasChanges,
-                            onPress: () {
-                              store.dispatch(SaveAction());
-                            }
+                        Row(
+                            children: [
+                              FIconButton(
+                                  iconData: Icons.save,
+                                  disabled: !store.state.hasChanges,
+                                  onPress: () {
+                                    store.dispatch(SaveAction());
+                                  }
+                              ),
+                              FIconButton(
+                                  iconData: Icons.image,
+                                  onPress: () {
+                                    store.dispatch(
+                                        OpenEditorModal(
+                                            ChangeImageModal(),
+                                            400,
+                                            500,
+                                        ),
+                                    );
+                                  }
+                              ),
+                              FIconButton(
+                                  iconData: Icons.get_app,
+                                  onPress: () {
+                                    _launchURL(store.state.currentAtlas);
+                                  }
+                              ),
+                            ]
                         ),
                         FIconButton(
-                            iconData: Icons.image,
+                            iconData: Icons.exit_to_app,
                             onPress: () {
-                              store.dispatch(
-                                  OpenEditorModal(
-                                      ChangeImageModal(),
-                                      400,
-                                      500,
-                                  ),
-                              );
-                            }
-                        ),
-                        FIconButton(
-                            iconData: Icons.get_app,
-                            onPress: () {
-                              _launchURL(store.state.currentAtlas);
-                            }
+                              Navigator.of(ctx).pushReplacementNamed('/');
+                            },
                         ),
                       ]
                   ),
