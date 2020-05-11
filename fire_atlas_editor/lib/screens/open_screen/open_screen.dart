@@ -106,10 +106,12 @@ class _OpenScreenState extends State<OpenScreen> {
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: containerChildren
-                            ),
+                            Expanded(child: SingleChildScrollView(
+                                child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: containerChildren
+                                ),
+                            )),
                             Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
