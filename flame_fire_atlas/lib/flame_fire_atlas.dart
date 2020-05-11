@@ -108,18 +108,16 @@ class FireAtlas {
     return atlas;
   }
 
-  String serialize() {
+  List<int> serialize() {
     String raw = jsonEncode(toJson());
 
     List<int> stringBytes = utf8.encode(raw);
     List<int> gzipBytes = GZipEncoder().encode(stringBytes);
-    print(gzipBytes.length);
-    return base64Encode(gzipBytes);
+    return gzipBytes;
   }
 
-  static FireAtlas deserialize(String raw) {
-    final zipedBytes = base64Decode(raw);
-    final unzipedBytes = GZipDecoder().decodeBytes(zipedBytes);
+  static FireAtlas deserialize(List<int> bytes) {
+    final unzipedBytes = GZipDecoder().decodeBytes(bytes);
     final unzipedString = utf8.decode(unzipedBytes);
     return fromJson(jsonDecode(unzipedString));
   }

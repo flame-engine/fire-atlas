@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flame_fire_atlas/flame_fire_atlas.dart';
+
+import 'dart:html';
+import 'dart:typed_data';
 
 import '../../../vendor/micro_store/micro_store.dart';
 import '../../../store/store.dart';
@@ -11,6 +15,20 @@ import '../../../widgets/container.dart';
 import '../../../widgets/icon_button.dart';
 
 class Toolbar extends StatelessWidget {
+
+  _launchURL(FireAtlas atlas) async {
+    final element = document.createElement('a');
+
+    List<int> bytes = atlas.serialize();
+    final uint8List = Uint8List.fromList(bytes);
+    final blob = Blob([uint8List]);
+    final url = Url.createObjectUrl(blob);
+    element.setAttribute('href', url);
+    element.setAttribute('download', '${atlas.id}.fa');
+
+    element.click();
+  }
+
   @override
   Widget build(_) {
     return MicroStoreProvider<FireAtlasState>(
@@ -44,6 +62,7 @@ class Toolbar extends StatelessWidget {
                         FIconButton(
                             iconData: Icons.get_app,
                             onPress: () {
+                              _launchURL(store.state.currentAtlas);
                             }
                         ),
                       ]
