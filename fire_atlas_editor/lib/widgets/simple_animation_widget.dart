@@ -68,10 +68,13 @@ class _AnimationPlayerWidget extends State<AnimationPlayerWidget> with SingleTic
         _lastUpdated = now;
       });
     });
+
+    widget.animation.onCompleteAnimation = _pauseAnimation;
   }
 
   void _initAnimation() {
     setState(() {
+      widget.animation.reset();
       _playing = true;
       _lastUpdated = DateTime.now().millisecond;
       _controller.repeat(

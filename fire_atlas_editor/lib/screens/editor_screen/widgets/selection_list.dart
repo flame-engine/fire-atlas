@@ -64,7 +64,7 @@ class SelectionList extends StatelessWidget {
                                                                   editingSelection: selection,
                                                               ),
                                                               400,
-                                                              400,
+                                                              450,
                                                           )
                                                       );
                                                     },

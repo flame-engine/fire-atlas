@@ -38,6 +38,7 @@ class _SelectionFormState extends State<SelectionForm> {
   final selectionNameController = TextEditingController();
   final frameCountController = TextEditingController();
   final stepTimeController = TextEditingController();
+  bool _animationLoop = true;
 
   @override
   initState() {
@@ -124,8 +125,7 @@ class _SelectionFormState extends State<SelectionForm> {
               selection: selectionToSave
               ..frameCount = int.parse(frameCountController.text)
               ..stepTime = int.parse(stepTimeController.text) / 1000
-              // Add a field to this
-              ..loop = true
+              ..loop = _animationLoop
           )
       );
 
@@ -210,6 +210,16 @@ class _SelectionFormState extends State<SelectionForm> {
                   inputController: stepTimeController,
               ),
             )
+          ..add(SizedBox(height: 20));
+
+      children
+          ..add(FLabel(label: 'Loop animation', fontSize: 12))
+          ..add(Checkbox(
+              value: _animationLoop,
+              onChanged: (v) {
+                setState(() => _animationLoop = v);
+              }
+          ))
           ..add(SizedBox(height: 20));
 
       children.add(

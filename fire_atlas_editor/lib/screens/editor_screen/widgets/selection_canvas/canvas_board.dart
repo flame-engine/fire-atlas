@@ -117,7 +117,7 @@ class CanvasBoardState extends State<CanvasBoard> {
                   selectionEnd: _selectionEnd,
               ),
               400,
-              500,
+              600,
           )
       );
     } else {
