@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:collection/collection.dart';
 
 class MicroStore<T> {
   T state;
@@ -43,15 +44,18 @@ abstract class AsyncMicroStoreAction<T> {
 }
 
 typedef MicroStoreProviderBuilder<T> = Widget Function(BuildContext, MicroStore<T>);
+typedef MicroStoreProviderMemo<T> = List Function(MicroStore<T>);
 
 class MicroStoreProvider<T> extends StatefulWidget {
   final MicroStore<T> store;
   final MicroStoreProviderBuilder<T> builder;
+  final MicroStoreProviderMemo<T> memoFn;
 
   MicroStoreProvider({
     Key key,
     this.store,
     this.builder,
+    this.memoFn,
   }): super(key: key);
 
   @override
@@ -60,10 +64,24 @@ class MicroStoreProvider<T> extends StatefulWidget {
 
 class _MicroStoreProviderState<T> extends State<MicroStoreProvider<T>> {
   MicroStore<T> _store;
+  List _memoValue;
 
   void _update(MicroStore<T> store) {
+
+    Function eq = const ListEquality().equals;
+
+    List newMemo;
+    if (widget.memoFn != null) {
+      final newMemo = widget.memoFn(store);
+
+      if (eq(newMemo, _memoValue)) {
+        return;
+      }
+    }
+
     setState(() {
       _store = store;
+      _memoValue = newMemo;
     });
   }
 
@@ -73,6 +91,8 @@ class _MicroStoreProviderState<T> extends State<MicroStoreProvider<T>> {
 
     _store = widget.store;
     _store.listen(_update);
+
+    _memoValue = widget.memoFn?.call(_store);
   }
 
   @override

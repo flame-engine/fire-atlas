@@ -58,7 +58,7 @@ packages:
     source: hosted
     version: "1.0.1"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       url: "https://pub.dartlang.org"
@@ -98,7 +98,7 @@ packages:
       path: "../../flame"
       relative: true
     source: path
-    version: "0.20.2"
+    version: "0.21.0"
   flame_fire_atlas:
     dependency: "direct main"
     description:

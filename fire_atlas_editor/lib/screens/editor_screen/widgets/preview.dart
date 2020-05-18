@@ -13,6 +13,7 @@ class Preview extends StatelessWidget {
   @override
   Widget build(_) {
     return MicroStoreProvider<FireAtlasState>(
+        memoFn: (store) => [store.state.selectedSelection?.id],
         store: Store.instance,
         builder: (ctx, store) {
 
