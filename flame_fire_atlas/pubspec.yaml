@@ -1,8 +1,7 @@
 name: flame_fire_atlas
-description: Easy to use texture atlases for the flame engine
+description: Easy to use texture atlases for the flame engine created with the fire atlas editor
 version: 0.0.1
-author:
-homepage:
+homepage: https://github.com/flame-engine/fire-atlas/tree/master/flame_fire_atlas
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -10,8 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flame:
-    path: ../../flame
+  flame: ^0.21.0
   archive: ^2.0.13
 
 dev_dependencies:

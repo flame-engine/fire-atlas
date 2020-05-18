@@ -1,14 +1,25 @@
-# flame_fire_atlas
+# Flame fire atlas
 
-A new Flutter package project.
+Flame fire atlas is a texture atlas lib for Flame. Atlases can be created using the Fire Atlas Editor.
 
-## Getting Started
+## How to use
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+Add the dependency on your pubspec
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+```
+flame_fire_atlas: ^0.0.1
+```
+
+Load the atlas from your assets
+
+```dart
+// file at assets/atlas.fa
+final atlas = await FireAtlas.fromAsset('atlas.fa');
+```
+
+With the instance loaded you can now get sprites and animations like:
+
+```dart
+atlas.getAnimation('animation_name');
+atlas.getSprite('sprite_name');
+```

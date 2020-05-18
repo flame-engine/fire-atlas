@@ -95,9 +95,9 @@ packages:
   flame:
     dependency: "direct main"
     description:
-      path: "../../flame"
-      relative: true
-    source: path
+      name: flame
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.21.0"
   flame_fire_atlas:
     dependency: "direct main"
