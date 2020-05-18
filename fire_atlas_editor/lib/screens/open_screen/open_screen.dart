@@ -98,9 +98,9 @@ class _OpenScreenState extends State<OpenScreen> {
         Center(child: Column(
             children: [
               // Logo of some sort
-              SizedBox(height: 10),
-              Container(width: 200, height: 200, color: Color(0xFFFF0000)),
-              SizedBox(height: 10),
+              SizedBox(height: 50),
+              Container(width: 400, child: FTitle(title: 'Fire Atlas')),
+              SizedBox(height: 40),
               Expanded(child: FContainer(
                       width: 400,
                       child: Column(
