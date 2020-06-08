@@ -88,10 +88,10 @@ packages:
   flame:
     dependency: "direct main"
     description:
-      path: "../../flame"
-      relative: true
-    source: path
-    version: "0.20.2"
+      name: flame
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.22.0"
   flare_dart:
     dependency: transitive
     description:
@@ -265,7 +265,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.15"
+    version: "0.2.16"
   tiled:
     dependency: transitive
     description:

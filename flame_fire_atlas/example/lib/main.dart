@@ -13,7 +13,7 @@ void main() async {
 
     final game = ExampleGame(atlas);
     runApp(game.widget);
-  } catch(e) {
+  } catch (e) {
     print(e);
   }
 }
@@ -22,42 +22,25 @@ class ExampleGame extends BaseGame with TapDetector {
   FireAtlas _atlas;
 
   ExampleGame(this._atlas) {
+    add(AnimationComponent(150, 100, _atlas.getAnimation('shooting_ptero'))
+      ..y = 50);
+
+    add(AnimationComponent(150, 100, _atlas.getAnimation('bomb_ptero'))
+      ..y = 50
+      ..x = 200);
+
     add(
-        AnimationComponent(
-            150,
-            100,
-            _atlas.getAnimation('shooting_ptero')
-        )..y = 50
+      SpriteComponent.fromSprite(50, 50, _atlas.getSprite('bullet'))..y = 200,
     );
 
     add(
-        AnimationComponent(
-            150,
-            100,
-            _atlas.getAnimation('bomb_ptero')
-        )
-          ..y = 50
-          ..x = 200
-    );
-
-    add(
-        SpriteComponent.fromSprite(
-            50, 50, _atlas.getSprite('bullet')
-        )..y = 200,
-    );
-
-    add(
-        SpriteComponent.fromSprite(
-            50, 50, _atlas.getSprite('shield')
-        )
+      SpriteComponent.fromSprite(50, 50, _atlas.getSprite('shield'))
         ..x = 100
         ..y = 200,
     );
 
     add(
-        SpriteComponent.fromSprite(
-            50, 50, _atlas.getSprite('ham')
-        )
+      SpriteComponent.fromSprite(50, 50, _atlas.getSprite('ham'))
         ..x = 200
         ..y = 200,
     );
@@ -67,17 +50,14 @@ class ExampleGame extends BaseGame with TapDetector {
   void onTapUp(details) {
     final o = details.localPosition;
 
-    add(
-        AnimationComponent(
-            100,
-            100,
-            _atlas.getAnimation('explosion'),
-            destroyOnFinish: true,
-        )
-        ..anchor = Anchor.center
-        ..x = o.dx
-        ..y = o.dy
-    );
+    add(AnimationComponent(
+      100,
+      100,
+      _atlas.getAnimation('explosion'),
+      destroyOnFinish: true,
+    )
+      ..anchor = Anchor.center
+      ..x = o.dx
+      ..y = o.dy);
   }
 }
-
