@@ -1,5 +1,8 @@
 # Fire Atlas
 
+![Logo with background](design/lockups/Logo.png)
+
+
 Fire Atlas is a tool to create Texture Atlases for games.
 
 This mono repo includes both the source for the editor and for the Flame Engine runtime.
