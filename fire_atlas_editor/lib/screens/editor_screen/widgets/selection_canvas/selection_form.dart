@@ -153,6 +153,7 @@ class _SelectionFormState extends State<SelectionForm> {
                 label: 'Selection name:',
                 inputController: selectionNameController,
                 enabled: widget.editingSelection == null,
+                autofocus: true,
             ),
         )
         ..add(SizedBox(height: 10));

@@ -6,11 +6,13 @@ class InputTextRow extends StatelessWidget {
   final TextEditingController inputController;
   final String label;
   final bool enabled;
+  final bool autofocus;
 
   InputTextRow({
     this.inputController,
     this.label,
     this.enabled = true,
+    this.autofocus,
   });
 
   @override
@@ -20,7 +22,11 @@ class InputTextRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FLabel(label: label, fontSize: 12),
-          TextField(controller: inputController, enabled: enabled),
+          TextField(
+              controller: inputController,
+              enabled: enabled,
+              autofocus: autofocus,
+          ),
         ],
     );
   }
