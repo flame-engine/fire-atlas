@@ -12,7 +12,7 @@ class InputTextRow extends StatelessWidget {
     this.inputController,
     this.label,
     this.enabled = true,
-    this.autofocus,
+    this.autofocus=false,
   });
 
   @override
