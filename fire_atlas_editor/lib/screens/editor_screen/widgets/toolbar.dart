@@ -74,6 +74,7 @@ class Toolbar extends StatelessWidget {
                         FIconButton(
                             iconData: Icons.exit_to_app,
                             onPress: () {
+//                              store.dispatch(SelectSelectionAction(selection: null));
                               Navigator.of(ctx).pushReplacementNamed('/');
                             },
                         ),
