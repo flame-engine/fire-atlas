@@ -19,8 +19,10 @@ class CanvasBoard extends StatefulWidget {
   final Sprite sprite;
   final Size size;
   final int tileSize;
+  final double tileWidth;
+  final double tileHeight;
 
-  CanvasBoard({ this.sprite, this.size, this.tileSize });
+  CanvasBoard({ this.sprite, this.size, this.tileSize ,this.tileWidth,this.tileHeight});
 
   @override
   State createState() => CanvasBoardState();
@@ -41,8 +43,8 @@ class CanvasBoardState extends State<CanvasBoard> {
   double _scale = 1.0;
 
   Offset _calculateIndexClick(Offset offset) {
-    final int x = ((offset.dx - _translateX) /  (widget.tileSize * _scale)).floor();
-    final int y = ((offset.dy - _translateY) /  (widget.tileSize * _scale)).floor();
+    final int x = ((offset.dx - _translateX) /  (widget.tileWidth==null?widget.tileSize:widget.tileWidth * _scale)).floor();
+    final int y = ((offset.dy - _translateY) /  (widget.tileHeight==null?widget.tileSize:widget.tileHeight * _scale)).floor();
 
     return Offset(x.toDouble(), y.toDouble());
   }
@@ -117,7 +119,7 @@ class CanvasBoardState extends State<CanvasBoard> {
                   selectionEnd: _selectionEnd,
               ),
               400,
-              550,
+              600,
           )
       );
     } else {
@@ -173,6 +175,8 @@ class CanvasBoardState extends State<CanvasBoard> {
                           translateY: _translateY,
                           scale: _scale,
                           tileSize: widget.tileSize,
+                          tileWidth: widget.tileWidth,
+                          tileHeight:widget.tileHeight,
                           selectionStart: _selectionStart,
                           selectionEnd: _selectionEnd,
                       ),
