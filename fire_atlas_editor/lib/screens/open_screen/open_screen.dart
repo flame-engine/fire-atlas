@@ -132,6 +132,8 @@ class _OpenScreenState extends State<OpenScreen> {
                                           String atlasName,
                                           int tileSize,
                                           String imageData,
+                                          double tileWidth,
+                                          double tileHeight,
                                         ) async {
                                           Store.instance
                                               .dispatch(CloseEditorModal());
@@ -141,6 +143,8 @@ class _OpenScreenState extends State<OpenScreen> {
                                               id: atlasName,
                                               imageData: imageData,
                                               tileSize: tileSize,
+                                              tileWidth: tileWidth,
+                                              tileHeight: tileHeight,
                                             ),
                                           );
                                           Navigator.of(context)
@@ -151,8 +155,8 @@ class _OpenScreenState extends State<OpenScreen> {
                                               .dispatch(CloseEditorModal());
                                         },
                                       ),
-                                      500,
-                                      500,
+                                      600,
+                                      600,
                                     ));
                                   }),
                             ],

@@ -45,12 +45,14 @@ class SelectionList extends StatelessWidget {
                                     child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                              '${selection.id}',
-                                              style: TextStyle(
-                                                  fontWeight: (store.state.selectedSelection?.id == selection.id)
-                                                  ? FontWeight.bold
-                                                  : FontWeight.normal)
+                                          Expanded(
+                                            child: Text(
+                                                '${selection.id}',
+                                                style: TextStyle(
+                                                    fontWeight: (store.state.selectedSelection?.id == selection.id)
+                                                    ? FontWeight.bold
+                                                    : FontWeight.normal)
+                                            ),
                                           ),
                                           Row(
                                               children: [
@@ -64,7 +66,7 @@ class SelectionList extends StatelessWidget {
                                                                   editingSelection: selection,
                                                               ),
                                                               400,
-                                                              450,
+                                                              500,
                                                           )
                                                       );
                                                     },

@@ -27,6 +27,8 @@ class SelectionCanvas extends StatelessWidget {
                           sprite: Sprite.fromImage(snapshot.data),
                           tileSize: store.state.currentAtlas.tileSize,
                           size: size,
+                          tileHeight: store.state.currentAtlas.tileHeight,
+                          tileWidth: store.state.currentAtlas.tileWidth,
                       );
                     },
                 );
