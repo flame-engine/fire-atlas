@@ -62,22 +62,24 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
       return;
     }
 
-    /*if (tileWidthRaw.isNotEmpty && !isValidNumber(tileWidthRaw)) {
+    if (tileWidthRaw.isNotEmpty && !isValidNumber(tileWidthRaw)) {
       Store.instance.dispatch(CreateMessageAction(
         message: 'Tile Width must be a number',
         type: MessageType.ERROR,
       ));
       return;
-    }*/
+    }
     if (tileHeightRaw.isNotEmpty && !isValidNumber(tileHeightRaw)) {
       Store.instance.dispatch(CreateMessageAction(
-        message: ' Tile Height must be a number',
+        message: 'Tile Height must be a number',
         type: MessageType.ERROR,
       ));
       return;
     }
 
     String tileSizeStr = tileWidthRaw.isNotEmpty ? tileWidthRaw : tileHeightRaw;
+
+
     if (_imageData == null) {
       Store.instance.dispatch(CreateMessageAction(
         message: 'An image must be selected',

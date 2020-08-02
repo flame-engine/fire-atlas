@@ -43,9 +43,9 @@ class CanvasBoardState extends State<CanvasBoard> {
   double _scale = 1.0;
 
   Offset _calculateIndexClick(Offset offset) {
-    final int x = ((offset.dx - _translateX) /  (widget.tileWidth==null?widget.tileSize:widget.tileWidth * _scale)).floor();
-    final int y = ((offset.dy - _translateY) /  (widget.tileHeight==null?widget.tileSize:widget.tileHeight * _scale)).floor();
-
+    final int x = ((offset.dx - _translateX) /  ((widget.tileWidth==null?widget.tileSize:widget.tileWidth) * _scale)).floor();
+    final int y = ((offset.dy - _translateY) /  ((widget.tileHeight==null?widget.tileSize:widget.tileHeight) * _scale)).floor();
+    print("x:$x y:$y tileWidth:${widget.tileWidth} tileHeight:${widget.tileHeight} tileSize:${widget.tileSize}");
     return Offset(x.toDouble(), y.toDouble());
   }
 
