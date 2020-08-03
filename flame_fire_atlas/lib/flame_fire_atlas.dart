@@ -103,6 +103,7 @@ class FireAtlas {
       ..['selections'] = selectionsJson
       ..['tileWidth'] = tileWidth?.toDouble()
       ..['tileHeight'] = tileHeight?.toDouble();
+
     return json;
   }
 
@@ -113,8 +114,11 @@ class FireAtlas {
       ..imageData = json['imageData']
       ..tileHeight = json['tileHeight']?.toDouble()
       ..tileWidth = json['tileWidth']?.toDouble();
+
     json['selections'].entries.forEach((entry) {
-      Selection selection = entry.value['type'] == 'animation' ? AnimationSelection() : SpriteSelection();
+      Selection selection = entry.value['type'] == 'animation'
+          ? AnimationSelection()
+          : SpriteSelection();
 
       selection.fromJson(entry.value);
 
@@ -146,15 +150,18 @@ class FireAtlas {
   }
 
   void _assertImageLoaded() {
-    assert(_image != null, 'Atlas is not loaded yet, call "load" before using it');
+    assert(
+        _image != null, 'Atlas is not loaded yet, call "load" before using it');
   }
 
   Sprite getSprite(String selectionId) {
     final selection = selections[selectionId];
 
     _assertImageLoaded();
-    assert(selection != null, 'There is no selection with the id "$selectionId" on this atlas');
-    assert(selection is SpriteSelection, 'Selection "$selectionId" is not a Sprite');
+    assert(selection != null,
+        'There is no selection with the id "$selectionId" on this atlas');
+    assert(selection is SpriteSelection,
+        'Selection "$selectionId" is not a Sprite');
 
     return Sprite.fromImage(
       _image,
@@ -169,14 +176,17 @@ class FireAtlas {
     final selection = selections[selectionId];
 
     _assertImageLoaded();
-    assert(selection != null, 'There is no selection with the id "$selectionId" on this atlas');
-    assert(selection is AnimationSelection, 'Selection "$selectionId" is not an Animation');
+    assert(selection != null,
+        'There is no selection with the id "$selectionId" on this atlas');
+    assert(selection is AnimationSelection,
+        'Selection "$selectionId" is not an Animation');
 
     final initialX = selection.x.toDouble();
 
     final animationSelection = selection as AnimationSelection;
 
-    final frameSize = (1 + selection.w.toDouble()) / animationSelection.frameCount;
+    final frameSize =
+        (1 + selection.w.toDouble()) / animationSelection.frameCount;
 
     final width = frameSize * (tileWidth==null?tileSize.toDouble():tileWidth);
     final height = (1 + selection.h.toDouble()) * (tileHeight==null?tileSize.toDouble():tileHeight);

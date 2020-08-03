@@ -7,6 +7,7 @@ import '../../services/storage.dart';
 import './editor_actions.dart';
 
 class CreateAtlasAction extends AsyncMicroStoreAction<FireAtlasState> {
+
   String id;
   String imageData;
   int tileSize;
@@ -24,17 +25,17 @@ class CreateAtlasAction extends AsyncMicroStoreAction<FireAtlasState> {
   @override
   Future<FireAtlasState> perform(FireAtlasState state) async {
     final atlas = FireAtlas()
-      ..id = id
-      ..imageData = imageData
-      ..tileSize = tileSize
-      ..tileHeight = tileHeight
-      ..tileWidth = tileWidth;
+        ..id = id
+        ..imageData = imageData
+        ..tileHeight = tileHeight
+        ..tileWidth = tileWidth
+        ..tileSize = tileSize;
 
     await atlas.load(clearImageData: false);
 
     state
-      ..currentAtlas = atlas
-      ..hasChanges = true;
+        ..currentAtlas = atlas
+        ..hasChanges = true;
 
     return state;
   }
@@ -43,13 +44,13 @@ class CreateAtlasAction extends AsyncMicroStoreAction<FireAtlasState> {
 class UpdateAtlasImageAction extends AsyncMicroStoreAction<FireAtlasState> {
   final String imageData;
 
-  UpdateAtlasImageAction({this.imageData});
+  UpdateAtlasImageAction({ this.imageData });
 
   @override
   Future<FireAtlasState> perform(state) async {
     state
-      ..currentAtlas.imageData = imageData
-      ..hasChanges = true;
+        ..currentAtlas.imageData = imageData
+        ..hasChanges = true;
 
     await state.currentAtlas.load(clearImageData: false);
 
@@ -58,6 +59,7 @@ class UpdateAtlasImageAction extends AsyncMicroStoreAction<FireAtlasState> {
 }
 
 class SetSelectionAction extends MicroStoreAction<FireAtlasState> {
+
   Selection selection;
 
   SetSelectionAction({
@@ -75,6 +77,7 @@ class SetSelectionAction extends MicroStoreAction<FireAtlasState> {
 }
 
 class SelectSelectionAction extends MicroStoreAction<FireAtlasState> {
+
   Selection selection;
 
   SelectSelectionAction({
@@ -90,6 +93,7 @@ class SelectSelectionAction extends MicroStoreAction<FireAtlasState> {
 }
 
 class RemoveSelectedSelectionAction extends MicroStoreAction<FireAtlasState> {
+
   @override
   FireAtlasState perform(FireAtlasState state) {
     state.currentAtlas.selections.remove(state.selectedSelection.id);
@@ -101,6 +105,7 @@ class RemoveSelectedSelectionAction extends MicroStoreAction<FireAtlasState> {
 }
 
 class SaveAction extends MicroStoreAction<FireAtlasState> {
+
   @override
   FireAtlasState perform(FireAtlasState state) {
     FireAtlasStorage.saveProject(state.currentAtlas);
@@ -108,12 +113,13 @@ class SaveAction extends MicroStoreAction<FireAtlasState> {
     state.hasChanges = false;
 
     store.dispatch(CreateMessageAction(
-      message: 'Atlas saved!',
-      type: MessageType.INFO,
+        message: 'Atlas saved!',
+        type: MessageType.INFO,
     ));
 
     return state;
   }
+
 }
 
 class LoadAtlasAction extends AsyncMicroStoreAction<FireAtlasState> {
