@@ -69,7 +69,6 @@ class AnimationSelection extends Selection {
 
 class FireAtlas {
   String id;
-  int tileSize;
   double tileWidth;
   double tileHeight;
   String imageData;
@@ -98,7 +97,6 @@ class FireAtlas {
 
     final Map<String, dynamic> json = {}
       ..['id'] = id
-      ..['tileSize'] = tileSize
       ..['imageData'] = imageData
       ..['selections'] = selectionsJson
       ..['tileWidth'] = tileWidth?.toDouble()
@@ -110,10 +108,9 @@ class FireAtlas {
   static FireAtlas fromJson(Map<String, dynamic> json) {
     final atlas = FireAtlas()
       ..id = json['id']
-      ..tileSize = json['tileSize']
       ..imageData = json['imageData']
-      ..tileHeight = json['tileHeight']?.toDouble()
-      ..tileWidth = json['tileWidth']?.toDouble();
+      ..tileHeight = json['tileHeight']?.toDouble()?? json['tileSize']?.toDouble()
+      ..tileWidth = json['tileWidth']?.toDouble()?? json['tileSize']?.toDouble();
 
     json['selections'].entries.forEach((entry) {
       Selection selection = entry.value['type'] == 'animation'
@@ -165,10 +162,10 @@ class FireAtlas {
 
     return Sprite.fromImage(
       _image,
-      x: selection.x.toDouble() * (tileWidth==null?tileSize.toDouble():tileWidth),
-      y: selection.y.toDouble() * (tileHeight==null?tileSize.toDouble():tileHeight),
-      width: (1 + selection.w.toDouble()) *  (tileWidth==null?tileSize.toDouble():tileWidth),
-      height: (1 + selection.h.toDouble()) * (tileHeight==null?tileSize.toDouble():tileHeight),
+      x: selection.x.toDouble() *tileWidth,
+      y: selection.y.toDouble() * tileHeight,
+      width: (1 + selection.w.toDouble()) * tileWidth,
+      height: (1 + selection.h.toDouble()) * tileHeight,
     );
   }
 
@@ -188,15 +185,15 @@ class FireAtlas {
     final frameSize =
         (1 + selection.w.toDouble()) / animationSelection.frameCount;
 
-    final width = frameSize * (tileWidth==null?tileSize.toDouble():tileWidth);
-    final height = (1 + selection.h.toDouble()) * (tileHeight==null?tileSize.toDouble():tileHeight);
+    final width = frameSize * tileWidth;
+    final height = (1 + selection.h.toDouble()) * tileHeight;
 
     final sprites = List.generate(animationSelection.frameCount, (i) {
       final x = (initialX + i) * frameSize;
       return Sprite.fromImage(
         _image,
-        x: x * (tileWidth==null?tileSize.toDouble():tileWidth),
-        y: selection.y.toDouble() * (tileHeight==null?tileSize.toDouble():tileHeight),
+        x: x * tileWidth,
+        y: selection.y.toDouble() * tileHeight,
         width: width,
         height: height,
       );

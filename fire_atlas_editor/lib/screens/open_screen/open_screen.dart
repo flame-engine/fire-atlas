@@ -130,7 +130,6 @@ class _OpenScreenState extends State<OpenScreen> {
                                       AtlasOptionsContainer(
                                         onConfirm: (
                                           String atlasName,
-                                          int tileSize,
                                           String imageData,
                                           double tileWidth,
                                           double tileHeight,
@@ -142,7 +141,6 @@ class _OpenScreenState extends State<OpenScreen> {
                                             CreateAtlasAction(
                                               id: atlasName,
                                               imageData: imageData,
-                                              tileSize: tileSize,
                                               tileWidth: tileWidth,
                                               tileHeight: tileHeight,
                                             ),

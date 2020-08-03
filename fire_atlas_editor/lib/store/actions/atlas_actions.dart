@@ -10,16 +10,14 @@ class CreateAtlasAction extends AsyncMicroStoreAction<FireAtlasState> {
 
   String id;
   String imageData;
-  int tileSize;
   double tileWidth;
   double tileHeight;
 
   CreateAtlasAction({
     @required this.id,
     @required this.imageData,
-    @required this.tileSize,
-    this.tileWidth,
-    this.tileHeight,
+    @required this.tileWidth,
+    @required this.tileHeight,
   });
 
   @override
@@ -28,8 +26,7 @@ class CreateAtlasAction extends AsyncMicroStoreAction<FireAtlasState> {
         ..id = id
         ..imageData = imageData
         ..tileHeight = tileHeight
-        ..tileWidth = tileWidth
-        ..tileSize = tileSize;
+        ..tileWidth = tileWidth;
 
     await atlas.load(clearImageData: false);
 
