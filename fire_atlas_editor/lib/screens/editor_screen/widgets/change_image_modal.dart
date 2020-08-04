@@ -20,49 +20,46 @@ class _ChangeImageModalState extends State<ChangeImageModal> {
   @override
   Widget build(BuildContext ctx) {
     return Container(
-        child: Column(
+      child: Column(
+        children: [
+          FSubtitleTitle(title: 'Update image'),
+          Expanded(
+            child: ImageSelectionContainer(
+                margin: EdgeInsets.all(30),
+                imageData: _imageData,
+                onSelectImage: (imageData) {
+                  Flame.images.clearCache();
+                  setState(() {
+                    _imageData = imageData;
+                  });
+                }),
+          ),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              FSubtitleTitle(title: 'Update image'),
-              Expanded(
-                  child: ImageSelectionContainer(
-                      margin: EdgeInsets.all(30),
-                      imageData: _imageData,
-                      onSelectImage: (imageData) {
-                        Flame.images.clearCache();
-                        setState(() {
-                          _imageData = imageData;
-                        });
-                      }
-                  ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FButton(
-                        label: 'Cancel',
-                        onSelect: () {
-                          Store.instance.dispatch(CloseEditorModal());
-                        }
-                    ),
-                    FButton(
-                        disabled: _imageData == null,
-                        selected: true,
-                        label: 'Ok',
-                        onSelect: () {
-                          Store.instance.dispatchAsync(
-                              UpdateAtlasImageAction(
-                                  imageData: _imageData,
-                              ),
-                          );
-                          Store.instance.dispatch(CloseEditorModal());
-                        }
-                    ),
-                  ],
-              ),
-              SizedBox(height: 20),
+              FButton(
+                  label: 'Cancel',
+                  onSelect: () {
+                    Store.instance.dispatch(CloseEditorModal());
+                  }),
+              FButton(
+                  disabled: _imageData == null,
+                  selected: true,
+                  label: 'Ok',
+                  onSelect: () {
+                    Store.instance.dispatchAsync(
+                      UpdateAtlasImageAction(
+                        imageData: _imageData,
+                      ),
+                    );
+                    Store.instance.dispatch(CloseEditorModal());
+                  }),
             ],
-        ),
+          ),
+          SizedBox(height: 20),
+        ],
+      ),
     );
   }
 }

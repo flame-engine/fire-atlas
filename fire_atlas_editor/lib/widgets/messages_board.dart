@@ -11,21 +11,21 @@ class MessagesBoard extends StatelessWidget {
   @override
   Widget build(_) {
     return MicroStoreProvider<FireAtlasState>(
-        store: Store.instance,
-        builder: (ctx, store) {
-
-          return Column(
-              children: store.state.messages.map((message) {
-                return _Message(
-                    key: Key(message.message),
-                    message: message,
-                    onVanish: () {
-                      store.dispatch(DismissMessageAction(message: message));
-                    }
-                );
-              }).toList().cast()
-          );
-        },
+      store: Store.instance,
+      builder: (ctx, store) {
+        return Column(
+            children: store.state.messages
+                .map((message) {
+                  return _Message(
+                      key: Key(message.message),
+                      message: message,
+                      onVanish: () {
+                        store.dispatch(DismissMessageAction(message: message));
+                      });
+                })
+                .toList()
+                .cast());
+      },
     );
   }
 }
@@ -38,12 +38,12 @@ class _Message extends StatelessWidget {
     this.message,
     this.onVanish,
     Key key,
-  }): super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(ctx) {
     final color = message.type == MessageType.INFO
-        ? Color(0xFF34b4eb) 
+        ? Color(0xFF34b4eb)
         : Theme.of(ctx).errorColor;
 
     return SlideContainer(
@@ -58,9 +58,8 @@ class _Message extends StatelessWidget {
         },
         from: Offset(1.2, 0.0),
         child: ColorBadge(
-            color: color,
-            label: message.message,
-        )
-    );
+          color: color,
+          label: message.message,
+        ));
   }
 }

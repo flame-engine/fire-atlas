@@ -14,14 +14,13 @@ enum CanvasTools {
   MOVE,
 }
 
-
 class CanvasBoard extends StatefulWidget {
   final Sprite sprite;
   final Size size;
   final double tileWidth;
   final double tileHeight;
 
-  CanvasBoard({ this.sprite, this.size, this.tileWidth, this.tileHeight});
+  CanvasBoard({this.sprite, this.size, this.tileWidth, this.tileHeight});
 
   @override
   State createState() => CanvasBoardState();
@@ -42,8 +41,10 @@ class CanvasBoardState extends State<CanvasBoard> {
   double _scale = 1.0;
 
   Offset _calculateIndexClick(Offset offset) {
-    final int x = ((offset.dx - _translateX) /  (widget.tileWidth * _scale)).floor();
-    final int y = ((offset.dy - _translateY) /  (widget.tileHeight* _scale)).floor();
+    final int x =
+        ((offset.dx - _translateX) / (widget.tileWidth * _scale)).floor();
+    final int y =
+        ((offset.dy - _translateY) / (widget.tileHeight * _scale)).floor();
 
     return Offset(x.toDouble(), y.toDouble());
   }
@@ -110,24 +111,19 @@ class CanvasBoardState extends State<CanvasBoard> {
 
   void _createItem() {
     if (_selectionStart != null && _selectionEnd != null) {
-
-      Store.instance.dispatch(
-          OpenEditorModal(
-              SelectionForm(
-                  selectionStart: _selectionStart,
-                  selectionEnd: _selectionEnd,
-              ),
-              400,
-              600,
-          )
-      );
+      Store.instance.dispatch(OpenEditorModal(
+        SelectionForm(
+          selectionStart: _selectionStart,
+          selectionEnd: _selectionEnd,
+        ),
+        400,
+        600,
+      ));
     } else {
-      Store.instance.dispatch(
-          CreateMessageAction(
-              type: MessageType.ERROR,
-              message: 'Nothing is selected',
-          )
-      );
+      Store.instance.dispatch(CreateMessageAction(
+        type: MessageType.ERROR,
+        message: 'Nothing is selected',
+      ));
     }
   }
 
@@ -140,55 +136,55 @@ class CanvasBoardState extends State<CanvasBoard> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
-              children: [
-                FIconButton(
-                    onPress: () =>  setState(() => _currentTool = CanvasTools.SELECTION),
-                    iconData: Icons.select_all,
-                    disabled: _currentTool == CanvasTools.SELECTION
-                ),
-                FIconButton(
-                    onPress: () =>  setState(() => _currentTool = CanvasTools.MOVE),
-                    iconData: Icons.open_with,
-                    disabled: _currentTool == CanvasTools.MOVE
-                ),
-                FIconButton(
-                    iconData: Icons.zoom_in,
-                    onPress: _zoomIn,
-                ),
-                FIconButton(
-                    iconData: Icons.zoom_out,
-                    onPress: _zoomOut,
-                ),
-                FIconButton(
-                    iconData: Icons.add_box,
-                    onPress: _createItem,
-                ),
-              ],
+            children: [
+              FIconButton(
+                  onPress: () =>
+                      setState(() => _currentTool = CanvasTools.SELECTION),
+                  iconData: Icons.select_all,
+                  disabled: _currentTool == CanvasTools.SELECTION),
+              FIconButton(
+                  onPress: () =>
+                      setState(() => _currentTool = CanvasTools.MOVE),
+                  iconData: Icons.open_with,
+                  disabled: _currentTool == CanvasTools.MOVE),
+              FIconButton(
+                iconData: Icons.zoom_in,
+                onPress: _zoomIn,
+              ),
+              FIconButton(
+                iconData: Icons.zoom_out,
+                onPress: _zoomOut,
+              ),
+              FIconButton(
+                iconData: Icons.add_box,
+                onPress: _createItem,
+              ),
+            ],
           ),
           Expanded(
-              child: GestureDetector(
-                  child: ClipRect(
-                      child: CanvasSprite(
-                          sprite: widget.sprite,
-                          translateX: _translateX,
-                          translateY: _translateY,
-                          scale: _scale,
-                          tileWidth: widget.tileWidth,
-                          tileHeight:widget.tileHeight,
-                          selectionStart: _selectionStart,
-                          selectionEnd: _selectionEnd,
-                      ),
-                  ),
-                  onPanStart: (details) {
-                    _handleMoveStart(details);
-                  },
-                  onPanUpdate: (details) {
-                    _handleMove(details);
-                  },
-                  onPanEnd: (details) {
-                    _handleMoveEnd();
-                  },
+            child: GestureDetector(
+              child: ClipRect(
+                child: CanvasSprite(
+                  sprite: widget.sprite,
+                  translateX: _translateX,
+                  translateY: _translateY,
+                  scale: _scale,
+                  tileWidth: widget.tileWidth,
+                  tileHeight: widget.tileHeight,
+                  selectionStart: _selectionStart,
+                  selectionEnd: _selectionEnd,
+                ),
               ),
+              onPanStart: (details) {
+                _handleMoveStart(details);
+              },
+              onPanUpdate: (details) {
+                _handleMove(details);
+              },
+              onPanEnd: (details) {
+                _handleMoveEnd();
+              },
+            ),
           ),
         ],
       ),

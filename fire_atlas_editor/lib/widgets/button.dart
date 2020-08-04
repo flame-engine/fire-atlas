@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class FButton extends StatelessWidget {
-
   final bool selected;
   final String label;
   final bool disabled;
@@ -23,13 +22,11 @@ class FButton extends StatelessWidget {
     return Opacity(
         opacity: disabled ? 0.6 : 1,
         child: RaisedButton(
-            color: color,
-            onPressed: () {
-              if (!disabled)
-                onSelect();
-            },
-            child: Text(label),
-        )
-    );
+          color: color,
+          onPressed: () {
+            if (!disabled) onSelect();
+          },
+          child: Text(label),
+        ));
   }
 }

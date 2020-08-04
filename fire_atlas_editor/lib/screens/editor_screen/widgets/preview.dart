@@ -16,37 +16,35 @@ class Preview extends StatelessWidget {
         memoFn: (store) => [store.state.selectedSelection?.id],
         store: Store.instance,
         builder: (ctx, store) {
-
           Widget child = Center(child: Text('Nothing selected'));
 
           if (store.state.selectedSelection != null) {
             if (store.state.selectedSelection is SpriteSelection) {
               child = SimpleSpriteWidget(
                   center: true,
-                  sprite: store.state.currentAtlas.getSprite(store.state.selectedSelection.id)
-              );
+                  sprite: store.state.currentAtlas
+                      .getSprite(store.state.selectedSelection.id));
             } else if (store.state.selectedSelection is AnimationSelection) {
               child = AnimationPlayerWidget(
-                  animation: store.state.currentAtlas.getAnimation(store.state.selectedSelection.id)
-              );
+                  animation: store.state.currentAtlas
+                      .getAnimation(store.state.selectedSelection.id));
             }
           }
 
           return FContainer(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    FSubtitleTitle(title: 'Preview'),
-                    Expanded(
-                        child: Container(
-                            padding: EdgeInsets.all(10),
-                            child: child,
-                        ),
-                    ),
-                  ],
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                FSubtitleTitle(title: 'Preview'),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    child: child,
+                  ),
+                ),
+              ],
+            ),
           );
-        }
-    );
+        });
   }
 }

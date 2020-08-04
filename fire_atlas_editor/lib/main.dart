@@ -17,15 +17,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Fire Atlas Editor',
-      theme: ThemeData(
-        primaryColor: Color(0xffd20101),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: OpenScreen(),
-      routes: {
-        '/editor': (_) => EditorScreen(),
-      }
-    );
+        title: 'Fire Atlas Editor',
+        theme: ThemeData(
+          primaryColor: Color(0xffd20101),
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: OpenScreen(),
+        routes: {
+          '/editor': (_) => EditorScreen(),
+        });
   }
 }

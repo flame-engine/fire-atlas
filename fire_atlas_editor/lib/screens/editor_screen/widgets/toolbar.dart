@@ -16,7 +16,6 @@ import '../../../widgets/icon_button.dart';
 import '../../../widgets/text.dart';
 
 class Toolbar extends StatelessWidget {
-
   _launchURL(FireAtlas atlas) async {
     final element = document.createElement('a');
 
@@ -33,56 +32,50 @@ class Toolbar extends StatelessWidget {
   @override
   Widget build(ctx) {
     return MicroStoreProvider<FireAtlasState>(
-        store: Store.instance,
-        builder: (ctx, store) => FContainer(
-            height: 60,
-            child: Column(
-                children: [
-                  FLabel(label: 'Working on: ${store.state.currentAtlas?.id}', fontSize: 12),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                            children: [
-                              FIconButton(
-                                  iconData: Icons.save,
-                                  disabled: !store.state.hasChanges,
-                                  onPress: () {
-                                    store.dispatch(SaveAction());
-                                  }
-                              ),
-                              FIconButton(
-                                  iconData: Icons.image,
-                                  onPress: () {
-                                    store.dispatch(
-                                        OpenEditorModal(
-                                            ChangeImageModal(),
-                                            400,
-                                            500,
-                                        ),
-                                    );
-                                  }
-                              ),
-                              FIconButton(
-                                  iconData: Icons.get_app,
-                                  onPress: () {
-                                    _launchURL(store.state.currentAtlas);
-                                  }
-                              ),
-                            ]
+      store: Store.instance,
+      builder: (ctx, store) => FContainer(
+        height: 60,
+        child: Column(
+          children: [
+            FLabel(
+                label: 'Working on: ${store.state.currentAtlas?.id}',
+                fontSize: 12),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Row(children: [
+                FIconButton(
+                    iconData: Icons.save,
+                    disabled: !store.state.hasChanges,
+                    onPress: () {
+                      store.dispatch(SaveAction());
+                    }),
+                FIconButton(
+                    iconData: Icons.image,
+                    onPress: () {
+                      store.dispatch(
+                        OpenEditorModal(
+                          ChangeImageModal(),
+                          400,
+                          500,
                         ),
-                        FIconButton(
-                            iconData: Icons.exit_to_app,
-                            onPress: () {
-                              store.dispatch(SelectSelectionAction(selection: null));
-                              Navigator.of(ctx).pushReplacementNamed('/');
-                            },
-                        ),
-                      ]
-                  ),
-                ],
-            ),
+                      );
+                    }),
+                FIconButton(
+                    iconData: Icons.get_app,
+                    onPress: () {
+                      _launchURL(store.state.currentAtlas);
+                    }),
+              ]),
+              FIconButton(
+                iconData: Icons.exit_to_app,
+                onPress: () {
+                  store.dispatch(SelectSelectionAction(selection: null));
+                  Navigator.of(ctx).pushReplacementNamed('/');
+                },
+              ),
+            ]),
+          ],
         ),
+      ),
     );
   }
 }

@@ -29,11 +29,9 @@ class FireAtlasStorage {
     return id;
   }
 
-  static List<String> listProjects() =>
-    _localStorage.entries
-        .map((e) => e.key)
-        .where((k) => k.startsWith('ATLAS_'))
-        .map((k) => k.replaceFirst('ATLAS_', ''))
-        .toList();
+  static List<String> listProjects() => _localStorage.entries
+      .map((e) => e.key)
+      .where((k) => k.startsWith('ATLAS_'))
+      .map((k) => k.replaceFirst('ATLAS_', ''))
+      .toList();
 }
-

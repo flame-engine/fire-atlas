@@ -20,12 +20,10 @@ class SimpleSpriteLoaderWidget extends StatelessWidget {
           if (snapshot.hasData)
             return SimpleSpriteWidget(sprite: snapshot.data, center: center);
 
-          if (snapshot.hasError)
-            return Text('Something went wrong :(');
+          if (snapshot.hasError) return Text('Something went wrong :(');
 
           return Text('Loading...');
-        }
-    );
+        });
   }
 }
 
@@ -41,7 +39,7 @@ class SimpleSpriteWidget extends StatelessWidget {
   @override
   Widget build(_) {
     return Container(
-        child: CustomPaint(painter: _SimpleSpritePainer(sprite, center)),
+      child: CustomPaint(painter: _SimpleSpritePainer(sprite, center)),
     );
   }
 }
@@ -63,16 +61,16 @@ class _SimpleSpritePainer extends CustomPainter {
     final rate = min(widthRate, heightRate);
 
     final rect = Rect.fromLTWH(
-        0,
-        0,
-        _sprite.size.x * rate,
-        _sprite.size.y * rate,
+      0,
+      0,
+      _sprite.size.x * rate,
+      _sprite.size.y * rate,
     );
 
     if (_center) {
       canvas.translate(
-          size.width / 2 - rect.width / 2,
-          size.height / 2 - rect.height / 2,
+        size.width / 2 - rect.width / 2,
+        size.height / 2 - rect.height / 2,
       );
     }
 

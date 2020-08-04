@@ -17,27 +17,25 @@ class DeleteSelectionModal extends StatelessWidget {
     }
 
     return Container(
-        padding: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-        child: Column(
-            children: [
-              FSubtitleTitle(title: 'Confirmation'),
-              FLabel(label: 'Are you sure you want to delete this selection?'),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FButton(
-                        label: 'Cancel',
-                        onSelect: _closeModal,
-                    ),
-                    FButton(
-                        selected: true,
-                        label: 'Yes',
-                        onSelect: _confirm,
-                    ),
-                  ],
-              ),
-            ]
+      padding: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+      child: Column(children: [
+        FSubtitleTitle(title: 'Confirmation'),
+        FLabel(label: 'Are you sure you want to delete this selection?'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FButton(
+              label: 'Cancel',
+              onSelect: _closeModal,
+            ),
+            FButton(
+              selected: true,
+              label: 'Yes',
+              onSelect: _confirm,
+            ),
+          ],
         ),
+      ]),
     );
   }
 }

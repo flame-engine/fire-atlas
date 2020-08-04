@@ -13,16 +13,15 @@ class OpenEditorModal extends MicroStoreAction<FireAtlasState> {
   @override
   FireAtlasState perform(state) {
     state.modal = ModalState()
-        ..child = modal
-        ..width = width
-        ..height = height;
+      ..child = modal
+      ..width = width
+      ..height = height;
 
     return state;
   }
 }
 
 class CloseEditorModal extends MicroStoreAction<FireAtlasState> {
-
   @override
   FireAtlasState perform(state) {
     state.modal = null;
@@ -46,8 +45,8 @@ class CreateMessageAction extends MicroStoreAction<FireAtlasState> {
 
     if (existent.isEmpty) {
       final messageObj = Message()
-          ..type  = type
-          ..message = message;
+        ..type = type
+        ..message = message;
 
       state.messages.add(messageObj);
     }
@@ -64,8 +63,6 @@ class DismissMessageAction extends MicroStoreAction<FireAtlasState> {
   });
 
   @override
-  FireAtlasState perform(state)  => state
-      ..messages.removeWhere((m) => m.message == message.message);
+  FireAtlasState perform(state) =>
+      state..messages.removeWhere((m) => m.message == message.message);
 }
-
-

@@ -16,13 +16,14 @@ class SlideContainer extends StatefulWidget {
     this.curve = Curves.easeInExpo,
     this.onFinish,
     Key key,
-  }): super(key: key);
+  }) : super(key: key);
 
   @override
   createState() => _SlideContainer();
 }
 
-class _SlideContainer extends State<SlideContainer> with SingleTickerProviderStateMixin {
+class _SlideContainer extends State<SlideContainer>
+    with SingleTickerProviderStateMixin {
   AnimationController _controller;
   Animation<Offset> _offsetAnimation;
 
@@ -33,8 +34,8 @@ class _SlideContainer extends State<SlideContainer> with SingleTickerProviderSta
       duration: widget.duration,
       vsync: this,
     )..forward().whenComplete(() {
-      widget.onFinish?.call(_controller);
-    });
+        widget.onFinish?.call(_controller);
+      });
 
     _offsetAnimation = Tween<Offset>(
       begin: widget.from,
@@ -59,4 +60,3 @@ class _SlideContainer extends State<SlideContainer> with SingleTickerProviderSta
     );
   }
 }
-

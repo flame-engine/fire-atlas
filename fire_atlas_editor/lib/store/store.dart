@@ -3,7 +3,8 @@ import '../vendor/micro_store/micro_store.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 enum MessageType {
-  ERROR, INFO,
+  ERROR,
+  INFO,
 }
 
 class Message {

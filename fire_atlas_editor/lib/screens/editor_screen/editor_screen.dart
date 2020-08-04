@@ -12,57 +12,56 @@ import '../../store/store.dart';
 class EditorScreen extends StatelessWidget {
   @override
   Widget build(ctx) {
-
     if (Store.instance.state.currentAtlas == null) {
       // TODO improve this
       return Scaffold(
-          body: Center(
-              child: Column(
-                  children: [
-                    Text('No atlas selected'),
-                    FButton(
-                        label: 'Back',
-                        onSelect: () {
-                          Navigator.of(ctx).pop();
-                        },
-                    ),
-                  ],
+        body: Center(
+          child: Column(
+            children: [
+              Text('No atlas selected'),
+              FButton(
+                label: 'Back',
+                onSelect: () {
+                  Navigator.of(ctx).pop();
+                },
               ),
+            ],
           ),
+        ),
       );
     }
 
     final body = Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Body
-          Expanded(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Toolbar(),
-                    Expanded(
-                        child: SelectionCanvas(),
-                    ),
-                  ],
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Body
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Toolbar(),
+              Expanded(
+                child: SelectionCanvas(),
               ),
+            ],
           ),
-          Container(
-              width: 400,
-              child: Column(
-                  children: [
-                    Expanded(
-                        flex: 4,
-                        child: Preview(),
-                    ),
-                    Expanded(
-                        flex: 6,
-                        child: SelectionList(),
-                    ),
-                  ],
+        ),
+        Container(
+          width: 400,
+          child: Column(
+            children: [
+              Expanded(
+                flex: 4,
+                child: Preview(),
               ),
+              Expanded(
+                flex: 6,
+                child: SelectionList(),
+              ),
+            ],
           ),
-        ],
+        ),
+      ],
     );
 
     return FScaffold(child: body);

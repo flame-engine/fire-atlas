@@ -16,10 +16,10 @@ class ColorBadge extends StatelessWidget {
     final textColor = TinyColor(color).lighten(35).color;
 
     return Container(
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.all(5),
-        color: color,
-        child: Text(label, style: TextStyle(color: textColor)),
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.all(5),
+      color: color,
+      child: Text(label, style: TextStyle(color: textColor)),
     );
   }
 }

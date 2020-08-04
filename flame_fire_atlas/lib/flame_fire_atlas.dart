@@ -109,8 +109,10 @@ class FireAtlas {
     final atlas = FireAtlas()
       ..id = json['id']
       ..imageData = json['imageData']
-      ..tileHeight = json['tileHeight']?.toDouble()?? json['tileSize']?.toDouble()
-      ..tileWidth = json['tileWidth']?.toDouble()?? json['tileSize']?.toDouble();
+      ..tileHeight =
+          json['tileHeight']?.toDouble() ?? json['tileSize']?.toDouble()
+      ..tileWidth =
+          json['tileWidth']?.toDouble() ?? json['tileSize']?.toDouble();
 
     json['selections'].entries.forEach((entry) {
       Selection selection = entry.value['type'] == 'animation'
@@ -162,7 +164,7 @@ class FireAtlas {
 
     return Sprite.fromImage(
       _image,
-      x: selection.x.toDouble() *tileWidth,
+      x: selection.x.toDouble() * tileWidth,
       y: selection.y.toDouble() * tileHeight,
       width: (1 + selection.w.toDouble()) * tileWidth,
       height: (1 + selection.h.toDouble()) * tileHeight,

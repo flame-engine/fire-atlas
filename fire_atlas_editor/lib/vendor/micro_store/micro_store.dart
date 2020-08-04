@@ -43,7 +43,8 @@ abstract class AsyncMicroStoreAction<T> {
   Future<T> perform(T state);
 }
 
-typedef MicroStoreProviderBuilder<T> = Widget Function(BuildContext, MicroStore<T>);
+typedef MicroStoreProviderBuilder<T> = Widget Function(
+    BuildContext, MicroStore<T>);
 typedef MicroStoreProviderMemo<T> = List Function(MicroStore<T>);
 
 class MicroStoreProvider<T> extends StatefulWidget {
@@ -56,7 +57,7 @@ class MicroStoreProvider<T> extends StatefulWidget {
     this.store,
     this.builder,
     this.memoFn,
-  }): super(key: key);
+  }) : super(key: key);
 
   @override
   State createState() => _MicroStoreProviderState<T>();
@@ -67,7 +68,6 @@ class _MicroStoreProviderState<T> extends State<MicroStoreProvider<T>> {
   List _memoValue;
 
   void _update(MicroStore<T> store) {
-
     Function eq = const ListEquality().equals;
 
     List newMemo;

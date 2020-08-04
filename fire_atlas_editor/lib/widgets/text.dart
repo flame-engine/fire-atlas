@@ -12,13 +12,11 @@ class FLabel extends StatelessWidget {
   @override
   Widget build(BuildContext ctx) {
     return Text(
-        label,
-        style: Theme.of(ctx).textTheme.bodyText2
-          .copyWith(fontSize: fontSize),
+      label,
+      style: Theme.of(ctx).textTheme.bodyText2.copyWith(fontSize: fontSize),
     );
   }
 }
-
 
 class _FTitle extends StatelessWidget {
   final String title;
@@ -33,24 +31,21 @@ class _FTitle extends StatelessWidget {
   Widget build(BuildContext ctx) {
     return Container(
         decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(
-                    width: 2,
-                    color: Theme.of(ctx).dividerColor
-                ),
-            ),
+          border: Border(
+            bottom: BorderSide(width: 2, color: Theme.of(ctx).dividerColor),
+          ),
         ),
         margin: EdgeInsets.only(
-            bottom: 25,
-            top: 5,
-            left: 5,
-            right: 5,
+          bottom: 25,
+          top: 5,
+          left: 5,
+          right: 5,
         ),
-        child: Center(child: Text(
-            title,
-            style: style,
-        ))
-    );
+        child: Center(
+            child: Text(
+          title,
+          style: style,
+        )));
   }
 }
 
@@ -62,7 +57,8 @@ class FTitle extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext ctx) => _FTitle(title: title, style: Theme.of(ctx).textTheme.headline4);
+  Widget build(BuildContext ctx) =>
+      _FTitle(title: title, style: Theme.of(ctx).textTheme.headline4);
 }
 
 class FSubtitleTitle extends StatelessWidget {
@@ -73,5 +69,6 @@ class FSubtitleTitle extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext ctx) => _FTitle(title: title, style: Theme.of(ctx).textTheme.headline6);
+  Widget build(BuildContext ctx) =>
+      _FTitle(title: title, style: Theme.of(ctx).textTheme.headline6);
 }

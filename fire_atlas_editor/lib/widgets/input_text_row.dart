@@ -18,16 +18,16 @@ class InputTextRow extends StatelessWidget {
   @override
   Widget build(ctx) {
     return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          FLabel(label: label, fontSize: 12),
-          TextField(
-              controller: inputController,
-              enabled: enabled,
-              autofocus: autofocus,
-          ),
-        ],
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        FLabel(label: label, fontSize: 12),
+        TextField(
+          controller: inputController,
+          enabled: enabled,
+          autofocus: autofocus,
+        ),
+      ],
     );
   }
 }
