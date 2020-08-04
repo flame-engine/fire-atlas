@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flame/sprite.dart';
 
 import '../../../../widgets/icon_button.dart';
@@ -162,28 +163,38 @@ class CanvasBoardState extends State<CanvasBoard> {
             ],
           ),
           Expanded(
-            child: GestureDetector(
-              child: ClipRect(
-                child: CanvasSprite(
-                  sprite: widget.sprite,
-                  translateX: _translateX,
-                  translateY: _translateY,
-                  scale: _scale,
-                  tileWidth: widget.tileWidth,
-                  tileHeight: widget.tileHeight,
-                  selectionStart: _selectionStart,
-                  selectionEnd: _selectionEnd,
+            child: Listener(
+              onPointerSignal: (s) {
+                if (s is PointerScrollEvent) {
+                  setState(() {
+                    _translateX += s.scrollDelta.dx;
+                    _translateY += s.scrollDelta.dy;
+                  });
+                }
+              },
+              child: GestureDetector(
+                child: ClipRect(
+                  child: CanvasSprite(
+                    sprite: widget.sprite,
+                    translateX: _translateX,
+                    translateY: _translateY,
+                    scale: _scale,
+                    tileWidth: widget.tileWidth,
+                    tileHeight: widget.tileHeight,
+                    selectionStart: _selectionStart,
+                    selectionEnd: _selectionEnd,
+                  ),
                 ),
+                onPanStart: (details) {
+                  _handleMoveStart(details);
+                },
+                onPanUpdate: (details) {
+                  _handleMove(details);
+                },
+                onPanEnd: (details) {
+                  _handleMoveEnd();
+                },
               ),
-              onPanStart: (details) {
-                _handleMoveStart(details);
-              },
-              onPanUpdate: (details) {
-                _handleMove(details);
-              },
-              onPanEnd: (details) {
-                _handleMoveEnd();
-              },
             ),
           ),
         ],
