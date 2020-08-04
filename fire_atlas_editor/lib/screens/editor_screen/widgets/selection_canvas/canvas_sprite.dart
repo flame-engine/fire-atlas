@@ -7,7 +7,8 @@ class CanvasSprite extends StatelessWidget {
   final double translateX;
   final double translateY;
   final double scale;
-  final int tileSize;
+  final double tileWidth;
+  final double tileHeight;
   final Offset selectionStart;
   final Offset selectionEnd;
 
@@ -16,7 +17,8 @@ class CanvasSprite extends StatelessWidget {
     this.translateX,
     this.translateY,
     this.scale,
-    this.tileSize,
+    this.tileWidth,
+    this.tileHeight,
     this.selectionStart,
     this.selectionEnd,
   });
@@ -29,7 +31,8 @@ class CanvasSprite extends StatelessWidget {
             translateX,
             translateY,
             scale,
-            tileSize,
+            tileWidth,
+            tileHeight,
             selectionStart,
             selectionEnd,
 
@@ -45,7 +48,8 @@ class _CanvasSpritePainer extends CustomPainter {
   final double _x;
   final double _y;
   final double _scale;
-  final int _tileSize;
+  final double _tileWidth;
+  final double _tileHeight;
   final Offset _selectionStart;
   final Offset _selectionEnd;
 
@@ -58,8 +62,9 @@ class _CanvasSpritePainer extends CustomPainter {
       this._y,
       this._scale,
 
-      this._tileSize,
 
+      this._tileWidth,
+      this._tileHeight,
       this._selectionStart,
       this._selectionEnd,
       this._selectionColor,
@@ -107,8 +112,8 @@ class _CanvasSpritePainer extends CustomPainter {
     );
 
     // Checker board
-    final rowCount = _sprite.size.y / _tileSize;
-    final columnCount = _sprite.size.x / _tileSize;
+    final rowCount = (_sprite.size.y / _tileHeight).ceil();
+    final columnCount = (_sprite.size.x / _tileWidth).ceil();
 
     final darkTilePaint = Paint()
         ..color = TinyColor(_gridTileColor.withOpacity(1)).lighten(70).color;
@@ -122,8 +127,8 @@ class _CanvasSpritePainer extends CustomPainter {
 
       for (var x = 0.0; x < columnCount; x++) {
         canvas.drawRect(
-            Rect.fromLTWH(x * _tileSize, y * _tileSize, _tileSize.toDouble(), _tileSize.toDouble()),
-            x % 2 == 0 ? p1 : p2 
+            Rect.fromLTWH(x * _tileWidth, y * _tileHeight, _tileWidth, _tileHeight),
+            x % 2 == 0 ? p1 : p2
         );
       }
     }
@@ -136,10 +141,10 @@ class _CanvasSpritePainer extends CustomPainter {
       final size = _selectionEnd - _selectionStart + Offset(1, 1);
       canvas.drawRect(
           Rect.fromLTWH(
-              (_selectionStart.dx * _tileSize),
-              (_selectionStart.dy * _tileSize),
-              (size.dx * _tileSize),
-              (size.dy * _tileSize),
+              (_selectionStart.dx * _tileWidth),
+              (_selectionStart.dy * _tileHeight),
+              (size.dx * _tileWidth),
+              (size.dy * _tileHeight),
           ),
           Paint()
             ..style = PaintingStyle.stroke

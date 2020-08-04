@@ -12,7 +12,7 @@ import '../../../utils/validators.dart';
 
 class AtlasOptionsContainer extends StatefulWidget {
   final void Function() onCancel;
-  final Function(String, int, String) onConfirm;
+  final Function(String, String, double, double) onConfirm;
 
   AtlasOptionsContainer({
     this.onCancel,
@@ -27,17 +27,21 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
 
   String _imageData;
 
-  final tileSizeController = TextEditingController();
   final atlasNameController = TextEditingController();
+  final tileWidthController = TextEditingController();
+  final tileHeightController = TextEditingController();
 
   @override
   void dispose() {
-    tileSizeController.dispose();
+    atlasNameController.dispose();
+    tileWidthController.dispose();
+    tileHeightController.dispose();
     super.dispose();
   }
 
   void _confirm() {
-    final tileSizeRaw = tileSizeController.text;
+    final tileWidthRaw = tileWidthController.text;
+    final tileHeightRaw = tileHeightController.text;
     final atlasName = atlasNameController.text;
 
     if (atlasName.isEmpty) {
@@ -49,12 +53,41 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
       );
       return;
     }
+    if (tileWidthRaw.isEmpty) {
+        Store.instance.dispatch(
+            CreateMessageAction(
+                message: 'Tile Width is required',
+                type: MessageType.ERROR,
+            )
+      );
+      return;
+    }
 
-    if (!isValidNumber(tileSizeRaw)) {
+    if (tileHeightRaw.isEmpty) {
+        Store.instance.dispatch(
+            CreateMessageAction(
+                message: 'Tile Height is required',
+                type: MessageType.ERROR,
+            )
+      );
+      return;
+    }
+
+    if (tileWidthRaw.isNotEmpty && !isValidNumber(tileWidthRaw)) {
       Store.instance.dispatch(
           CreateMessageAction(
-              message: 'Tile size is required, and must be a number',
+              message: 'Tile Width must be a number',
               type: MessageType.ERROR,
+          )
+      );
+      return;
+    }
+
+    if (tileHeightRaw.isNotEmpty && !isValidNumber(tileHeightRaw)) {
+      Store.instance.dispatch(
+          CreateMessageAction(
+            message: 'Tile Height must be a number',
+            type: MessageType.ERROR,
           )
       );
       return;
@@ -70,7 +103,7 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
       return;
     }
 
-    widget.onConfirm(atlasName, int.parse(tileSizeRaw), _imageData);
+    widget.onConfirm(atlasName, _imageData, double.tryParse(tileWidthRaw), double.tryParse(tileHeightRaw));
   }
 
   void _cancel() {
@@ -100,9 +133,18 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
                                   inputController: atlasNameController,
                               ),
                               SizedBox(height: 40),
-                              InputTextRow(
+                              /*InputTextRow(
                                   label: 'Tile size:',
                                   inputController: tileSizeController,
+                              ),*/
+                              InputTextRow(
+                                label: 'Tile Width:',
+                                inputController: tileWidthController,
+                              ),
+                              SizedBox(height: 40),
+                              InputTextRow(
+                                label: 'Tile Height:',
+                                inputController: tileHeightController,
                               ),
                             ],
                         )
