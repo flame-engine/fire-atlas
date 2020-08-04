@@ -1,4 +1,4 @@
-name: Test
+name: lint
 
 on: push
 
@@ -15,6 +15,4 @@ jobs:
         with:
           channel: 'beta'
       - run: flutter --version
-      - run: flutter pub get
       - run: ./scripts/lint.sh
-      - run: flutter test
