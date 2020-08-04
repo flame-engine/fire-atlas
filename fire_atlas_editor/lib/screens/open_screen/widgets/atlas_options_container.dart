@@ -133,10 +133,6 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
                                   inputController: atlasNameController,
                               ),
                               SizedBox(height: 40),
-                              /*InputTextRow(
-                                  label: 'Tile size:',
-                                  inputController: tileSizeController,
-                              ),*/
                               InputTextRow(
                                 label: 'Tile Width:',
                                 inputController: tileWidthController,
