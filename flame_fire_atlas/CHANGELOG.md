@@ -1,3 +1,7 @@
+## next
+
+ * Breaking tile size into width and height
+
 ## [0.0.3]
 
 * Updating Flame version
