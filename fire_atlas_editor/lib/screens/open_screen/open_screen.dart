@@ -12,6 +12,7 @@ import '../../widgets/text.dart';
 import '../../utils/select_file.dart';
 
 import './widgets/atlas_options_container.dart';
+import './widgets/support_container.dart';
 
 class OpenScreen extends StatefulWidget {
   @override
@@ -91,79 +92,102 @@ class _OpenScreenState extends State<OpenScreen> {
     });
 
     children.add(
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      Stack(
         children: [
-          Container(
-            height: 400,
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Logo of some sort
-                  SizedBox(height: 50),
-                  Container(width: 500, child: Image.asset('assets/Logo.png')),
-                  SizedBox(height: 40),
-                  FContainer(
-                    width: 400,
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                              child: SingleChildScrollView(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: containerChildren),
-                          )),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 400,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Logo of some sort
+                      SizedBox(height: 50),
+                      Container(
+                          width: 500, child: Image.asset('assets/Logo.png')),
+                      SizedBox(height: 40),
+                      FContainer(
+                        width: 400,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              FButton(
-                                label: 'Import atlas',
-                                onSelect: _importAtlas,
-                              ),
-                              SizedBox(width: 10),
-                              FButton(
-                                  label: 'New atlas',
-                                  onSelect: () {
-                                    Store.instance.dispatch(OpenEditorModal(
-                                      AtlasOptionsContainer(
-                                        onConfirm: (
-                                          String atlasName,
-                                          String imageData,
-                                          double tileWidth,
-                                          double tileHeight,
-                                        ) async {
-                                          Store.instance
-                                              .dispatch(CloseEditorModal());
+                              Expanded(
+                                  child: SingleChildScrollView(
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: containerChildren),
+                              )),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  FButton(
+                                    label: 'Import atlas',
+                                    onSelect: _importAtlas,
+                                  ),
+                                  SizedBox(width: 10),
+                                  FButton(
+                                      label: 'New atlas',
+                                      onSelect: () {
+                                        Store.instance.dispatch(OpenEditorModal(
+                                          AtlasOptionsContainer(
+                                            onConfirm: (
+                                              String atlasName,
+                                              String imageData,
+                                              double tileWidth,
+                                              double tileHeight,
+                                            ) async {
+                                              Store.instance
+                                                  .dispatch(CloseEditorModal());
 
-                                          await Store.instance.dispatchAsync(
-                                            CreateAtlasAction(
-                                              id: atlasName,
-                                              imageData: imageData,
-                                              tileWidth: tileWidth,
-                                              tileHeight: tileHeight,
-                                            ),
-                                          );
-                                          Navigator.of(context)
-                                              .pushNamed('/editor');
-                                        },
-                                        onCancel: () {
-                                          Store.instance
-                                              .dispatch(CloseEditorModal());
-                                        },
-                                      ),
-                                      600,
-                                      600,
-                                    ));
-                                  }),
-                            ],
-                          ),
-                        ]),
+                                              await Store.instance
+                                                  .dispatchAsync(
+                                                CreateAtlasAction(
+                                                  id: atlasName,
+                                                  imageData: imageData,
+                                                  tileWidth: tileWidth,
+                                                  tileHeight: tileHeight,
+                                                ),
+                                              );
+                                              Navigator.of(context)
+                                                  .pushNamed('/editor');
+                                            },
+                                            onCancel: () {
+                                              Store.instance
+                                                  .dispatch(CloseEditorModal());
+                                            },
+                                          ),
+                                          600,
+                                          600,
+                                        ));
+                                      }),
+                                ],
+                              ),
+                            ]),
+                      ),
+                      SizedBox(height: 20),
+                    ],
                   ),
-                  SizedBox(height: 20),
-                ],
+                ),
               ),
+            ],
+          ),
+          Positioned(
+            bottom: 10,
+            right: 10,
+            child: FButton(
+              label: 'Support this project',
+              onSelect: () {
+                Store.instance.dispatch(
+                  OpenEditorModal(
+                    SupportContainer(),
+                    500,
+                    300,
+                  ),
+                );
+              },
             ),
           ),
         ],
