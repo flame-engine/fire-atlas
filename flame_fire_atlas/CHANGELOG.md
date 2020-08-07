@@ -1,4 +1,4 @@
-## next
+## [0.0.4]
 
  * Breaking tile size into width and height
 
