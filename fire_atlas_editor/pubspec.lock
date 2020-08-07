@@ -112,7 +112,7 @@ packages:
       path: "../flame_fire_atlas"
       relative: true
     source: path
-    version: "0.0.3"
+    version: "0.0.4"
   flare_dart:
     dependency: transitive
     description:
