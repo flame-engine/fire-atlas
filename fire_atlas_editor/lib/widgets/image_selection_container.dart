@@ -34,6 +34,7 @@ class ImageSelectionContainer extends StatelessWidget {
                   future: Flame.images.fromBase64('', imageData),
                   builder: (ctx, snapshot) {
                     if (snapshot.hasData) {
+                      Flame.images.clearCache();
                       return SizedBox(
                           width: 200,
                           child: SimpleSpriteWidget(
