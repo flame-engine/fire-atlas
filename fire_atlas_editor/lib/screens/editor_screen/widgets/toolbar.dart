@@ -10,6 +10,7 @@ import '../../../store/actions/atlas_actions.dart';
 import '../../../store/actions/editor_actions.dart';
 
 import './change_image_modal.dart';
+import './concat_image_modal.dart';
 
 import '../../../widgets/container.dart';
 import '../../../widgets/icon_button.dart';
@@ -55,6 +56,17 @@ class Toolbar extends StatelessWidget {
                         OpenEditorModal(
                           ChangeImageModal(),
                           400,
+                          500,
+                        ),
+                      );
+                    }),
+                FIconButton(
+                    iconData: Icons.add_photo_alternate,
+                    onPress: () {
+                      store.dispatch(
+                        OpenEditorModal(
+                          ConcatImageModal(),
+                          600,
                           500,
                         ),
                       );
