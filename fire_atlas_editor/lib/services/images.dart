@@ -3,6 +3,7 @@ import 'package:flame/flame.dart';
 import 'dart:ui';
 import 'dart:convert';
 import 'dart:typed_data';
+import 'dart:math';
 
 Future<String> concatenateImages(
   String originalData,
@@ -33,8 +34,8 @@ Future<String> concatenateImages(
 
   final picture = recorder.endRecording();
   final finalImage = await picture.toImage(
-    original.width + (newImage.width * position.x).abs().toInt(),
-    original.height + (newImage.height * position.y).abs().toInt(),
+    max(original.width + (newImage.width * position.x).abs().toInt(), newImage.width),
+    max(original.height + (newImage.height * position.y).abs().toInt(), newImage.height),
   );
 
   final byteData = await finalImage.toByteData(format: ImageByteFormat.png);
