@@ -1,4 +1,3 @@
-import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 import 'package:flame/position.dart';
 import 'package:flame/flame.dart';
 import 'dart:ui';
@@ -10,7 +9,7 @@ Future<String> concatenateImages(
   String originalData,
   String newImageData,
   Position placement,
-  Selection selection,
+  Rect selection,
 ) async {
   final original = await Flame.images.fromBase64('original', originalData);
   final newImage = await Flame.images.fromBase64('newImage', newImageData);
@@ -37,6 +36,7 @@ Future<String> concatenateImages(
       canvas.drawImage(newImage, Offset(newX, newY), paint);
     }
   } else if (selection != null) {
+    canvas.drawImage(original, Offset(0, 0), paint);
     canvas.drawImageRect(
       newImage,
       Rect.fromLTWH(
@@ -45,21 +45,16 @@ Future<String> concatenateImages(
         newImage.width.toDouble(),
         newImage.height.toDouble(),
       ),
-      Rect.fromLTWH(
-        selection.x.toDouble(),
-        selection.y.toDouble(),
-        selection.w.toDouble(),
-        selection.h.toDouble(),
-      ),
+      selection,
       paint,
     );
   }
 
   final picture = recorder.endRecording();
   final finalImage = await picture.toImage(
-    max(original.width + (newImage.width * placement.x).abs().toInt(),
+    max(original.width + (newImage.width * (placement?.x ?? 0)).abs().toInt(),
         newImage.width),
-    max(original.height + (newImage.height * placement.y).abs().toInt(),
+    max(original.height + (newImage.height * (placement?.y ?? 0)).abs().toInt(),
         newImage.height),
   );
 

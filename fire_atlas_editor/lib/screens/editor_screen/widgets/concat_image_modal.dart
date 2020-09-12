@@ -20,7 +20,7 @@ class ConcatImageModal extends StatefulWidget {
 class _ConcatImageModalState extends State<ConcatImageModal> {
   String _imageData;
   Position _placement;
-  Selection _selection;
+  Rect _selection;
 
   @override
   Widget build(BuildContext ctx) {
@@ -90,13 +90,12 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                       ),
                       FButton(
                         label: 'Selection',
-                        disabled:
-                            Store.instance.state.selectedSelection == null,
+                        disabled: Store.instance.state.canvasSelection == null,
                         selected: _selection != null,
                         onSelect: () {
                           setState(() {
                             _placement = null;
-                            _selection = Store.instance.state.selectedSelection;
+                            _selection = Store.instance.state.canvasSelection;
                           });
                         },
                       ),
@@ -116,7 +115,8 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                     Store.instance.dispatch(CloseEditorModal());
                   }),
               FButton(
-                  disabled: _imageData == null || _placement == null,
+                  disabled: _imageData == null ||
+                      (_placement == null && _selection == null),
                   selected: true,
                   label: 'Ok',
                   onSelect: () async {
