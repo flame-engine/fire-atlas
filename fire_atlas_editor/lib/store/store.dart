@@ -1,6 +1,9 @@
 import 'package:flutter/widgets.dart';
-import '../vendor/micro_store/micro_store.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
+
+import 'dart:ui';
+
+import '../vendor/micro_store/micro_store.dart';
 
 enum MessageType {
   ERROR,
@@ -24,6 +27,7 @@ class FireAtlasState {
   Selection selectedSelection;
   ModalState modal;
   List<Message> messages = [];
+  Rect canvasSelection;
 }
 
 class Store {
