@@ -18,7 +18,8 @@ class ConcatImageModal extends StatefulWidget {
 
 class _ConcatImageModalState extends State<ConcatImageModal> {
   String _imageData;
-  Position _position;
+  Position _placement;
+  Rect _selection;
 
   @override
   Widget build(BuildContext ctx) {
@@ -48,37 +49,52 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                       FSubtitleTitle(title: 'Position'),
                       FButton(
                         label: 'Top',
-                        selected: _position?.y == -1,
+                        selected: _placement?.y == -1,
                         onSelect: () {
                           setState(() {
-                            _position = Position(0, -1);
+                            _placement = Position(0, -1);
+                            _selection = null;
                           });
                         },
                       ),
                       FButton(
                         label: 'Bottom',
-                        selected: _position?.y == 1,
+                        selected: _placement?.y == 1,
                         onSelect: () {
                           setState(() {
-                            _position = Position(0, 1);
+                            _placement = Position(0, 1);
+                            _selection = null;
                           });
                         },
                       ),
                       FButton(
                         label: 'Left',
-                        selected: _position?.x == -1,
+                        selected: _placement?.x == -1,
                         onSelect: () {
                           setState(() {
-                            _position = Position(-1, 0);
+                            _placement = Position(-1, 0);
+                            _selection = null;
                           });
                         },
                       ),
                       FButton(
                         label: 'Right',
-                        selected: _position?.x == 1,
+                        selected: _placement?.x == 1,
                         onSelect: () {
                           setState(() {
-                            _position = Position(1, 0);
+                            _placement = Position(1, 0);
+                            _selection = null;
+                          });
+                        },
+                      ),
+                      FButton(
+                        label: 'Selection',
+                        disabled: Store.instance.state.canvasSelection == null,
+                        selected: _selection != null,
+                        onSelect: () {
+                          setState(() {
+                            _placement = null;
+                            _selection = Store.instance.state.canvasSelection;
                           });
                         },
                       ),
@@ -98,14 +114,16 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                     Store.instance.dispatch(CloseEditorModal());
                   }),
               FButton(
-                  disabled: _imageData == null || _position == null,
+                  disabled: _imageData == null ||
+                      (_placement == null && _selection == null),
                   selected: true,
                   label: 'Ok',
                   onSelect: () async {
                     final _newImageData = await concatenateImages(
                       Store.instance.state.currentAtlas.imageData,
                       _imageData,
-                      _position,
+                      _placement,
+                      _selection,
                     );
                     Store.instance.dispatchAsync(
                       UpdateAtlasImageAction(

@@ -3,6 +3,19 @@ import 'package:flutter/widgets.dart';
 import '../../vendor/micro_store/micro_store.dart';
 import '../../store/store.dart';
 
+class SetCanvasSelection extends MicroStoreAction<FireAtlasState> {
+  Rect selection;
+
+  SetCanvasSelection(this.selection);
+
+  @override
+  FireAtlasState perform(state) {
+    state.canvasSelection = selection;
+
+    return state;
+  }
+}
+
 class OpenEditorModal extends MicroStoreAction<FireAtlasState> {
   final Widget modal;
   final double width;

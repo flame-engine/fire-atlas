@@ -41,6 +41,19 @@ class CanvasBoardState extends State<CanvasBoard> {
 
   double _scale = 1.0;
 
+  void _finishSelection(Offset offset) {
+    if (_selectionEnd != offset) {
+      final rect = Rect.fromLTWH(
+        _selectionStart.dx * widget.tileWidth,
+        _selectionStart.dy * widget.tileHeight,
+        ((offset.dx - _selectionStart.dx) + 1) * widget.tileWidth,
+        ((offset.dy - _selectionStart.dy) + 1) * widget.tileHeight,
+      );
+      Store.instance.dispatch(SetCanvasSelection(rect));
+    }
+    _selectionEnd = offset;
+  }
+
   Offset _calculateIndexClick(Offset offset) {
     final int x =
         ((offset.dx - _translateX) / (widget.tileWidth * _scale)).floor();
@@ -59,7 +72,7 @@ class CanvasBoardState extends State<CanvasBoard> {
         _translateX += x;
         _translateY += y;
       } else if (_currentTool == CanvasTools.SELECTION) {
-        _selectionEnd = _calculateIndexClick(details.localPosition);
+        _finishSelection(_calculateIndexClick(details.localPosition));
       }
 
       _lastDrag = details.localPosition;
@@ -69,7 +82,7 @@ class CanvasBoardState extends State<CanvasBoard> {
   void _handleMoveEnd() {
     setState(() {
       if (_currentTool == CanvasTools.SELECTION) {
-        _selectionEnd = _calculateIndexClick(_lastDrag);
+        _finishSelection(_calculateIndexClick(_lastDrag));
       }
       _lastDrag = _dragStart = null;
     });
@@ -81,7 +94,7 @@ class CanvasBoardState extends State<CanvasBoard> {
 
       if (_currentTool == CanvasTools.SELECTION) {
         _selectionStart = _calculateIndexClick(_dragStart);
-        _selectionEnd = _selectionStart;
+        _finishSelection(_selectionStart);
       }
     });
   }
