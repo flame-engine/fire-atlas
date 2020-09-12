@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flame/position.dart';
-import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 import '../../../store/store.dart';
 import '../../../store/actions/editor_actions.dart';
