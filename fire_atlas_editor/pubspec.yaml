@@ -15,7 +15,7 @@ dependencies:
   tinycolor: ^1.0.2
   collection: ^1.14.12
   url_launcher: 5.5.0
-  flame: ^0.24.0
+  flame: 1.0.0-rc5
   flame_fire_atlas:
     path: ../flame_fire_atlas
 

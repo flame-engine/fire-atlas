@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flame/anchor.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:flame/game.dart';
 import 'package:flame/gestures.dart';
-import 'package:flame/components/component.dart';
-import 'package:flame/components/animation_component.dart';
+import 'package:flame/components/sprite_animation_component.dart';
+import 'package:flame/components/sprite_component.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 void main() async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
-    final atlas = await FireAtlas.fromAsset('caveace.fa');
 
-    final game = ExampleGame(atlas);
-    runApp(game.widget);
+    final game = ExampleGame();
+    runApp(GameWidget(game: game));
   } catch (e) {
     print(e);
   }
@@ -21,26 +21,36 @@ void main() async {
 class ExampleGame extends BaseGame with TapDetector {
   FireAtlas _atlas;
 
-  ExampleGame(this._atlas) {
-    add(AnimationComponent(150, 100, _atlas.getAnimation('shooting_ptero'))
-      ..y = 50);
+  @override
+  Future<void> onLoad() async {
+    _atlas = await loadFireAtlas('caveace.fa');
+    add(
+      SpriteAnimationComponent(
+        Vector2(150, 100),
+        _atlas.getAnimation('shooting_ptero'),
+      )..y = 50,
+    );
 
-    add(AnimationComponent(150, 100, _atlas.getAnimation('bomb_ptero'))
+    add(SpriteAnimationComponent(
+      Vector2(150, 100),
+      _atlas.getAnimation('bomb_ptero'),
+    )
       ..y = 50
       ..x = 200);
 
     add(
-      SpriteComponent.fromSprite(50, 50, _atlas.getSprite('bullet'))..y = 200,
+      SpriteComponent.fromSprite(Vector2(50, 50), _atlas.getSprite('bullet'))
+        ..y = 200,
     );
 
     add(
-      SpriteComponent.fromSprite(50, 50, _atlas.getSprite('shield'))
+      SpriteComponent.fromSprite(Vector2(50, 50), _atlas.getSprite('shield'))
         ..x = 100
         ..y = 200,
     );
 
     add(
-      SpriteComponent.fromSprite(50, 50, _atlas.getSprite('ham'))
+      SpriteComponent.fromSprite(Vector2(50, 50), _atlas.getSprite('ham'))
         ..x = 200
         ..y = 200,
     );
@@ -50,11 +60,10 @@ class ExampleGame extends BaseGame with TapDetector {
   void onTapUp(details) {
     final o = details.localPosition;
 
-    add(AnimationComponent(
-      100,
-      100,
+    add(SpriteAnimationComponent(
+      Vector2(100, 100),
       _atlas.getAnimation('explosion'),
-      destroyOnFinish: true,
+      removeOnFinish: true,
     )
       ..anchor = Anchor.center
       ..x = o.dx
