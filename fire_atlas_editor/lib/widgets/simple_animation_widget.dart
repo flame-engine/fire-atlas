@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart' hide Animation;
-import 'package:flame/animation.dart';
+import 'package:flame/sprite_animation.dart';
 
 import './simple_sprite_widget.dart';
 
@@ -8,7 +8,7 @@ import './icon_button.dart';
 import 'dart:math';
 
 class SimpleAnimationLoaderWidget extends StatelessWidget {
-  final Future<Animation> future;
+  final Future<SpriteAnimation> future;
 
   SimpleAnimationLoaderWidget({
     this.future,
@@ -31,7 +31,7 @@ class SimpleAnimationLoaderWidget extends StatelessWidget {
 }
 
 class AnimationPlayerWidget extends StatefulWidget {
-  final Animation animation;
+  final SpriteAnimation animation;
 
   AnimationPlayerWidget({
     this.animation,
@@ -63,7 +63,7 @@ class _AnimationPlayerWidget extends State<AnimationPlayerWidget>
         });
       });
 
-    widget.animation.onCompleteAnimation = _pauseAnimation;
+    widget.animation.onComplete = _pauseAnimation;
   }
 
   void _initAnimation() {

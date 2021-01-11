@@ -115,11 +115,11 @@ class CanvasBoardState extends State<CanvasBoard> {
   void initState() {
     super.initState();
 
-    _scale = (widget.size.width - 200) / widget.sprite.size.x;
+    _scale = (widget.size.width - 200) / widget.sprite.originalSize.x;
 
     final middleX = widget.size.width / 2;
 
-    _translateX = middleX - (widget.sprite.size.x * _scale) / 2;
+    _translateX = middleX - (widget.sprite.originalSize.x * _scale) / 2;
     _translateY = 100;
   }
 

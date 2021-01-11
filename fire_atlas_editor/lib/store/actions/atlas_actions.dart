@@ -27,7 +27,7 @@ class CreateAtlasAction extends AsyncMicroStoreAction<FireAtlasState> {
       ..tileHeight = tileHeight
       ..tileWidth = tileWidth;
 
-    await atlas.load(clearImageData: false);
+    await atlas.loadImage(clearImageData: false);
 
     state
       ..currentAtlas = atlas
@@ -48,7 +48,7 @@ class UpdateAtlasImageAction extends AsyncMicroStoreAction<FireAtlasState> {
       ..currentAtlas.imageData = imageData
       ..hasChanges = true;
 
-    await state.currentAtlas.load(clearImageData: false);
+    await state.currentAtlas.loadImage(clearImageData: false);
 
     return state;
   }
@@ -122,7 +122,7 @@ class LoadAtlasAction extends AsyncMicroStoreAction<FireAtlasState> {
   Future<FireAtlasState> perform(state) async {
     final atlas = FireAtlasStorage.loadProject(id);
 
-    await atlas.load(clearImageData: false);
+    await atlas.loadImage(clearImageData: false);
 
     return state..currentAtlas = atlas;
   }
