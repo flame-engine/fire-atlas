@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flame: 1.0.0-rc5
+  flame: ^1.0.0-rc5
   archive: ^2.0.13
 
 dev_dependencies:
