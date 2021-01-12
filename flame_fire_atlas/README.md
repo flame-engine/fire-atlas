@@ -14,7 +14,14 @@ Load the atlas from your assets
 
 ```dart
 // file at assets/atlas.fa
-final atlas = await FireAtlas.fromAsset('atlas.fa');
+final atlas = await FireAtlas.loadAsset('atlas.fa');
+```
+
+or when inside a game instance, the `loadFireAtlas` can be used:
+
+```dart
+// file at assets/atlas.fa
+final atlas = await loadFireAtlas('atlas.fa');
 ```
 
 With the instance loaded you can now get sprites and animations like:

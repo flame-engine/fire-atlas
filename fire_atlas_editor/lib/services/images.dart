@@ -1,4 +1,4 @@
-import 'package:flame/position.dart';
+import 'package:flame/extensions/vector2.dart';
 import 'package:flame/flame.dart';
 import 'dart:ui';
 import 'dart:convert';
@@ -8,7 +8,7 @@ import 'dart:math';
 Future<String> concatenateImages(
   String originalData,
   String newImageData,
-  Position placement,
+  Vector2 placement,
   Rect selection,
 ) async {
   final original = await Flame.images.fromBase64('original', originalData);

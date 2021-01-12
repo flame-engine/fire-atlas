@@ -93,8 +93,8 @@ class _CanvasSpritePainer extends CustomPainter {
     final spriteRect = Rect.fromLTWH(
       0,
       0,
-      _sprite.size.x,
-      _sprite.size.y,
+      _sprite.originalSize.x,
+      _sprite.originalSize.y,
     );
 
     // Background outline
@@ -104,8 +104,8 @@ class _CanvasSpritePainer extends CustomPainter {
           ..color = TinyColor(_gridTileColor.withOpacity(1)).lighten(20).color);
 
     // Checker board
-    final rowCount = (_sprite.size.y / _tileHeight).ceil();
-    final columnCount = (_sprite.size.x / _tileWidth).ceil();
+    final rowCount = (_sprite.originalSize.y / _tileHeight).ceil();
+    final columnCount = (_sprite.originalSize.x / _tileWidth).ceil();
 
     final darkTilePaint = Paint()
       ..color = TinyColor(_gridTileColor.withOpacity(1)).lighten(70).color;
@@ -126,7 +126,7 @@ class _CanvasSpritePainer extends CustomPainter {
     }
 
     // Sprite itself
-    _sprite.renderRect(canvas, spriteRect);
+    _sprite.render(canvas);
 
     // Selection
     if (_selectionStart != null && _selectionEnd != null) {

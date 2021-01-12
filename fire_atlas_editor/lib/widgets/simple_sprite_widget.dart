@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame/extensions/vector2.dart';
 
 import 'dart:math';
 
@@ -55,16 +56,16 @@ class _SimpleSpritePainer extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final widthRate = size.width / _sprite.size.x;
-    final heightRate = size.height / _sprite.size.y;
+    final widthRate = size.width / _sprite.srcSize.x;
+    final heightRate = size.height / _sprite.srcSize.y;
 
     final rate = min(widthRate, heightRate);
 
     final rect = Rect.fromLTWH(
       0,
       0,
-      _sprite.size.x * rate,
-      _sprite.size.y * rate,
+      _sprite.srcSize.x * rate,
+      _sprite.srcSize.y * rate,
     );
 
     if (_center) {
@@ -74,6 +75,10 @@ class _SimpleSpritePainer extends CustomPainter {
       );
     }
 
-    _sprite.renderRect(canvas, rect);
+    _sprite.render(
+      canvas,
+      position: Vector2(0, 0),
+      size: Vector2(rect.width, rect.height),
+    );
   }
 }

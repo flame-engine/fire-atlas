@@ -38,7 +38,7 @@ class ImageSelectionContainer extends StatelessWidget {
                       return SizedBox(
                           width: 200,
                           child: SimpleSpriteWidget(
-                              sprite: Sprite.fromImage(snapshot.data)));
+                              sprite: Sprite(snapshot.data)));
                     } else if (snapshot.hasError) {
                       return Text('Something wrong happened :(');
                     } else {

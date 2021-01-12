@@ -1,13 +1,27 @@
 library flame_fire_atlas;
 
 import 'package:flame/flame.dart';
+import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame/animation.dart';
+import 'package:flame/extensions/vector2.dart';
+import 'package:flame/sprite_animation.dart';
+import 'package:flame/assets/images.dart';
+import 'package:flame/assets/assets_cache.dart';
 
 import 'package:archive/archive.dart';
 
 import 'dart:convert';
 import 'dart:ui';
+
+extension FireAtlasExtensions on Game {
+  Future<FireAtlas> loadFireAtlas(String asset) async {
+    return FireAtlas.loadAsset(
+      asset,
+      assets: assets,
+      images: images,
+    );
+  }
+}
 
 abstract class Selection {
   String id;
@@ -76,12 +90,14 @@ class FireAtlas {
 
   Map<String, Selection> selections = {};
 
-  /// Loads the atlas into memory so it can be used
+  /// Loads the atlas image into memory so it can be used
   ///
   /// [clearImageData] Can be set to false to avoid clearing the stored information about the image on this object, this is true by default, its use is intended to enable serializing this object
+  /// [images] The images cache to be used, falls back to [Flame.images] when omitted
   ///
-  Future<void> load({bool clearImageData = true}) async {
-    _image = await Flame.images.fromBase64(id, imageData);
+  Future<void> loadImage({bool clearImageData = true, Images images}) async {
+    final _images = images ?? Flame.images;
+    _image = await _images.fromBase64(id, imageData);
 
     // Clear memory
     if (clearImageData) {
@@ -105,7 +121,7 @@ class FireAtlas {
     return json;
   }
 
-  static FireAtlas fromJson(Map<String, dynamic> json) {
+  static FireAtlas _fromJson(Map<String, dynamic> json) {
     final atlas = FireAtlas()
       ..id = json['id']
       ..imageData = json['imageData']
@@ -127,10 +143,13 @@ class FireAtlas {
     return atlas;
   }
 
-  static Future<FireAtlas> fromAsset(String fileName) async {
-    final bytes = await Flame.assets.readBinaryFile(fileName);
+  static Future<FireAtlas> loadAsset(String fileName,
+      {AssetsCache assets, Images images}) async {
+    final _assets = assets ?? Flame.assets;
+
+    final bytes = await _assets.readBinaryFile(fileName);
     final atlas = FireAtlas.deserialize(bytes);
-    await atlas.load();
+    await atlas.loadImage(images: images);
     return atlas;
   }
 
@@ -145,12 +164,14 @@ class FireAtlas {
   static FireAtlas deserialize(List<int> bytes) {
     final unzipedBytes = GZipDecoder().decodeBytes(bytes);
     final unzipedString = utf8.decode(unzipedBytes);
-    return fromJson(jsonDecode(unzipedString));
+    return _fromJson(jsonDecode(unzipedString));
   }
 
   void _assertImageLoaded() {
     assert(
-        _image != null, 'Atlas is not loaded yet, call "load" before using it');
+      _image != null,
+      'Atlas is not loaded yet, call "load" before using it',
+    );
   }
 
   Sprite getSprite(String selectionId) {
@@ -162,16 +183,20 @@ class FireAtlas {
     assert(selection is SpriteSelection,
         'Selection "$selectionId" is not a Sprite');
 
-    return Sprite.fromImage(
+    return Sprite(
       _image,
-      x: selection.x.toDouble() * tileWidth,
-      y: selection.y.toDouble() * tileHeight,
-      width: (1 + selection.w.toDouble()) * tileWidth,
-      height: (1 + selection.h.toDouble()) * tileHeight,
+      srcPosition: Vector2(
+        selection.x.toDouble() * tileWidth,
+        selection.y.toDouble() * tileHeight,
+      ),
+      srcSize: Vector2(
+        (1 + selection.w.toDouble()) * tileWidth,
+        (1 + selection.h.toDouble()) * tileHeight,
+      ),
     );
   }
 
-  Animation getAnimation(String selectionId) {
+  SpriteAnimation getAnimation(String selectionId) {
     final selection = selections[selectionId];
 
     _assertImageLoaded();
@@ -192,16 +217,17 @@ class FireAtlas {
 
     final sprites = List.generate(animationSelection.frameCount, (i) {
       final x = (initialX + i) * frameSize;
-      return Sprite.fromImage(
+      return Sprite(
         _image,
-        x: x * tileWidth,
-        y: selection.y.toDouble() * tileHeight,
-        width: width,
-        height: height,
+        srcPosition: Vector2(
+          x * tileWidth,
+          selection.y.toDouble() * tileHeight,
+        ),
+        srcSize: Vector2(width, height),
       );
     });
 
-    return Animation.spriteList(
+    return SpriteAnimation.spriteList(
       sprites,
       stepTime: animationSelection.stepTime,
       loop: animationSelection.loop,

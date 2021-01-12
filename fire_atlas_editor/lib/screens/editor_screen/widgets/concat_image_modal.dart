@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flame/position.dart';
+import 'package:flame/extensions/vector2.dart';
 
 import '../../../store/store.dart';
 import '../../../store/actions/editor_actions.dart';
@@ -18,7 +18,7 @@ class ConcatImageModal extends StatefulWidget {
 
 class _ConcatImageModalState extends State<ConcatImageModal> {
   String _imageData;
-  Position _placement;
+  Vector2 _placement;
   Rect _selection;
 
   @override
@@ -52,7 +52,7 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                         selected: _placement?.y == -1,
                         onSelect: () {
                           setState(() {
-                            _placement = Position(0, -1);
+                            _placement = Vector2(0, -1);
                             _selection = null;
                           });
                         },
@@ -62,7 +62,7 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                         selected: _placement?.y == 1,
                         onSelect: () {
                           setState(() {
-                            _placement = Position(0, 1);
+                            _placement = Vector2(0, 1);
                             _selection = null;
                           });
                         },
@@ -72,7 +72,7 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                         selected: _placement?.x == -1,
                         onSelect: () {
                           setState(() {
-                            _placement = Position(-1, 0);
+                            _placement = Vector2(-1, 0);
                             _selection = null;
                           });
                         },
@@ -82,7 +82,7 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                         selected: _placement?.x == 1,
                         onSelect: () {
                           setState(() {
-                            _placement = Position(1, 0);
+                            _placement = Vector2(1, 0);
                             _selection = null;
                           });
                         },

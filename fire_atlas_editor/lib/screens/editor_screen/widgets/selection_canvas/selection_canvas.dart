@@ -26,7 +26,7 @@ class SelectionCanvas extends StatelessWidget {
                         final size =
                             Size(constraints.maxWidth, constraints.maxHeight);
                         return CanvasBoard(
-                          sprite: Sprite.fromImage(snapshot.data),
+                          sprite: Sprite(snapshot.data),
                           size: size,
                           tileHeight: store.state.currentAtlas.tileHeight,
                           tileWidth: store.state.currentAtlas.tileWidth,
