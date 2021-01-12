@@ -56,16 +56,16 @@ class _SimpleSpritePainer extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final widthRate = size.width / _sprite.originalSize.x;
-    final heightRate = size.height / _sprite.originalSize.y;
+    final widthRate = size.width / _sprite.srcSize.x;
+    final heightRate = size.height / _sprite.srcSize.y;
 
     final rate = min(widthRate, heightRate);
 
     final rect = Rect.fromLTWH(
       0,
       0,
-      _sprite.originalSize.x * rate,
-      _sprite.originalSize.y * rate,
+      _sprite.srcSize.x * rate,
+      _sprite.srcSize.y * rate,
     );
 
     if (_center) {
