@@ -16,9 +16,9 @@ import 'dart:ui';
 extension FireAtlasExtensions on Game {
   Future<FireAtlas> loadFireAtlas(String asset) async {
     return FireAtlas.loadAsset(
-        asset,
-        assets: assets,
-        images: images,
+      asset,
+      assets: assets,
+      images: images,
     );
   }
 }
@@ -143,7 +143,8 @@ class FireAtlas {
     return atlas;
   }
 
-  static Future<FireAtlas> loadAsset(String fileName, { AssetsCache assets, Images images }) async {
+  static Future<FireAtlas> loadAsset(String fileName,
+      {AssetsCache assets, Images images}) async {
     final _assets = assets ?? Flame.assets;
 
     final bytes = await _assets.readBinaryFile(fileName);
@@ -168,8 +169,8 @@ class FireAtlas {
 
   void _assertImageLoaded() {
     assert(
-        _image != null,
-        'Atlas is not loaded yet, call "load" before using it',
+      _image != null,
+      'Atlas is not loaded yet, call "load" before using it',
     );
   }
 
@@ -189,8 +190,8 @@ class FireAtlas {
         selection.y.toDouble() * tileHeight,
       ),
       srcSize: Vector2(
-       (1 + selection.w.toDouble()) * tileWidth,
-       (1 + selection.h.toDouble()) * tileHeight,
+        (1 + selection.w.toDouble()) * tileWidth,
+        (1 + selection.h.toDouble()) * tileHeight,
       ),
     );
   }

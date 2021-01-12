@@ -76,9 +76,9 @@ class _SimpleSpritePainer extends CustomPainter {
     }
 
     _sprite.render(
-        canvas,
-        position: Vector2(0, 0),
-        size: Vector2(rect.width, rect.height),
+      canvas,
+      position: Vector2(0, 0),
+      size: Vector2(rect.width, rect.height),
     );
   }
 }
