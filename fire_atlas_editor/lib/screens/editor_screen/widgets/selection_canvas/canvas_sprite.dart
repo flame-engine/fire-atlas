@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame/extensions/vector2.dart';
 import 'package:tinycolor/tinycolor.dart';
 
 class CanvasSprite extends StatelessWidget {
