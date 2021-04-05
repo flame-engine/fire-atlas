@@ -3,10 +3,8 @@ library flame_fire_atlas;
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame/extensions/vector2.dart';
-import 'package:flame/sprite_animation.dart';
-import 'package:flame/assets/images.dart';
-import 'package:flame/assets/assets_cache.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/assets.dart';
 
 import 'package:archive/archive.dart';
 
@@ -23,52 +21,88 @@ extension FireAtlasExtensions on Game {
   }
 }
 
-abstract class Selection {
+class Selection {
   String id;
   int x;
   int y;
   int w;
   int h;
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> json = {}
-      ..['id'] = id
-      ..['x'] = x
-      ..['y'] = y
-      ..['w'] = w
-      ..['h'] = h;
+  Selection({
+      required this.id,
+      required this.x,
+      required this.y,
+      required this.w,
+      required this.h,
+  });
 
-    return json;
-  }
-
-  fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    x = json['x'];
-    y = json['y'];
-    w = json['w'];
-    h = json['h'];
+  factory Selection.fromJson(Map<String, dynamic> json) {
+    return Selection(
+        id: json['id'],
+        x: json['x'],
+        y: json['y'],
+        w: json['w'],
+        h: json['h'],
+    );
   }
 }
 
-class SpriteSelection extends Selection {
+abstract class BaseSelection {
+  final Selection info;
+
+  BaseSelection(this.info);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> json = {}
+      ..['id'] = info.id
+      ..['x'] = info.x
+      ..['y'] = info.y
+      ..['w'] = info.w
+      ..['h'] = info.h;
+
+    return json;
+  }
+}
+
+class SpriteSelection extends BaseSelection {
+  SpriteSelection({
+      required Selection info,
+  }): super(info);
+
+  factory SpriteSelection.fromJson(Map<String, dynamic> json) {
+    final info = Selection.fromJson(json);
+    return SpriteSelection(info: info);
+  }
+
   @override
   Map<String, dynamic> toJson() {
     return super.toJson()..['type'] = 'sprite';
   }
 }
 
-class AnimationSelection extends Selection {
+class AnimationSelection extends BaseSelection {
   int frameCount;
   double stepTime;
   bool loop;
 
-  @override
-  void fromJson(Map<String, dynamic> json) {
-    super.fromJson(json);
+  AnimationSelection({
+    required Selection info,
 
-    frameCount = json['frameCount'];
-    stepTime = json['stepTime'];
-    loop = json['loop'];
+    required this.frameCount,
+    required this.stepTime,
+    required this.loop,
+  }): super(info);
+
+  @override
+  factory AnimationSelection.fromJson(Map<String, dynamic> json) {
+    final info = Selection.fromJson(json);
+
+    return AnimationSelection(
+        info: info,
+        frameCount: json['frameCount'],
+        stepTime: json['stepTime'],
+        loop: json['loop'],
+    );
   }
 
   @override
@@ -85,19 +119,29 @@ class FireAtlas {
   String id;
   double tileWidth;
   double tileHeight;
-  String imageData;
-  Image _image;
+  String? imageData;
+  Image? _image;
 
-  Map<String, Selection> selections = {};
+  FireAtlas({
+    required this.id,
+    required this.tileWidth,
+    required this.tileHeight,
+    required this.imageData,
+  });
+
+  Map<String, BaseSelection> selections = {};
 
   /// Loads the atlas image into memory so it can be used
   ///
   /// [clearImageData] Can be set to false to avoid clearing the stored information about the image on this object, this is true by default, its use is intended to enable serializing this object
   /// [images] The images cache to be used, falls back to [Flame.images] when omitted
   ///
-  Future<void> loadImage({bool clearImageData = true, Images images}) async {
+  Future<void> loadImage({bool clearImageData = true, Images? images}) async {
+    if (imageData == null) {
+      throw 'Attempting on calling load on an already loaded Image';
+    }
     final _images = images ?? Flame.images;
-    _image = await _images.fromBase64(id, imageData);
+    _image = await _images.fromBase64(id, imageData!);
 
     // Clear memory
     if (clearImageData) {
@@ -115,27 +159,24 @@ class FireAtlas {
       ..['id'] = id
       ..['imageData'] = imageData
       ..['selections'] = selectionsJson
-      ..['tileWidth'] = tileWidth?.toDouble()
-      ..['tileHeight'] = tileHeight?.toDouble();
+      ..['tileWidth'] = tileWidth.toDouble()
+      ..['tileHeight'] = tileHeight.toDouble();
 
     return json;
   }
 
   static FireAtlas _fromJson(Map<String, dynamic> json) {
-    final atlas = FireAtlas()
-      ..id = json['id']
-      ..imageData = json['imageData']
-      ..tileHeight =
-          json['tileHeight']?.toDouble() ?? json['tileSize']?.toDouble()
-      ..tileWidth =
-          json['tileWidth']?.toDouble() ?? json['tileSize']?.toDouble();
+    final atlas = FireAtlas(
+      id: json['id'],
+      imageData: json['imageData'],
+      tileHeight: json['tileHeight']?.toDouble() ?? json['tileSize']?.toDouble(),
+      tileWidth: json['tileWidth']?.toDouble() ?? json['tileSize']?.toDouble(),
+    );
 
     json['selections'].entries.forEach((entry) {
-      Selection selection = entry.value['type'] == 'animation'
-          ? AnimationSelection()
-          : SpriteSelection();
-
-      selection.fromJson(entry.value);
+      BaseSelection selection = entry.value['type'] == 'animation'
+          ? AnimationSelection.fromJson(entry.value)
+          : SpriteSelection.fromJson(entry.value);
 
       atlas.selections[entry.key] = selection;
     });
@@ -144,7 +185,7 @@ class FireAtlas {
   }
 
   static Future<FireAtlas> loadAsset(String fileName,
-      {AssetsCache assets, Images images}) async {
+      {AssetsCache? assets, Images? images}) async {
     final _assets = assets ?? Flame.assets;
 
     final bytes = await _assets.readBinaryFile(fileName);
@@ -157,7 +198,11 @@ class FireAtlas {
     String raw = jsonEncode(toJson());
 
     List<int> stringBytes = utf8.encode(raw);
-    List<int> gzipBytes = GZipEncoder().encode(stringBytes);
+    List<int>? gzipBytes = GZipEncoder().encode(stringBytes);
+
+    if (gzipBytes == null) {
+      throw 'Generated an empty file';
+    }
     return gzipBytes;
   }
 
@@ -167,31 +212,34 @@ class FireAtlas {
     return _fromJson(jsonDecode(unzipedString));
   }
 
-  void _assertImageLoaded() {
-    assert(
-      _image != null,
-      'Atlas is not loaded yet, call "load" before using it',
-    );
+  Image _assertImageLoaded() {
+    if(_image == null) {
+      throw 'Atlas is not loaded yet, call "load" before using it';
+    }
+
+    return _image!;
   }
 
   Sprite getSprite(String selectionId) {
     final selection = selections[selectionId];
 
-    _assertImageLoaded();
-    assert(selection != null,
-        'There is no selection with the id "$selectionId" on this atlas');
-    assert(selection is SpriteSelection,
-        'Selection "$selectionId" is not a Sprite');
+    if(selection == null)
+        throw 'There is no selection with the id "$selectionId" on this atlas';
+
+    if(!(selection is SpriteSelection))
+        throw 'Selection "$selectionId" is not a Sprite';
+
+    final image = _assertImageLoaded();
 
     return Sprite(
-      _image,
+      image,
       srcPosition: Vector2(
-        selection.x.toDouble() * tileWidth,
-        selection.y.toDouble() * tileHeight,
+        selection.info.x.toDouble() * tileWidth,
+        selection.info.y.toDouble() * tileHeight,
       ),
       srcSize: Vector2(
-        (1 + selection.w.toDouble()) * tileWidth,
-        (1 + selection.h.toDouble()) * tileHeight,
+        (1 + selection.info.w.toDouble()) * tileWidth,
+        (1 + selection.info.h.toDouble()) * tileHeight,
       ),
     );
   }
@@ -199,29 +247,28 @@ class FireAtlas {
   SpriteAnimation getAnimation(String selectionId) {
     final selection = selections[selectionId];
 
-    _assertImageLoaded();
-    assert(selection != null,
-        'There is no selection with the id "$selectionId" on this atlas');
-    assert(selection is AnimationSelection,
-        'Selection "$selectionId" is not an Animation');
+    final image = _assertImageLoaded();
 
-    final initialX = selection.x.toDouble();
+    if(selection == null)
+        throw 'There is no selection with the id "$selectionId" on this atlas';
+    if (!(selection is AnimationSelection))
+        throw 'Selection "$selectionId" is not an Animation';
 
-    final animationSelection = selection as AnimationSelection;
+    final initialX = selection.info.x.toDouble();
 
     final frameSize =
-        (1 + selection.w.toDouble()) / animationSelection.frameCount;
+        (1 + selection.info.w.toDouble()) / selection.frameCount;
 
     final width = frameSize * tileWidth;
-    final height = (1 + selection.h.toDouble()) * tileHeight;
+    final height = (1 + selection.info.h.toDouble()) * tileHeight;
 
-    final sprites = List.generate(animationSelection.frameCount, (i) {
+    final sprites = List.generate(selection.frameCount, (i) {
       final x = (initialX + i) * frameSize;
       return Sprite(
-        _image,
+        image,
         srcPosition: Vector2(
           x * tileWidth,
-          selection.y.toDouble() * tileHeight,
+          selection.info.y.toDouble() * tileHeight,
         ),
         srcSize: Vector2(width, height),
       );
@@ -229,8 +276,8 @@ class FireAtlas {
 
     return SpriteAnimation.spriteList(
       sprites,
-      stepTime: animationSelection.stepTime,
-      loop: animationSelection.loop,
+      stepTime: selection.stepTime,
+      loop: selection.loop,
     );
   }
 }

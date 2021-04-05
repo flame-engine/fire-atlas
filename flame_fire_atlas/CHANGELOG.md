@@ -1,5 +1,9 @@
 ## [1.0.0-rc1]
 
+ * Compatibility with Flame v1.0.0-rc9 and null safe support
+
+## [1.0.0-rc1]
+
  * Compatibility with Flame v1.0.0-rc5
 
 ## [0.0.4]
