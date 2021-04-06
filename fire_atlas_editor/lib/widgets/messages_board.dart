@@ -35,9 +35,9 @@ class _Message extends StatelessWidget {
   final VoidCallback onVanish;
 
   _Message({
-    this.message,
-    this.onVanish,
-    Key key,
+    required this.message,
+    required this.onVanish,
+    Key? key,
   }) : super(key: key);
 
   @override

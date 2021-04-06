@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flame/sprite.dart';
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/extensions.dart';
 
 import 'dart:math';
 
@@ -9,17 +9,20 @@ class SimpleSpriteLoaderWidget extends StatelessWidget {
   final bool center;
 
   SimpleSpriteLoaderWidget({
-    this.future,
+    required this.future,
     this.center = false,
   });
 
   @override
   Widget build(ctx) {
-    return FutureBuilder(
+    return FutureBuilder<Sprite>(
         future: future,
         builder: (ctx, snapshot) {
           if (snapshot.hasData)
-            return SimpleSpriteWidget(sprite: snapshot.data, center: center);
+            return SimpleSpriteWidget(
+              sprite: snapshot.data!,
+              center: center,
+            );
 
           if (snapshot.hasError) return Text('Something went wrong :(');
 
@@ -33,7 +36,7 @@ class SimpleSpriteWidget extends StatelessWidget {
   final bool center;
 
   SimpleSpriteWidget({
-    this.sprite,
+    required this.sprite,
     this.center = false,
   });
 

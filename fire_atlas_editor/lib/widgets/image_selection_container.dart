@@ -10,14 +10,16 @@ import './simple_sprite_widget.dart';
 import './button.dart';
 import '../utils/select_file.dart';
 
+typedef OnSelectImage = void Function(String);
+
 class ImageSelectionContainer extends StatelessWidget {
-  final String imageData;
-  final void Function(String) onSelectImage;
+  final String? imageData;
+  final OnSelectImage onSelectImage;
   final EdgeInsets margin;
 
   ImageSelectionContainer({
     this.imageData,
-    this.onSelectImage,
+    required this.onSelectImage,
     this.margin =
         const EdgeInsets.only(left: 30, right: 2.5, top: 2.5, bottom: 2.5),
   });
@@ -31,14 +33,16 @@ class ImageSelectionContainer extends StatelessWidget {
           child: imageData != null
               ? FutureBuilder<Image>(
                   // todo image name
-                  future: Flame.images.fromBase64('', imageData),
+                  future: Flame.images.fromBase64('', imageData!),
                   builder: (ctx, snapshot) {
                     if (snapshot.hasData) {
                       Flame.images.clearCache();
                       return SizedBox(
-                          width: 200,
-                          child: SimpleSpriteWidget(
-                              sprite: Sprite(snapshot.data)));
+                        width: 200,
+                        child: SimpleSpriteWidget(
+                          sprite: Sprite(snapshot.data!),
+                        ),
+                      );
                     } else if (snapshot.hasError) {
                       return Text('Something wrong happened :(');
                     } else {

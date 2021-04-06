@@ -21,7 +21,12 @@ class CanvasBoard extends StatefulWidget {
   final double tileWidth;
   final double tileHeight;
 
-  CanvasBoard({this.sprite, this.size, this.tileWidth, this.tileHeight});
+  CanvasBoard({
+    required this.sprite,
+    required this.size,
+    required this.tileWidth,
+    required this.tileHeight,
+  });
 
   @override
   State createState() => CanvasBoardState();
@@ -30,11 +35,11 @@ class CanvasBoard extends StatefulWidget {
 class CanvasBoardState extends State<CanvasBoard> {
   CanvasTools _currentTool = CanvasTools.SELECTION;
 
-  Offset _selectionStart;
-  Offset _selectionEnd;
+  Offset? _selectionStart;
+  Offset? _selectionEnd;
 
-  Offset _dragStart = Offset.zero;
-  Offset _lastDrag = Offset.zero;
+  Offset? _dragStart = Offset.zero;
+  Offset? _lastDrag = Offset.zero;
 
   double _translateX = 0.0;
   double _translateY = 0.0;
@@ -42,12 +47,13 @@ class CanvasBoardState extends State<CanvasBoard> {
   double _scale = 1.0;
 
   void _finishSelection(Offset offset) {
-    if (_selectionEnd != offset) {
+    if (_selectionEnd != offset && _selectionStart != null) {
+      final _start = _selectionStart!;
       final rect = Rect.fromLTWH(
-        _selectionStart.dx * widget.tileWidth,
-        _selectionStart.dy * widget.tileHeight,
-        ((offset.dx - _selectionStart.dx) + 1) * widget.tileWidth,
-        ((offset.dy - _selectionStart.dy) + 1) * widget.tileHeight,
+        _start.dx * widget.tileWidth,
+        _start.dy * widget.tileHeight,
+        ((offset.dx - _start.dx) + 1) * widget.tileWidth,
+        ((offset.dy - _start.dy) + 1) * widget.tileHeight,
       );
       Store.instance.dispatch(SetCanvasSelection(rect));
     }
@@ -64,28 +70,33 @@ class CanvasBoardState extends State<CanvasBoard> {
   }
 
   void _handleMove(DragUpdateDetails details) {
-    setState(() {
-      final x = details.localPosition.dx - _lastDrag.dx;
-      final y = details.localPosition.dy - _lastDrag.dy;
+    if (_lastDrag != null) {
+      final _last = _lastDrag!;
+      setState(() {
+        final x = details.localPosition.dx - _last.dx;
+        final y = details.localPosition.dy - _last.dy;
 
-      if (_currentTool == CanvasTools.MOVE) {
-        _translateX += x;
-        _translateY += y;
-      } else if (_currentTool == CanvasTools.SELECTION) {
-        _finishSelection(_calculateIndexClick(details.localPosition));
-      }
+        if (_currentTool == CanvasTools.MOVE) {
+          _translateX += x;
+          _translateY += y;
+        } else if (_currentTool == CanvasTools.SELECTION) {
+          _finishSelection(_calculateIndexClick(details.localPosition));
+        }
 
-      _lastDrag = details.localPosition;
-    });
+        _lastDrag = details.localPosition;
+      });
+    }
   }
 
   void _handleMoveEnd() {
-    setState(() {
-      if (_currentTool == CanvasTools.SELECTION) {
-        _finishSelection(_calculateIndexClick(_lastDrag));
-      }
-      _lastDrag = _dragStart = null;
-    });
+    if (_lastDrag != null) {
+      setState(() {
+        if (_currentTool == CanvasTools.SELECTION) {
+          _finishSelection(_calculateIndexClick(_lastDrag!));
+        }
+        _lastDrag = _dragStart = null;
+      });
+    }
   }
 
   void _handleMoveStart(DragStartDetails details) {
@@ -93,8 +104,8 @@ class CanvasBoardState extends State<CanvasBoard> {
       _lastDrag = _dragStart = details.localPosition;
 
       if (_currentTool == CanvasTools.SELECTION) {
-        _selectionStart = _calculateIndexClick(_dragStart);
-        _finishSelection(_selectionStart);
+        _selectionStart = _calculateIndexClick(_dragStart!);
+        _finishSelection(_selectionStart!);
       }
     });
   }
@@ -127,8 +138,8 @@ class CanvasBoardState extends State<CanvasBoard> {
     if (_selectionStart != null && _selectionEnd != null) {
       Store.instance.dispatch(OpenEditorModal(
         SelectionForm(
-          selectionStart: _selectionStart,
-          selectionEnd: _selectionEnd,
+          selectionStart: _selectionStart!,
+          selectionEnd: _selectionEnd!,
         ),
         400,
         600,

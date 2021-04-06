@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:tinycolor/tinycolor.dart';
 
 class ColorBadge extends StatelessWidget {
@@ -7,8 +6,8 @@ class ColorBadge extends StatelessWidget {
   final Color color;
 
   ColorBadge({
-    @required this.label,
-    @required this.color,
+    required this.label,
+    required this.color,
   });
 
   @override

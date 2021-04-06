@@ -9,8 +9,8 @@ class InputTextRow extends StatelessWidget {
   final bool autofocus;
 
   InputTextRow({
-    this.inputController,
-    this.label,
+    required this.inputController,
+    required this.label,
     this.enabled = true,
     this.autofocus = false,
   });

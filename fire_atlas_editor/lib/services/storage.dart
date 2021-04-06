@@ -9,15 +9,15 @@ class FireAtlasStorage {
   static FireAtlas readBase64Project(String base64) {
     final jsonRaw = base64Decode(base64);
 
-    if (jsonRaw != null) {
-      return FireAtlas.deserialize(jsonRaw);
-    }
-
-    return null;
+    return FireAtlas.deserialize(jsonRaw);
   }
 
   static FireAtlas loadProject(String id) {
-    return readBase64Project(_localStorage['ATLAS_$id']);
+    final value = _localStorage['ATLAS_$id'];
+    if (value == null) {
+      throw 'Unknow project with id $id';
+    }
+    return readBase64Project(value);
   }
 
   static String saveProject(FireAtlas atlas) {

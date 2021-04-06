@@ -13,19 +13,20 @@ class CreateAtlasAction extends AsyncMicroStoreAction<FireAtlasState> {
   double tileHeight;
 
   CreateAtlasAction({
-    @required this.id,
-    @required this.imageData,
-    @required this.tileWidth,
-    @required this.tileHeight,
+    required this.id,
+    required this.imageData,
+    required this.tileWidth,
+    required this.tileHeight,
   });
 
   @override
   Future<FireAtlasState> perform(FireAtlasState state) async {
-    final atlas = FireAtlas()
-      ..id = id
-      ..imageData = imageData
-      ..tileHeight = tileHeight
-      ..tileWidth = tileWidth;
+    final atlas = FireAtlas(
+      id: id,
+      imageData: imageData,
+      tileHeight: tileHeight,
+      tileWidth: tileWidth,
+    );
 
     await atlas.loadImage(clearImageData: false);
 
@@ -40,42 +41,47 @@ class CreateAtlasAction extends AsyncMicroStoreAction<FireAtlasState> {
 class UpdateAtlasImageAction extends AsyncMicroStoreAction<FireAtlasState> {
   final String imageData;
 
-  UpdateAtlasImageAction({this.imageData});
+  UpdateAtlasImageAction({required this.imageData});
 
   @override
   Future<FireAtlasState> perform(state) async {
-    state
-      ..currentAtlas.imageData = imageData
-      ..hasChanges = true;
+    if (state.currentAtlas != null) {
+      final atlas = state.currentAtlas!;
 
-    await state.currentAtlas.loadImage(clearImageData: false);
+      state.hasChanges = true;
+      atlas.imageData = imageData;
+      await atlas.loadImage(clearImageData: false);
+    }
 
     return state;
   }
 }
 
 class SetSelectionAction extends MicroStoreAction<FireAtlasState> {
-  Selection selection;
+  BaseSelection selection;
 
   SetSelectionAction({
-    @required this.selection,
+    required this.selection,
   });
 
   @override
   FireAtlasState perform(FireAtlasState state) {
-    state.currentAtlas.selections[selection.id] = selection;
-    state.selectedSelection = selection;
-    state.hasChanges = true;
+    if (state.currentAtlas != null) {
+      final atlas = state.currentAtlas!;
+      atlas.selections[selection.info.id] = selection;
+      state.selectedSelection = selection;
+      state.hasChanges = true;
+    }
 
     return state;
   }
 }
 
 class SelectSelectionAction extends MicroStoreAction<FireAtlasState> {
-  Selection selection;
+  BaseSelection selection;
 
   SelectSelectionAction({
-    @required this.selection,
+    required this.selection,
   });
 
   @override
@@ -89,9 +95,14 @@ class SelectSelectionAction extends MicroStoreAction<FireAtlasState> {
 class RemoveSelectedSelectionAction extends MicroStoreAction<FireAtlasState> {
   @override
   FireAtlasState perform(FireAtlasState state) {
-    state.currentAtlas.selections.remove(state.selectedSelection.id);
-    state.selectedSelection = null;
-    state.hasChanges = true;
+    if (state.currentAtlas != null && state.selectedSelection != null) {
+      final atlas = state.currentAtlas!;
+      final selected = state.selectedSelection!;
+
+      atlas.selections.remove(selected.info.id);
+      state.selectedSelection = null;
+      state.hasChanges = true;
+    }
 
     return state;
   }
@@ -100,15 +111,16 @@ class RemoveSelectedSelectionAction extends MicroStoreAction<FireAtlasState> {
 class SaveAction extends MicroStoreAction<FireAtlasState> {
   @override
   FireAtlasState perform(FireAtlasState state) {
-    FireAtlasStorage.saveProject(state.currentAtlas);
+    if (state.currentAtlas != null) {
+      FireAtlasStorage.saveProject(state.currentAtlas!);
 
-    state.hasChanges = false;
+      state.hasChanges = false;
 
-    store.dispatch(CreateMessageAction(
-      message: 'Atlas saved!',
-      type: MessageType.INFO,
-    ));
-
+      store.dispatch(CreateMessageAction(
+        message: 'Atlas saved!',
+        type: MessageType.INFO,
+      ));
+    }
     return state;
   }
 }

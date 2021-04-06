@@ -9,16 +9,16 @@ class CanvasSprite extends StatelessWidget {
   final double scale;
   final double tileWidth;
   final double tileHeight;
-  final Offset selectionStart;
-  final Offset selectionEnd;
+  final Offset? selectionStart;
+  final Offset? selectionEnd;
 
   CanvasSprite({
-    this.sprite,
-    this.translateX,
-    this.translateY,
-    this.scale,
-    this.tileWidth,
-    this.tileHeight,
+    required this.sprite,
+    required this.translateX,
+    required this.translateY,
+    required this.scale,
+    required this.tileWidth,
+    required this.tileHeight,
     this.selectionStart,
     this.selectionEnd,
   });
@@ -50,8 +50,8 @@ class _CanvasSpritePainer extends CustomPainter {
   final double _scale;
   final double _tileWidth;
   final double _tileHeight;
-  final Offset _selectionStart;
-  final Offset _selectionEnd;
+  final Offset? _selectionStart;
+  final Offset? _selectionEnd;
 
   Color _selectionColor;
   Color _gridTileColor;
@@ -130,11 +130,14 @@ class _CanvasSpritePainer extends CustomPainter {
 
     // Selection
     if (_selectionStart != null && _selectionEnd != null) {
-      final size = _selectionEnd - _selectionStart + Offset(1, 1);
+      final _start = _selectionStart!;
+      final _end = _selectionEnd!;
+
+      final size = _end - _start + Offset(1, 1);
       canvas.drawRect(
         Rect.fromLTWH(
-          (_selectionStart.dx * _tileWidth),
-          (_selectionStart.dy * _tileHeight),
+          (_start.dx * _tileWidth),
+          (_start.dy * _tileHeight),
           (size.dx * _tileWidth),
           (size.dy * _tileHeight),
         ),

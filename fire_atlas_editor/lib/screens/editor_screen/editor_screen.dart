@@ -14,6 +14,7 @@ class EditorScreen extends StatelessWidget {
   Widget build(ctx) {
     if (Store.instance.state.currentAtlas == null) {
       // TODO improve this
+      // To the Erick from the past: Improve what?
       return Scaffold(
         body: Center(
           child: Column(

@@ -13,23 +13,34 @@ enum MessageType {
 class Message {
   MessageType type;
   String message;
+
+  Message({
+    required this.type,
+    required this.message,
+  });
 }
 
 class ModalState {
   Widget child;
   double width;
   double height;
+
+  ModalState({
+    required this.child,
+    required this.width,
+    required this.height,
+  });
 }
 
 class FireAtlasState {
-  FireAtlas currentAtlas;
+  FireAtlas? currentAtlas;
   bool hasChanges = false;
-  Selection selectedSelection;
-  ModalState modal;
+  BaseSelection? selectedSelection;
+  ModalState? modal;
   List<Message> messages = [];
-  Rect canvasSelection;
+  Rect? canvasSelection;
 }
 
 class Store {
-  static MicroStore<FireAtlasState> instance;
+  static late MicroStore<FireAtlasState> instance;
 }
