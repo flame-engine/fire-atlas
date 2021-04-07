@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import '../../vendor/micro_store/micro_store.dart';
 import '../../store/store.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
