@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Color(0xffd20101),
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        buttonColor: Color(0xffdb5b42),
       ),
       home: OpenScreen(),
       routes: {

@@ -12,7 +12,7 @@ class ColorBadge extends StatelessWidget {
 
   @override
   Widget build(ctx) {
-    final textColor = color.brighten(0.35);
+    final textColor = color.brighten(0.85);
 
     return Container(
       padding: EdgeInsets.all(10),

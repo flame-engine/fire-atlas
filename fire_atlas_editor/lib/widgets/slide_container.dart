@@ -48,8 +48,8 @@ class _SlideContainer extends State<SlideContainer>
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    super.dispose();
   }
 
   @override
