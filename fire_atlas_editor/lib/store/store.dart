@@ -23,12 +23,12 @@ class Message {
 class ModalState {
   Widget child;
   double width;
-  double height;
+  double? height;
 
   ModalState({
     required this.child,
     required this.width,
-    required this.height,
+    this.height,
   });
 }
 

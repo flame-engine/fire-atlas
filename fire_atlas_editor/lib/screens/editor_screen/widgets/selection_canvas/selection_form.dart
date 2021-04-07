@@ -11,14 +11,14 @@ import '../../../../store/actions/atlas_actions.dart';
 import '../../../../store/actions/editor_actions.dart';
 
 class SelectionForm extends StatefulWidget {
-  final Offset selectionStart;
-  final Offset selectionEnd;
+  final Offset? selectionStart;
+  final Offset? selectionEnd;
 
   final AnimationSelection? editingSelection;
 
   SelectionForm({
-    required this.selectionStart,
-    required this.selectionEnd,
+    this.selectionStart,
+    this.selectionEnd,
     this.editingSelection,
   });
 
@@ -60,13 +60,21 @@ class _SelectionFormState extends State<SelectionForm> {
   }
 
   Selection _fillSelectionBaseValues() {
-    final w = (widget.selectionEnd.dx - widget.selectionStart.dx).toInt();
-    final h = (widget.selectionEnd.dy - widget.selectionStart.dy).toInt();
+    if (widget.selectionEnd == null)
+      throw 'Selection end is null';
+    if (widget.selectionStart == null)
+      throw 'Selection start is null';
+
+    final selectionEnd = widget.selectionEnd!;
+    final selectionStart = widget.selectionStart!;
+
+    final w = (selectionEnd.dx - selectionStart.dx).toInt();
+    final h = (selectionEnd.dy - selectionStart.dy).toInt();
 
     return Selection(
       id: selectionNameController.text,
-      x: widget.selectionStart.dx.toInt(),
-      y: widget.selectionStart.dy.toInt(),
+      x: selectionStart.dx.toInt(),
+      y: selectionStart.dy.toInt(),
       w: w,
       h: h,
     );

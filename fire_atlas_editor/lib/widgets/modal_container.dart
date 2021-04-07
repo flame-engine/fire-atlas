@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tinycolor/tinycolor.dart';
+import 'package:flame/extensions.dart';
 
 import '../vendor/micro_store/micro_store.dart';
 import '../store/store.dart';
@@ -15,15 +15,15 @@ class ModalContainer extends StatelessWidget {
       store: Store.instance,
       builder: (ctx, store) {
         if (store.state.modal != null) {
+          final modal = store.state.modal!;
           return Stack(
             children: [
               Positioned.fill(
                 child: Opacity(
                   opacity: 0.9,
                   child: Container(
-                    color: TinyColor(Theme.of(ctx).dialogBackgroundColor)
-                        .darken(80)
-                        .color,
+                    color: Theme.of(ctx).dialogBackgroundColor
+                        .darken(0.8)
                   ),
                 ),
               ),
@@ -36,8 +36,8 @@ class ModalContainer extends StatelessWidget {
                     child: Opacity(
                         opacity: 1,
                         child: FContainer(
-                          width: store.state.modal.width,
-                          height: store.state.modal.height,
+                          width: modal.width,
+                          height: modal.height,
                           color: Theme.of(ctx).dialogBackgroundColor,
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -51,7 +51,7 @@ class ModalContainer extends StatelessWidget {
                                         store.dispatch(CloseEditorModal());
                                       }),
                                 ),
-                                Expanded(child: store.state.modal.child),
+                                Expanded(child: modal.child),
                               ]),
                         ))),
               ),

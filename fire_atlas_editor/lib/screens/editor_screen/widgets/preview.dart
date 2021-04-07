@@ -13,21 +13,23 @@ class Preview extends StatelessWidget {
   @override
   Widget build(_) {
     return MicroStoreProvider<FireAtlasState>(
-        memoFn: (store) => [store.state.selectedSelection?.id],
+        memoFn: (store) => [store.state.selectedSelection?.info.id],
         store: Store.instance,
         builder: (ctx, store) {
           Widget child = Center(child: Text('Nothing selected'));
+
+          final currentAtlas = store.state.currentAtlas!;
 
           if (store.state.selectedSelection != null) {
             if (store.state.selectedSelection is SpriteSelection) {
               child = SimpleSpriteWidget(
                   center: true,
-                  sprite: store.state.currentAtlas
-                      .getSprite(store.state.selectedSelection.id));
+                  sprite: currentAtlas
+                      .getSprite(store.state.selectedSelection!.info.id));
             } else if (store.state.selectedSelection is AnimationSelection) {
               child = AnimationPlayerWidget(
-                  animation: store.state.currentAtlas
-                      .getAnimation(store.state.selectedSelection.id));
+                  animation: currentAtlas
+                      .getAnimation(store.state.selectedSelection!.info.id));
             }
           }
 

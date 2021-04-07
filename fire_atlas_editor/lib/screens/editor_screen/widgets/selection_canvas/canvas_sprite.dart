@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flame/sprite.dart';
-import 'package:tinycolor/tinycolor.dart';
+import 'package:flame/extensions.dart';
 
 class CanvasSprite extends StatelessWidget {
   final Sprite sprite;
@@ -84,7 +84,7 @@ class _CanvasSpritePainer extends CustomPainter {
     canvas.drawRect(
         Rect.fromLTWH(0, 0, size.width, size.height),
         Paint()
-          ..color = TinyColor(_gridTileColor.withOpacity(1)).lighten(60).color);
+          ..color = _gridTileColor.withOpacity(1).brighten(0.6));
 
     canvas.save();
     canvas.translate(_x, _y);
@@ -101,16 +101,16 @@ class _CanvasSpritePainer extends CustomPainter {
     canvas.drawRect(
         spriteRect.inflate(1.0),
         Paint()
-          ..color = TinyColor(_gridTileColor.withOpacity(1)).lighten(20).color);
+          ..color = _gridTileColor.withOpacity(1).brighten(0.2));
 
     // Checker board
     final rowCount = (_sprite.originalSize.y / _tileHeight).ceil();
     final columnCount = (_sprite.originalSize.x / _tileWidth).ceil();
 
     final darkTilePaint = Paint()
-      ..color = TinyColor(_gridTileColor.withOpacity(1)).lighten(70).color;
+      ..color = _gridTileColor.withOpacity(1).brighten(0.7);
     final lightTilePaint = Paint()
-      ..color = TinyColor(_gridTileColor.withOpacity(1)).lighten(90).color;
+      ..color = _gridTileColor.withOpacity(1).brighten(0.9);
 
     for (var y = 0.0; y < rowCount; y++) {
       final m = y % 2;

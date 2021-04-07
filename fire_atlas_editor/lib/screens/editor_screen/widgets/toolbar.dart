@@ -74,7 +74,7 @@ class Toolbar extends StatelessWidget {
                 FIconButton(
                     iconData: Icons.get_app,
                     onPress: () {
-                      _launchURL(store.state.currentAtlas);
+                      _launchURL(store.state.currentAtlas!);
                     }),
               ]),
               FIconButton(

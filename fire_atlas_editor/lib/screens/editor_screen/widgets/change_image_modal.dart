@@ -15,7 +15,7 @@ class ChangeImageModal extends StatefulWidget {
 }
 
 class _ChangeImageModalState extends State<ChangeImageModal> {
-  String _imageData;
+  String? _imageData;
 
   @override
   Widget build(BuildContext ctx) {
@@ -50,7 +50,7 @@ class _ChangeImageModalState extends State<ChangeImageModal> {
                   onSelect: () {
                     Store.instance.dispatchAsync(
                       UpdateAtlasImageAction(
-                        imageData: _imageData,
+                        imageData: _imageData!,
                       ),
                     );
                     Store.instance.dispatch(CloseEditorModal());

@@ -78,10 +78,10 @@ class SetSelectionAction extends MicroStoreAction<FireAtlasState> {
 }
 
 class SelectSelectionAction extends MicroStoreAction<FireAtlasState> {
-  BaseSelection selection;
+  BaseSelection? selection;
 
   SelectSelectionAction({
-    required this.selection,
+    this.selection,
   });
 
   @override

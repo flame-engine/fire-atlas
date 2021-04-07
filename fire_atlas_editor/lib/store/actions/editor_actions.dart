@@ -19,16 +19,17 @@ class SetCanvasSelection extends MicroStoreAction<FireAtlasState> {
 class OpenEditorModal extends MicroStoreAction<FireAtlasState> {
   final Widget modal;
   final double width;
-  final double height;
+  final double? height;
 
   OpenEditorModal(this.modal, this.width, [this.height]);
 
   @override
   FireAtlasState perform(state) {
-    state.modal = ModalState()
-      ..child = modal
-      ..width = width
-      ..height = height;
+    state.modal = ModalState(
+      child: modal,
+      width: width,
+      height: height,
+    );
 
     return state;
   }
@@ -48,8 +49,8 @@ class CreateMessageAction extends MicroStoreAction<FireAtlasState> {
   final String message;
 
   CreateMessageAction({
-    this.type,
-    this.message,
+    required this.type,
+    required this.message,
   });
 
   @override
@@ -57,9 +58,10 @@ class CreateMessageAction extends MicroStoreAction<FireAtlasState> {
     final existent = state.messages.where((m) => m.message == message);
 
     if (existent.isEmpty) {
-      final messageObj = Message()
-        ..type = type
-        ..message = message;
+      final messageObj = Message(
+        type: type,
+        message: message,
+      );
 
       state.messages.add(messageObj);
     }
@@ -72,7 +74,7 @@ class DismissMessageAction extends MicroStoreAction<FireAtlasState> {
   final Message message;
 
   DismissMessageAction({
-    this.message,
+    required this.message,
   });
 
   @override
