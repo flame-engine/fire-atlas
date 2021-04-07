@@ -22,9 +22,7 @@ class ModalContainer extends StatelessWidget {
                 child: Opacity(
                   opacity: 0.9,
                   child: Container(
-                    color: Theme.of(ctx).dialogBackgroundColor
-                        .darken(0.8)
-                  ),
+                      color: Theme.of(ctx).dialogBackgroundColor.darken(0.8)),
                 ),
               ),
               Positioned(

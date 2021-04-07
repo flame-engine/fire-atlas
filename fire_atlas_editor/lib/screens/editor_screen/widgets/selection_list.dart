@@ -58,7 +58,12 @@ class SelectionList extends StatelessWidget {
                                   Expanded(
                                     child: Text('${selection.info.id}',
                                         style: TextStyle(
-                                            fontWeight: ((store.state.selectedSelection?.info.id == selection.info.id)
+                                            fontWeight: ((store
+                                                        .state
+                                                        .selectedSelection
+                                                        ?.info
+                                                        .id ==
+                                                    selection.info.id)
                                                 ? FontWeight.bold
                                                 : FontWeight.normal))),
                                   ),

@@ -81,10 +81,8 @@ class _CanvasSpritePainer extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // Background
-    canvas.drawRect(
-        Rect.fromLTWH(0, 0, size.width, size.height),
-        Paint()
-          ..color = _gridTileColor.withOpacity(1).brighten(0.6));
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height),
+        Paint()..color = _gridTileColor.withOpacity(1).brighten(0.6));
 
     canvas.save();
     canvas.translate(_x, _y);
@@ -98,10 +96,8 @@ class _CanvasSpritePainer extends CustomPainter {
     );
 
     // Background outline
-    canvas.drawRect(
-        spriteRect.inflate(1.0),
-        Paint()
-          ..color = _gridTileColor.withOpacity(1).brighten(0.2));
+    canvas.drawRect(spriteRect.inflate(1.0),
+        Paint()..color = _gridTileColor.withOpacity(1).brighten(0.2));
 
     // Checker board
     final rowCount = (_sprite.originalSize.y / _tileHeight).ceil();

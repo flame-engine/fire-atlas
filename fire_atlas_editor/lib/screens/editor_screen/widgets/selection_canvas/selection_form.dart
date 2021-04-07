@@ -60,10 +60,8 @@ class _SelectionFormState extends State<SelectionForm> {
   }
 
   Selection _fillSelectionBaseValues() {
-    if (widget.selectionEnd == null)
-      throw 'Selection end is null';
-    if (widget.selectionStart == null)
-      throw 'Selection start is null';
+    if (widget.selectionEnd == null) throw 'Selection end is null';
+    if (widget.selectionStart == null) throw 'Selection start is null';
 
     final selectionEnd = widget.selectionEnd!;
     final selectionStart = widget.selectionStart!;
