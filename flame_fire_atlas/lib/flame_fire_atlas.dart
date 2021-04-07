@@ -29,20 +29,20 @@ class Selection {
   int h;
 
   Selection({
-      required this.id,
-      required this.x,
-      required this.y,
-      required this.w,
-      required this.h,
+    required this.id,
+    required this.x,
+    required this.y,
+    required this.w,
+    required this.h,
   });
 
   factory Selection.fromJson(Map<String, dynamic> json) {
     return Selection(
-        id: json['id'],
-        x: json['x'],
-        y: json['y'],
-        w: json['w'],
-        h: json['h'],
+      id: json['id'],
+      x: json['x'],
+      y: json['y'],
+      w: json['w'],
+      h: json['h'],
     );
   }
 }
@@ -66,8 +66,8 @@ abstract class BaseSelection {
 
 class SpriteSelection extends BaseSelection {
   SpriteSelection({
-      required Selection info,
-  }): super(info);
+    required Selection info,
+  }) : super(info);
 
   factory SpriteSelection.fromJson(Map<String, dynamic> json) {
     final info = Selection.fromJson(json);
@@ -87,21 +87,20 @@ class AnimationSelection extends BaseSelection {
 
   AnimationSelection({
     required Selection info,
-
     required this.frameCount,
     required this.stepTime,
     required this.loop,
-  }): super(info);
+  }) : super(info);
 
   @override
   factory AnimationSelection.fromJson(Map<String, dynamic> json) {
     final info = Selection.fromJson(json);
 
     return AnimationSelection(
-        info: info,
-        frameCount: json['frameCount'],
-        stepTime: json['stepTime'],
-        loop: json['loop'],
+      info: info,
+      frameCount: json['frameCount'],
+      stepTime: json['stepTime'],
+      loop: json['loop'],
     );
   }
 
@@ -169,7 +168,8 @@ class FireAtlas {
     final atlas = FireAtlas(
       id: json['id'],
       imageData: json['imageData'],
-      tileHeight: json['tileHeight']?.toDouble() ?? json['tileSize']?.toDouble(),
+      tileHeight:
+          json['tileHeight']?.toDouble() ?? json['tileSize']?.toDouble(),
       tileWidth: json['tileWidth']?.toDouble() ?? json['tileSize']?.toDouble(),
     );
 
@@ -213,7 +213,7 @@ class FireAtlas {
   }
 
   Image _assertImageLoaded() {
-    if(_image == null) {
+    if (_image == null) {
       throw 'Atlas is not loaded yet, call "load" before using it';
     }
 
@@ -223,11 +223,11 @@ class FireAtlas {
   Sprite getSprite(String selectionId) {
     final selection = selections[selectionId];
 
-    if(selection == null)
-        throw 'There is no selection with the id "$selectionId" on this atlas';
+    if (selection == null)
+      throw 'There is no selection with the id "$selectionId" on this atlas';
 
-    if(!(selection is SpriteSelection))
-        throw 'Selection "$selectionId" is not a Sprite';
+    if (!(selection is SpriteSelection))
+      throw 'Selection "$selectionId" is not a Sprite';
 
     final image = _assertImageLoaded();
 
@@ -249,15 +249,14 @@ class FireAtlas {
 
     final image = _assertImageLoaded();
 
-    if(selection == null)
-        throw 'There is no selection with the id "$selectionId" on this atlas';
+    if (selection == null)
+      throw 'There is no selection with the id "$selectionId" on this atlas';
     if (!(selection is AnimationSelection))
-        throw 'Selection "$selectionId" is not an Animation';
+      throw 'Selection "$selectionId" is not an Animation';
 
     final initialX = selection.info.x.toDouble();
 
-    final frameSize =
-        (1 + selection.info.w.toDouble()) / selection.frameCount;
+    final frameSize = (1 + selection.info.w.toDouble()) / selection.frameCount;
 
     final width = frameSize * tileWidth;
     final height = (1 + selection.info.h.toDouble()) * tileHeight;
