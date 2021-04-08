@@ -1,4 +1,4 @@
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'dart:ui';
 import 'dart:convert';
@@ -8,8 +8,8 @@ import 'dart:math';
 Future<String> concatenateImages(
   String originalData,
   String newImageData,
-  Vector2 placement,
-  Rect selection,
+  Vector2? placement,
+  Rect? selection,
 ) async {
   final original = await Flame.images.fromBase64('original', originalData);
   final newImage = await Flame.images.fromBase64('newImage', newImageData);
@@ -59,6 +59,9 @@ Future<String> concatenateImages(
   );
 
   final byteData = await finalImage.toByteData(format: ImageByteFormat.png);
+  if (byteData == null) {
+    throw 'Empty file generated';
+  }
   final Uint8List bytes = Uint8List.view(byteData.buffer);
 
   final data = "data:image/png;base64,${base64Encode(bytes)}";

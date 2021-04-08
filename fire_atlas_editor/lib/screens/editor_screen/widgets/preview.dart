@@ -18,16 +18,18 @@ class Preview extends StatelessWidget {
         builder: (ctx, store) {
           Widget child = Center(child: Text('Nothing selected'));
 
+          final currentAtlas = store.state.currentAtlas!;
+
           if (store.state.selectedSelection != null) {
             if (store.state.selectedSelection is SpriteSelection) {
               child = SimpleSpriteWidget(
                   center: true,
-                  sprite: store.state.currentAtlas
-                      .getSprite(store.state.selectedSelection.id));
+                  sprite: currentAtlas
+                      .getSprite(store.state.selectedSelection!.id));
             } else if (store.state.selectedSelection is AnimationSelection) {
               child = AnimationPlayerWidget(
-                  animation: store.state.currentAtlas
-                      .getAnimation(store.state.selectedSelection.id));
+                  animation: currentAtlas
+                      .getAnimation(store.state.selectedSelection!.id));
             }
           }
 

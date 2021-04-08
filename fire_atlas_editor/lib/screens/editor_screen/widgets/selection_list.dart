@@ -16,10 +16,16 @@ import './selection_canvas/selection_form.dart';
 class SelectionList extends StatelessWidget {
   @override
   Widget build(_) {
-    return MicroStoreProvider(
+    return MicroStoreProvider<FireAtlasState>(
       store: Store.instance,
       builder: (ctx, store) {
-        void _select(Selection selection) =>
+        final currentAtlas = store.state.currentAtlas;
+
+        if (currentAtlas == null) {
+          return Text('No atlas selected');
+        }
+
+        void _select(BaseSelection selection) =>
             store.dispatch(SelectSelectionAction(selection: selection));
 
         return FContainer(
@@ -29,9 +35,9 @@ class SelectionList extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 FSubtitleTitle(title: 'Selections')
-              ]..addAll(store.state.currentAtlas?.selections?.length == 0
+              ]..addAll(currentAtlas.selections.length == 0
                   ? [FLabel(label: 'No selections yet')]
-                  : store.state.currentAtlas.selections.values
+                  : currentAtlas.selections.values
                       .map((selection) {
                         return Container(
                           margin: EdgeInsets.all(10),
@@ -52,13 +58,13 @@ class SelectionList extends StatelessWidget {
                                   Expanded(
                                     child: Text('${selection.id}',
                                         style: TextStyle(
-                                            fontWeight: (store
+                                            fontWeight: ((store
                                                         .state
                                                         .selectedSelection
                                                         ?.id ==
                                                     selection.id)
                                                 ? FontWeight.bold
-                                                : FontWeight.normal)),
+                                                : FontWeight.normal))),
                                   ),
                                   Row(children: [
                                     selection is AnimationSelection

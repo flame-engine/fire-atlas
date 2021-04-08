@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart' hide Animation;
-import 'package:flame/sprite_animation.dart';
+import 'package:flame/sprite.dart';
 
 import './simple_sprite_widget.dart';
 
@@ -11,16 +11,16 @@ class SimpleAnimationLoaderWidget extends StatelessWidget {
   final Future<SpriteAnimation> future;
 
   SimpleAnimationLoaderWidget({
-    this.future,
+    required this.future,
   });
 
   @override
   Widget build(ctx) {
-    return FutureBuilder(
+    return FutureBuilder<SpriteAnimation>(
         future: future,
         builder: (ctx, snapshot) {
           if (snapshot.hasData) {
-            return AnimationPlayerWidget(animation: snapshot.data);
+            return AnimationPlayerWidget(animation: snapshot.data!);
           }
 
           if (snapshot.hasError) return Text('Something went wrong :(');
@@ -34,7 +34,7 @@ class AnimationPlayerWidget extends StatefulWidget {
   final SpriteAnimation animation;
 
   AnimationPlayerWidget({
-    this.animation,
+    required this.animation,
   });
 
   @override
@@ -43,8 +43,8 @@ class AnimationPlayerWidget extends StatefulWidget {
 
 class _AnimationPlayerWidget extends State<AnimationPlayerWidget>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  int _lastUpdated;
+  late AnimationController _controller;
+  int _lastUpdated = 0;
   bool _playing = false;
 
   @override
@@ -55,7 +55,7 @@ class _AnimationPlayerWidget extends State<AnimationPlayerWidget>
       ..addListener(() {
         final now = DateTime.now().millisecond;
 
-        final dt = max(0, (now - _lastUpdated) / 1000);
+        final double dt = max(0, (now - _lastUpdated) / 1000);
         widget.animation.update(dt);
 
         setState(() {

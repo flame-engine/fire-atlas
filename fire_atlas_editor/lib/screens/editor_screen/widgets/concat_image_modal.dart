@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flame/extensions/vector2.dart';
+import 'package:flame/extensions.dart';
 
 import '../../../store/store.dart';
 import '../../../store/actions/editor_actions.dart';
@@ -17,9 +17,9 @@ class ConcatImageModal extends StatefulWidget {
 }
 
 class _ConcatImageModalState extends State<ConcatImageModal> {
-  String _imageData;
-  Vector2 _placement;
-  Rect _selection;
+  String? _imageData;
+  Vector2? _placement;
+  Rect? _selection;
 
   @override
   Widget build(BuildContext ctx) {
@@ -119,9 +119,10 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                   selected: true,
                   label: 'Ok',
                   onSelect: () async {
+                    final currentAtlas = Store.instance.state.currentAtlas!;
                     final _newImageData = await concatenateImages(
-                      Store.instance.state.currentAtlas.imageData,
-                      _imageData,
+                      currentAtlas.imageData!,
+                      _imageData!,
                       _placement,
                       _selection,
                     );

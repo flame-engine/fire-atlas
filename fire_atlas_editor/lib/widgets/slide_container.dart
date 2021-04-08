@@ -9,13 +9,13 @@ class SlideContainer extends StatefulWidget {
   final void Function(AnimationController) onFinish;
 
   SlideContainer({
-    this.child,
+    required this.child,
+    required this.onFinish,
     this.from = const Offset(0.0, 0.0),
     this.to = const Offset(0.0, 0.0),
     this.duration = const Duration(seconds: 1),
     this.curve = Curves.easeInExpo,
-    this.onFinish,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -24,8 +24,8 @@ class SlideContainer extends StatefulWidget {
 
 class _SlideContainer extends State<SlideContainer>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<Offset> _offsetAnimation;
+  late AnimationController _controller;
+  late Animation<Offset> _offsetAnimation;
 
   @override
   void initState() {
@@ -34,7 +34,7 @@ class _SlideContainer extends State<SlideContainer>
       duration: widget.duration,
       vsync: this,
     )..forward().whenComplete(() {
-        widget.onFinish?.call(_controller);
+        widget.onFinish.call(_controller);
       });
 
     _offsetAnimation = Tween<Offset>(
@@ -48,8 +48,8 @@ class _SlideContainer extends State<SlideContainer>
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    super.dispose();
   }
 
   @override

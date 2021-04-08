@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 
 class FIconButton extends StatefulWidget {
   final IconData iconData;
   final VoidCallback onPress;
   final bool disabled;
-  final Color color;
+  final Color? color;
 
   FIconButton({
-    @required this.iconData,
-    @required this.onPress,
+    required this.iconData,
+    required this.onPress,
     this.disabled = false,
     this.color,
   });
@@ -23,7 +22,7 @@ class _FIconButtonState extends State<FIconButton> {
 
   void _pressReleased() {
     if (widget.disabled) return;
-    widget.onPress?.call();
+    widget.onPress.call();
     setState(() {
       _pressed = false;
     });

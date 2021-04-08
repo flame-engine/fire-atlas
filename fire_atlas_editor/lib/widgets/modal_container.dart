@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tinycolor/tinycolor.dart';
+import 'package:flame/extensions.dart';
 
 import '../vendor/micro_store/micro_store.dart';
 import '../store/store.dart';
@@ -14,17 +14,15 @@ class ModalContainer extends StatelessWidget {
     return MicroStoreProvider<FireAtlasState>(
       store: Store.instance,
       builder: (ctx, store) {
-        if (store.state.modal != null) {
+        final modal = store.state.modal;
+        if (modal != null) {
           return Stack(
             children: [
               Positioned.fill(
                 child: Opacity(
                   opacity: 0.9,
                   child: Container(
-                    color: TinyColor(Theme.of(ctx).dialogBackgroundColor)
-                        .darken(80)
-                        .color,
-                  ),
+                      color: Theme.of(ctx).dialogBackgroundColor.darken(0.8)),
                 ),
               ),
               Positioned(
@@ -33,27 +31,29 @@ class ModalContainer extends StatelessWidget {
                 top: 10,
                 bottom: 10,
                 child: Center(
-                    child: Opacity(
-                        opacity: 1,
-                        child: FContainer(
-                          width: store.state.modal.width,
-                          height: store.state.modal.height,
-                          color: Theme.of(ctx).dialogBackgroundColor,
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: FIconButton(
-                                      iconData: Icons.close,
-                                      color: Theme.of(ctx).buttonColor,
-                                      onPress: () {
-                                        store.dispatch(CloseEditorModal());
-                                      }),
-                                ),
-                                Expanded(child: store.state.modal.child),
-                              ]),
-                        ))),
+                  child: Opacity(
+                    opacity: 1,
+                    child: FContainer(
+                      width: modal.width,
+                      height: modal.height,
+                      color: Theme.of(ctx).dialogBackgroundColor,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: FIconButton(
+                                  iconData: Icons.close,
+                                  color: Theme.of(ctx).buttonColor,
+                                  onPress: () {
+                                    store.dispatch(CloseEditorModal());
+                                  }),
+                            ),
+                            Expanded(child: modal.child),
+                          ]),
+                    ),
+                  ),
+                ),
               ),
             ],
           );

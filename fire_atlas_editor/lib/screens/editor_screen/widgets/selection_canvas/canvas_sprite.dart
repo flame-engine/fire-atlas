@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flame/sprite.dart';
-import 'package:tinycolor/tinycolor.dart';
+import 'package:flame/extensions.dart';
 
 class CanvasSprite extends StatelessWidget {
   final Sprite sprite;
@@ -9,16 +9,16 @@ class CanvasSprite extends StatelessWidget {
   final double scale;
   final double tileWidth;
   final double tileHeight;
-  final Offset selectionStart;
-  final Offset selectionEnd;
+  final Offset? selectionStart;
+  final Offset? selectionEnd;
 
   CanvasSprite({
-    this.sprite,
-    this.translateX,
-    this.translateY,
-    this.scale,
-    this.tileWidth,
-    this.tileHeight,
+    required this.sprite,
+    required this.translateX,
+    required this.translateY,
+    required this.scale,
+    required this.tileWidth,
+    required this.tileHeight,
     this.selectionStart,
     this.selectionEnd,
   });
@@ -50,8 +50,8 @@ class _CanvasSpritePainer extends CustomPainter {
   final double _scale;
   final double _tileWidth;
   final double _tileHeight;
-  final Offset _selectionStart;
-  final Offset _selectionEnd;
+  final Offset? _selectionStart;
+  final Offset? _selectionEnd;
 
   Color _selectionColor;
   Color _gridTileColor;
@@ -82,9 +82,9 @@ class _CanvasSpritePainer extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     // Background
     canvas.drawRect(
-        Rect.fromLTWH(0, 0, size.width, size.height),
-        Paint()
-          ..color = TinyColor(_gridTileColor.withOpacity(1)).lighten(60).color);
+      Offset.zero & size,
+      Paint()..color = _gridTileColor.withOpacity(1).brighten(0.6),
+    );
 
     canvas.save();
     canvas.translate(_x, _y);
@@ -99,18 +99,18 @@ class _CanvasSpritePainer extends CustomPainter {
 
     // Background outline
     canvas.drawRect(
-        spriteRect.inflate(1.0),
-        Paint()
-          ..color = TinyColor(_gridTileColor.withOpacity(1)).lighten(20).color);
+      spriteRect.inflate(1.0),
+      Paint()..color = _gridTileColor.withOpacity(1).brighten(0.2),
+    );
 
     // Checker board
     final rowCount = (_sprite.originalSize.y / _tileHeight).ceil();
     final columnCount = (_sprite.originalSize.x / _tileWidth).ceil();
 
     final darkTilePaint = Paint()
-      ..color = TinyColor(_gridTileColor.withOpacity(1)).lighten(70).color;
+      ..color = _gridTileColor.withOpacity(1).brighten(0.7);
     final lightTilePaint = Paint()
-      ..color = TinyColor(_gridTileColor.withOpacity(1)).lighten(90).color;
+      ..color = _gridTileColor.withOpacity(1).brighten(0.9);
 
     for (var y = 0.0; y < rowCount; y++) {
       final m = y % 2;
@@ -129,12 +129,14 @@ class _CanvasSpritePainer extends CustomPainter {
     _sprite.render(canvas);
 
     // Selection
-    if (_selectionStart != null && _selectionEnd != null) {
-      final size = _selectionEnd - _selectionStart + Offset(1, 1);
+    final _start = _selectionStart;
+    final _end = _selectionEnd;
+    if (_start != null && _end != null) {
+      final size = _end - _start + Offset(1, 1);
       canvas.drawRect(
         Rect.fromLTWH(
-          (_selectionStart.dx * _tileWidth),
-          (_selectionStart.dy * _tileHeight),
+          (_start.dx * _tileWidth),
+          (_start.dy * _tileHeight),
           (size.dx * _tileWidth),
           (size.dy * _tileHeight),
         ),

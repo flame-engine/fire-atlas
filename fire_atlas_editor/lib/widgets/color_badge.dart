@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
-import 'package:tinycolor/tinycolor.dart';
+import 'package:flame/extensions.dart';
 
 class ColorBadge extends StatelessWidget {
   final String label;
   final Color color;
 
   ColorBadge({
-    @required this.label,
-    @required this.color,
+    required this.label,
+    required this.color,
   });
 
   @override
   Widget build(ctx) {
-    final textColor = TinyColor(color).lighten(35).color;
+    final textColor = color.brighten(0.85);
 
     return Container(
       padding: EdgeInsets.all(10),

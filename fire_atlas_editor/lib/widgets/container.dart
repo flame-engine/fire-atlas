@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class FContainer extends StatelessWidget {
-  final double width;
-  final double height;
-  final Widget child;
-  final Color color;
+  final double? width;
+  final double? height;
+  final Widget? child;
+  final Color? color;
   final EdgeInsets margin;
   final EdgeInsets padding;
 
@@ -14,7 +14,7 @@ class FContainer extends StatelessWidget {
     this.width,
     this.color,
     this.margin = const EdgeInsets.all(2.5),
-    this.padding,
+    this.padding = const EdgeInsets.all(0),
   });
 
   @override

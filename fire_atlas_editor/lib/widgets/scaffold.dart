@@ -6,7 +6,7 @@ import './messages_board.dart';
 class FScaffold extends StatelessWidget {
   final Widget child;
 
-  FScaffold({this.child});
+  FScaffold({required this.child});
 
   @override
   Widget build(ctx) {

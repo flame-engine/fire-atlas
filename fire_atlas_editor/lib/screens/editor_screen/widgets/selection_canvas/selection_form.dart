@@ -11,10 +11,10 @@ import '../../../../store/actions/atlas_actions.dart';
 import '../../../../store/actions/editor_actions.dart';
 
 class SelectionForm extends StatefulWidget {
-  final Offset selectionStart;
-  final Offset selectionEnd;
+  final Offset? selectionStart;
+  final Offset? selectionEnd;
 
-  final AnimationSelection editingSelection;
+  final AnimationSelection? editingSelection;
 
   SelectionForm({
     this.selectionStart,
@@ -32,7 +32,7 @@ enum SelectionType {
 }
 
 class _SelectionFormState extends State<SelectionForm> {
-  SelectionType _selectionType;
+  SelectionType? _selectionType;
 
   final selectionNameController = TextEditingController();
   final frameCountController = TextEditingController();
@@ -44,10 +44,10 @@ class _SelectionFormState extends State<SelectionForm> {
     super.initState();
 
     if (widget.editingSelection != null) {
-      selectionNameController.text = widget.editingSelection.id;
-      frameCountController.text = widget.editingSelection.frameCount.toString();
-      stepTimeController.text =
-          (widget.editingSelection.stepTime * 1000).toString();
+      final selection = widget.editingSelection!;
+      selectionNameController.text = selection.id;
+      frameCountController.text = selection.frameCount.toString();
+      stepTimeController.text = (selection.stepTime * 1000).toString();
 
       _selectionType = SelectionType.ANIMATION;
     }
@@ -59,22 +59,33 @@ class _SelectionFormState extends State<SelectionForm> {
     });
   }
 
-  T _fillSelectionBaseValues<T extends Selection>(T selection) {
-    final w = (widget.selectionEnd.dx - widget.selectionStart.dx).toInt();
-    final h = (widget.selectionEnd.dy - widget.selectionStart.dy).toInt();
+  Selection _fillSelectionBaseValues() {
+    if (widget.selectionEnd == null) throw 'Selection end is null';
+    if (widget.selectionStart == null) throw 'Selection start is null';
 
-    return selection
-      ..id = selectionNameController.text
-      ..x = widget.selectionStart.dx.toInt()
-      ..y = widget.selectionStart.dy.toInt()
-      ..w = w
-      ..h = h;
+    final selectionEnd = widget.selectionEnd!;
+    final selectionStart = widget.selectionStart!;
+
+    final w = (selectionEnd.dx - selectionStart.dx).toInt();
+    final h = (selectionEnd.dy - selectionStart.dy).toInt();
+
+    return Selection(
+      id: selectionNameController.text,
+      x: selectionStart.dx.toInt(),
+      y: selectionStart.dy.toInt(),
+      w: w,
+      h: h,
+    );
   }
 
   void _createSprite() {
     if (selectionNameController.text.isNotEmpty) {
-      Store.instance.dispatch(SetSelectionAction(
-          selection: _fillSelectionBaseValues(SpriteSelection())));
+      final info = _fillSelectionBaseValues();
+      Store.instance.dispatch(
+        SetSelectionAction(
+          selection: SpriteSelection(info: info),
+        ),
+      );
 
       Store.instance.dispatch(CloseEditorModal());
     } else {
@@ -112,15 +123,24 @@ class _SelectionFormState extends State<SelectionForm> {
 
         return;
       }
+      final frameCount = int.parse(frameCountController.text);
+      final stepTime = int.parse(stepTimeController.text) / 1000;
 
-      final selectionToSave = widget.editingSelection ??
-          _fillSelectionBaseValues<AnimationSelection>(AnimationSelection());
+      final selectionToSave = widget.editingSelection == null
+          ? AnimationSelection(
+              info: _fillSelectionBaseValues(),
+              frameCount: frameCount,
+              stepTime: stepTime,
+              loop: _animationLoop,
+            )
+          : widget.editingSelection!
+        ..frameCount = frameCount
+        ..stepTime = stepTime
+        ..loop = _animationLoop;
 
-      Store.instance.dispatch(SetSelectionAction(
-          selection: selectionToSave
-            ..frameCount = int.parse(frameCountController.text)
-            ..stepTime = int.parse(stepTimeController.text) / 1000
-            ..loop = _animationLoop));
+      Store.instance.dispatch(
+        SetSelectionAction(selection: selectionToSave),
+      );
 
       Store.instance.dispatch(CloseEditorModal());
     } else {
@@ -210,7 +230,9 @@ class _SelectionFormState extends State<SelectionForm> {
         ..add(Checkbox(
             value: _animationLoop,
             onChanged: (v) {
-              setState(() => _animationLoop = v);
+              if (v != null) {
+                setState(() => _animationLoop = v);
+              }
             }))
         ..add(SizedBox(height: 20));
 

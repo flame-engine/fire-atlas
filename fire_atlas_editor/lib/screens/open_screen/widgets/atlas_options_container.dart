@@ -15,8 +15,8 @@ class AtlasOptionsContainer extends StatefulWidget {
   final Function(String, String, double, double) onConfirm;
 
   AtlasOptionsContainer({
-    this.onCancel,
-    this.onConfirm,
+    required this.onCancel,
+    required this.onConfirm,
   });
 
   @override
@@ -24,7 +24,7 @@ class AtlasOptionsContainer extends StatefulWidget {
 }
 
 class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
-  String _imageData;
+  String? _imageData;
 
   final atlasNameController = TextEditingController();
   final tileWidthController = TextEditingController();
@@ -90,8 +90,12 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
       return;
     }
 
-    widget.onConfirm(atlasName, _imageData, double.tryParse(tileWidthRaw),
-        double.tryParse(tileHeightRaw));
+    widget.onConfirm(
+      atlasName,
+      _imageData!,
+      double.parse(tileWidthRaw),
+      double.parse(tileHeightRaw),
+    );
   }
 
   void _cancel() {

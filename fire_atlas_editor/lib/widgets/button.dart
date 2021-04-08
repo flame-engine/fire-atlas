@@ -9,8 +9,8 @@ class FButton extends StatelessWidget {
   FButton({
     this.selected = false,
     this.disabled = false,
-    this.label,
-    this.onSelect,
+    required this.label,
+    required this.onSelect,
   });
 
   @override
@@ -21,8 +21,8 @@ class FButton extends StatelessWidget {
 
     return Opacity(
         opacity: disabled ? 0.6 : 1,
-        child: RaisedButton(
-          color: color,
+        child: ElevatedButton(
+          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(color)),
           onPressed: () {
             if (!disabled) onSelect();
           },
