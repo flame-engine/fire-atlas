@@ -48,17 +48,23 @@ class Selection {
 }
 
 abstract class BaseSelection {
-  final Selection info;
+  final Selection _info;
 
-  BaseSelection(this.info);
+  BaseSelection(this._info);
+
+  String get id => _info.id;
+  int get x => _info.x;
+  int get y => _info.y;
+  int get w => _info.w;
+  int get h => _info.h;
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{}
-      ..['id'] = info.id
-      ..['x'] = info.x
-      ..['y'] = info.y
-      ..['w'] = info.w
-      ..['h'] = info.h;
+      ..['id'] = id
+      ..['x'] = x
+      ..['y'] = y
+      ..['w'] = w
+      ..['h'] = h;
 
     return json;
   }
@@ -236,12 +242,12 @@ class FireAtlas {
     return Sprite(
       image,
       srcPosition: Vector2(
-        selection.info.x.toDouble() * tileWidth,
-        selection.info.y.toDouble() * tileHeight,
+        selection.x.toDouble() * tileWidth,
+        selection.y.toDouble() * tileHeight,
       ),
       srcSize: Vector2(
-        (1 + selection.info.w.toDouble()) * tileWidth,
-        (1 + selection.info.h.toDouble()) * tileHeight,
+        (1 + selection.w.toDouble()) * tileWidth,
+        (1 + selection.h.toDouble()) * tileHeight,
       ),
     );
   }
@@ -258,12 +264,12 @@ class FireAtlas {
       throw 'Selection "$selectionId" is not an Animation';
     }
 
-    final initialX = selection.info.x.toDouble();
+    final initialX = selection.x.toDouble();
 
-    final frameSize = (1 + selection.info.w.toDouble()) / selection.frameCount;
+    final frameSize = (1 + selection.w.toDouble()) / selection.frameCount;
 
     final width = frameSize * tileWidth;
-    final height = (1 + selection.info.h.toDouble()) * tileHeight;
+    final height = (1 + selection.h.toDouble()) * tileHeight;
 
     final sprites = List.generate(selection.frameCount, (i) {
       final x = (initialX + i) * frameSize;
@@ -271,7 +277,7 @@ class FireAtlas {
         image,
         srcPosition: Vector2(
           x * tileWidth,
-          selection.info.y.toDouble() * tileHeight,
+          selection.y.toDouble() * tileHeight,
         ),
         srcSize: Vector2(width, height),
       );

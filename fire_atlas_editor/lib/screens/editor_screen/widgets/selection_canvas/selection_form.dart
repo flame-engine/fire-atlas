@@ -45,7 +45,7 @@ class _SelectionFormState extends State<SelectionForm> {
 
     if (widget.editingSelection != null) {
       final selection = widget.editingSelection!;
-      selectionNameController.text = selection.info.id;
+      selectionNameController.text = selection.id;
       frameCountController.text = selection.frameCount.toString();
       stepTimeController.text = (selection.stepTime * 1000).toString();
 

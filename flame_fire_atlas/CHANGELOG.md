@@ -1,4 +1,4 @@
-## [1.0.0-rc1]
+## [next]
 
  * Compatibility with Flame v1.0.0-rc9 and null safe support
 

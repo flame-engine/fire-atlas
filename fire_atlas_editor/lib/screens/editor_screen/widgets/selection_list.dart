@@ -56,14 +56,13 @@ class SelectionList extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
-                                    child: Text('${selection.info.id}',
+                                    child: Text('${selection.id}',
                                         style: TextStyle(
                                             fontWeight: ((store
                                                         .state
                                                         .selectedSelection
-                                                        ?.info
-                                                        .id ==
-                                                    selection.info.id)
+                                                        ?.id ==
+                                                    selection.id)
                                                 ? FontWeight.bold
                                                 : FontWeight.normal))),
                                   ),

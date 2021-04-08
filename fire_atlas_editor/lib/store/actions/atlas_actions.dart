@@ -67,7 +67,7 @@ class SetSelectionAction extends MicroStoreAction<FireAtlasState> {
   FireAtlasState perform(FireAtlasState state) {
     final atlas = state.currentAtlas;
     if (atlas != null) {
-      atlas.selections[selection.info.id] = selection;
+      atlas.selections[selection.id] = selection;
       state.selectedSelection = selection;
       state.hasChanges = true;
     }
@@ -98,7 +98,7 @@ class RemoveSelectedSelectionAction extends MicroStoreAction<FireAtlasState> {
     final selected = state.selectedSelection;
 
     if (atlas != null && selected != null) {
-      atlas.selections.remove(selected.info.id);
+      atlas.selections.remove(selected.id);
       state.selectedSelection = null;
       state.hasChanges = true;
     }
