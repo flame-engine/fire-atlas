@@ -72,7 +72,7 @@ class _MicroStoreProviderState<T> extends State<MicroStoreProvider<T>> {
 
     List? newMemo;
     if (widget.memoFn != null) {
-      final newMemo = widget.memoFn!(store);
+      newMemo = widget.memoFn!(store);
 
       if (eq(newMemo, _memoValue)) {
         return;

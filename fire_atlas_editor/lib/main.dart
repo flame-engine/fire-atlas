@@ -19,9 +19,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fire Atlas Editor',
       theme: ThemeData(
-        primaryColor: Color(0xffd20101),
+        primaryColor: Color(0XFFD20101),
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        buttonColor: Color(0xffdb5b42),
+        buttonColor: Color(0XFFDB5B42),
       ),
       home: OpenScreen(),
       routes: {

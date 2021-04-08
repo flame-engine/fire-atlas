@@ -53,7 +53,7 @@ abstract class BaseSelection {
   BaseSelection(this.info);
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> json = {}
+    final json = <String, dynamic>{}
       ..['id'] = info.id
       ..['x'] = info.x
       ..['y'] = info.y
@@ -149,7 +149,7 @@ class FireAtlas {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> selectionsJson = {};
+    final selectionsJson = <String, dynamic>{};
     selections.entries.forEach((entry) {
       selectionsJson[entry.key] = entry.value.toJson();
     });
@@ -223,11 +223,13 @@ class FireAtlas {
   Sprite getSprite(String selectionId) {
     final selection = selections[selectionId];
 
-    if (selection == null)
+    if (selection == null) {
       throw 'There is no selection with the id "$selectionId" on this atlas';
+    }
 
-    if (!(selection is SpriteSelection))
+    if (!(selection is SpriteSelection)) {
       throw 'Selection "$selectionId" is not a Sprite';
+    }
 
     final image = _assertImageLoaded();
 
@@ -249,10 +251,12 @@ class FireAtlas {
 
     final image = _assertImageLoaded();
 
-    if (selection == null)
+    if (selection == null) {
       throw 'There is no selection with the id "$selectionId" on this atlas';
-    if (!(selection is AnimationSelection))
+    }
+    if (!(selection is AnimationSelection)) {
       throw 'Selection "$selectionId" is not an Animation';
+    }
 
     final initialX = selection.info.x.toDouble();
 

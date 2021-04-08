@@ -73,12 +73,11 @@ class CanvasBoardState extends State<CanvasBoard> {
     if (_lastDrag != null) {
       final _last = _lastDrag!;
       setState(() {
-        final x = details.localPosition.dx - _last.dx;
-        final y = details.localPosition.dy - _last.dy;
+        final delta = details.localPosition - _last;
 
         if (_currentTool == CanvasTools.MOVE) {
-          _translateX += x;
-          _translateY += y;
+          _translateX += delta.dx;
+          _translateY += delta.dy;
         } else if (_currentTool == CanvasTools.SELECTION) {
           _finishSelection(_calculateIndexClick(details.localPosition));
         }
@@ -90,13 +89,15 @@ class CanvasBoardState extends State<CanvasBoard> {
 
   void _handleMoveEnd() {
     if (_lastDrag != null) {
-      setState(() {
-        if (_currentTool == CanvasTools.SELECTION) {
-          _finishSelection(_calculateIndexClick(_lastDrag!));
-        }
-        _lastDrag = _dragStart = null;
-      });
+      return;
     }
+    final clickIndex = _calculateIndexClick(_lastDrag!);
+    setState(() {
+      if (_currentTool == CanvasTools.SELECTION) {
+        _finishSelection(clickIndex);
+      }
+      _lastDrag = _dragStart = null;
+    });
   }
 
   void _handleMoveStart(DragStartDetails details) {

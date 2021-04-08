@@ -14,8 +14,8 @@ class ModalContainer extends StatelessWidget {
     return MicroStoreProvider<FireAtlasState>(
       store: Store.instance,
       builder: (ctx, store) {
-        if (store.state.modal != null) {
-          final modal = store.state.modal!;
+        final modal = store.state.modal;
+        if (modal != null) {
           return Stack(
             children: [
               Positioned.fill(
@@ -31,27 +31,29 @@ class ModalContainer extends StatelessWidget {
                 top: 10,
                 bottom: 10,
                 child: Center(
-                    child: Opacity(
-                        opacity: 1,
-                        child: FContainer(
-                          width: modal.width,
-                          height: modal.height,
-                          color: Theme.of(ctx).dialogBackgroundColor,
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: FIconButton(
-                                      iconData: Icons.close,
-                                      color: Theme.of(ctx).buttonColor,
-                                      onPress: () {
-                                        store.dispatch(CloseEditorModal());
-                                      }),
-                                ),
-                                Expanded(child: modal.child),
-                              ]),
-                        ))),
+                  child: Opacity(
+                    opacity: 1,
+                    child: FContainer(
+                      width: modal.width,
+                      height: modal.height,
+                      color: Theme.of(ctx).dialogBackgroundColor,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: FIconButton(
+                                  iconData: Icons.close,
+                                  color: Theme.of(ctx).buttonColor,
+                                  onPress: () {
+                                    store.dispatch(CloseEditorModal());
+                                  }),
+                            ),
+                            Expanded(child: modal.child),
+                          ]),
+                    ),
+                  ),
+                ),
               ),
             ],
           );

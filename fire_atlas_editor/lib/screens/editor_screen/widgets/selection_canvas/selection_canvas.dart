@@ -16,11 +16,11 @@ class SelectionCanvas extends StatelessWidget {
     return MicroStoreProvider<FireAtlasState>(
       store: Store.instance,
       builder: (ctx, store) {
-        if (store.state.currentAtlas == null) {
+        final atlas = store.state.currentAtlas;
+
+        if (atlas == null) {
           return Text('No atlas selected');
         }
-
-        final atlas = store.state.currentAtlas!;
 
         return FContainer(
           child: FutureBuilder<Image>(
@@ -32,8 +32,10 @@ class SelectionCanvas extends StatelessWidget {
               if (snapshot.hasData) {
                 return LayoutBuilder(
                   builder: (ctx, constraints) {
-                    final size =
-                        Size(constraints.maxWidth, constraints.maxHeight);
+                    final size = Size(
+                      constraints.maxWidth,
+                      constraints.maxHeight,
+                    );
                     return CanvasBoard(
                       sprite: Sprite(snapshot.data!),
                       size: size,
@@ -42,8 +44,6 @@ class SelectionCanvas extends StatelessWidget {
                     );
                   },
                 );
-              } else if (snapshot.hasError) {
-                return Text('Something wrong happened :(');
               }
               return Text('Something wrong happened :(');
             },
