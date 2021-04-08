@@ -70,8 +70,8 @@ class CanvasBoardState extends State<CanvasBoard> {
   }
 
   void _handleMove(DragUpdateDetails details) {
-    if (_lastDrag != null) {
-      final _last = _lastDrag!;
+    final _last = _lastDrag;
+    if (_last != null) {
       setState(() {
         final delta = details.localPosition - _last;
 
