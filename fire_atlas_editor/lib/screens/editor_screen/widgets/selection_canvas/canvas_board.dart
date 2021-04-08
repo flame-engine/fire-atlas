@@ -88,7 +88,7 @@ class CanvasBoardState extends State<CanvasBoard> {
   }
 
   void _handleMoveEnd() {
-    if (_lastDrag != null) {
+    if (_lastDrag == null) {
       return;
     }
     final clickIndex = _calculateIndexClick(_lastDrag!);
