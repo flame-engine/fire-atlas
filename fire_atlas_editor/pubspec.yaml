@@ -15,6 +15,7 @@ dependencies:
   collection: ^1.14.12
   url_launcher: ^6.0.3
   flame: 1.0.0-rc9
+  equatable: ^2.0.0
   flame_fire_atlas:
     path: ../flame_fire_atlas
 

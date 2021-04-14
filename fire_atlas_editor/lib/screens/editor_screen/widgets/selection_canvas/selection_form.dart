@@ -1,3 +1,4 @@
+import 'package:fire_atlas_editor/vendor/slices/slices.dart';
 import 'package:flutter/material.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
@@ -79,17 +80,18 @@ class _SelectionFormState extends State<SelectionForm> {
   }
 
   void _createSprite() {
+    final _store = SlicesProvider.of<FireAtlasState>(context);
     if (selectionNameController.text.isNotEmpty) {
       final info = _fillSelectionBaseValues();
-      Store.instance.dispatch(
+      _store.dispatch(
         SetSelectionAction(
           selection: SpriteSelection(info: info),
         ),
       );
 
-      Store.instance.dispatch(CloseEditorModal());
+      _store.dispatch(CloseEditorModal());
     } else {
-      Store.instance.dispatch(
+      _store.dispatch(
         CreateMessageAction(
           type: MessageType.ERROR,
           message: 'You must inform the selection name',
@@ -99,11 +101,12 @@ class _SelectionFormState extends State<SelectionForm> {
   }
 
   void _createAnimation() {
+    final _store = SlicesProvider.of<FireAtlasState>(context);
     if (selectionNameController.text.isNotEmpty &&
         frameCountController.text.isNotEmpty &&
         stepTimeController.text.isNotEmpty) {
       if (!isValidNumber(frameCountController.text)) {
-        Store.instance.dispatch(
+        _store.dispatch(
           CreateMessageAction(
             type: MessageType.ERROR,
             message: 'Frame count is not a valid number',
@@ -114,7 +117,7 @@ class _SelectionFormState extends State<SelectionForm> {
       }
 
       if (!isValidNumber(stepTimeController.text)) {
-        Store.instance.dispatch(
+        _store.dispatch(
           CreateMessageAction(
             type: MessageType.ERROR,
             message: 'Step time is not a valid number',
@@ -138,13 +141,13 @@ class _SelectionFormState extends State<SelectionForm> {
         ..stepTime = stepTime
         ..loop = _animationLoop;
 
-      Store.instance.dispatch(
+      _store.dispatch(
         SetSelectionAction(selection: selectionToSave),
       );
 
-      Store.instance.dispatch(CloseEditorModal());
+      _store.dispatch(CloseEditorModal());
     } else {
-      Store.instance.dispatch(
+      _store.dispatch(
         CreateMessageAction(
           type: MessageType.ERROR,
           message: 'All fields are required',

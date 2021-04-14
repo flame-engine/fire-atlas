@@ -1,3 +1,4 @@
+import 'package:fire_atlas_editor/vendor/slices/slices.dart';
 import 'package:flutter/material.dart';
 
 import '../../store/store.dart';
@@ -25,10 +26,12 @@ class _OpenScreenState extends State<OpenScreen> {
   @override
   void initState() {
     super.initState();
+
     _projects = FireAtlasStorage.listProjects();
   }
 
   void _importAtlas() {
+    final _store = SlicesProvider.of<FireAtlasState>(context);
     selectFile((fileData) {
       try {
         final base64 = fileData.substring(fileData.indexOf(',') + 1);
@@ -37,7 +40,7 @@ class _OpenScreenState extends State<OpenScreen> {
         setState(() {
           _projects.add(atlas.id);
         });
-        Store.instance.dispatch(
+        _store.dispatch(
           CreateMessageAction(
             message: '"${atlas.id}" successfully imported',
             type: MessageType.INFO,
@@ -45,7 +48,7 @@ class _OpenScreenState extends State<OpenScreen> {
         );
       } catch (e) {
         print(e);
-        Store.instance.dispatch(
+        _store.dispatch(
           CreateMessageAction(
             message: 'Error importing atlas',
             type: MessageType.ERROR,
@@ -57,6 +60,7 @@ class _OpenScreenState extends State<OpenScreen> {
 
   @override
   Widget build(_) {
+    final _store = SlicesProvider.of<FireAtlasState>(context);
     List<Widget> children = [];
 
     List<Widget> containerChildren = [];
@@ -80,7 +84,7 @@ class _OpenScreenState extends State<OpenScreen> {
                 FIconButton(
                     iconData: Icons.folder_open,
                     onPress: () async {
-                      await Store.instance.dispatchAsync(LoadAtlasAction(p));
+                      await _store.dispatchAsync(LoadAtlasAction(p));
                       Navigator.of(context).pushNamed('/editor');
                     }),
               ],
@@ -131,7 +135,7 @@ class _OpenScreenState extends State<OpenScreen> {
                                   FButton(
                                       label: 'New atlas',
                                       onSelect: () {
-                                        Store.instance.dispatch(OpenEditorModal(
+                                        _store.dispatch(OpenEditorModal(
                                           AtlasOptionsContainer(
                                             onConfirm: (
                                               String atlasName,
@@ -139,11 +143,10 @@ class _OpenScreenState extends State<OpenScreen> {
                                               double tileWidth,
                                               double tileHeight,
                                             ) async {
-                                              Store.instance
+                                              _store
                                                   .dispatch(CloseEditorModal());
 
-                                              await Store.instance
-                                                  .dispatchAsync(
+                                              await _store.dispatchAsync(
                                                 CreateAtlasAction(
                                                   id: atlasName,
                                                   imageData: imageData,
@@ -155,7 +158,7 @@ class _OpenScreenState extends State<OpenScreen> {
                                                   .pushNamed('/editor');
                                             },
                                             onCancel: () {
-                                              Store.instance
+                                              _store
                                                   .dispatch(CloseEditorModal());
                                             },
                                           ),
@@ -180,7 +183,7 @@ class _OpenScreenState extends State<OpenScreen> {
             child: FButton(
               label: 'Support this project',
               onSelect: () {
-                Store.instance.dispatch(
+                _store.dispatch(
                   OpenEditorModal(
                     SupportContainer(),
                     500,

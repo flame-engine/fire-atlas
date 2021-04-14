@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 import 'dart:html';
 import 'dart:typed_data';
 
-import '../../../vendor/micro_store/micro_store.dart';
+import '../../../vendor/slices/slices.dart';
 import '../../../store/store.dart';
 import '../../../store/actions/atlas_actions.dart';
 import '../../../store/actions/editor_actions.dart';
@@ -15,6 +16,18 @@ import './concat_image_modal.dart';
 import '../../../widgets/container.dart';
 import '../../../widgets/icon_button.dart';
 import '../../../widgets/text.dart';
+
+class _ToolbarSlice extends Equatable {
+  final FireAtlas? currentAtlas;
+  final bool hasChanges;
+
+  _ToolbarSlice.fromState(FireAtlasState state):
+    currentAtlas = state.currentAtlas,
+    hasChanges = state.hasChanges;
+
+  @override
+  List<Object?> get props => [currentAtlas?.id, hasChanges];
+}
 
 class Toolbar extends StatelessWidget {
   _launchURL(FireAtlas atlas) async {
@@ -32,20 +45,19 @@ class Toolbar extends StatelessWidget {
 
   @override
   Widget build(ctx) {
-    return MicroStoreProvider<FireAtlasState>(
-      store: Store.instance,
-      builder: (ctx, store) => FContainer(
+    return SliceWatcher<FireAtlasState, _ToolbarSlice>(
+      slicer: (state) => _ToolbarSlice.fromState(state),
+      builder: (ctx, store, slice) => FContainer(
         height: 60,
         child: Column(
           children: [
             FLabel(
-                label: 'Working on: ${store.state.currentAtlas?.id}',
-                fontSize: 12),
+                label: 'Working on: ${slice.currentAtlas?.id}', fontSize: 12),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Row(children: [
                 FIconButton(
                     iconData: Icons.save,
-                    disabled: !store.state.hasChanges,
+                    disabled: !slice.hasChanges,
                     onPress: () {
                       store.dispatch(SaveAction());
                     }),
@@ -74,7 +86,7 @@ class Toolbar extends StatelessWidget {
                 FIconButton(
                     iconData: Icons.get_app,
                     onPress: () {
-                      _launchURL(store.state.currentAtlas!);
+                      _launchURL(slice.currentAtlas!);
                     }),
               ]),
               FIconButton(

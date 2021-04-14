@@ -1,3 +1,4 @@
+import 'package:fire_atlas_editor/vendor/slices/slices.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flame/flame.dart';
 
@@ -25,10 +26,18 @@ class AtlasOptionsContainer extends StatefulWidget {
 
 class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
   String? _imageData;
+  late final atlasNameController;
+  late final tileWidthController;
+  late final tileHeightController;
 
-  final atlasNameController = TextEditingController();
-  final tileWidthController = TextEditingController();
-  final tileHeightController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+
+    atlasNameController = TextEditingController();
+    tileWidthController = TextEditingController();
+    tileHeightController = TextEditingController();
+  }
 
   @override
   void dispose() {
@@ -39,19 +48,20 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
   }
 
   void _confirm() {
+    final _store = SlicesProvider.of<FireAtlasState>(context);
     final tileWidthRaw = tileWidthController.text;
     final tileHeightRaw = tileHeightController.text;
     final atlasName = atlasNameController.text;
 
     if (atlasName.isEmpty) {
-      Store.instance.dispatch(CreateMessageAction(
+      _store.dispatch(CreateMessageAction(
         message: 'Atlas name is required',
         type: MessageType.ERROR,
       ));
       return;
     }
     if (tileWidthRaw.isEmpty) {
-      Store.instance.dispatch(CreateMessageAction(
+      _store.dispatch(CreateMessageAction(
         message: 'Tile Width is required',
         type: MessageType.ERROR,
       ));
@@ -59,7 +69,7 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
     }
 
     if (tileHeightRaw.isEmpty) {
-      Store.instance.dispatch(CreateMessageAction(
+      _store.dispatch(CreateMessageAction(
         message: 'Tile Height is required',
         type: MessageType.ERROR,
       ));
@@ -67,7 +77,7 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
     }
 
     if (tileWidthRaw.isNotEmpty && !isValidNumber(tileWidthRaw)) {
-      Store.instance.dispatch(CreateMessageAction(
+      _store.dispatch(CreateMessageAction(
         message: 'Tile Width must be a number',
         type: MessageType.ERROR,
       ));
@@ -75,7 +85,7 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
     }
 
     if (tileHeightRaw.isNotEmpty && !isValidNumber(tileHeightRaw)) {
-      Store.instance.dispatch(CreateMessageAction(
+      _store.dispatch(CreateMessageAction(
         message: 'Tile Height must be a number',
         type: MessageType.ERROR,
       ));
@@ -83,7 +93,7 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
     }
 
     if (_imageData == null) {
-      Store.instance.dispatch(CreateMessageAction(
+      _store.dispatch(CreateMessageAction(
         message: 'An image must be selected',
         type: MessageType.ERROR,
       ));

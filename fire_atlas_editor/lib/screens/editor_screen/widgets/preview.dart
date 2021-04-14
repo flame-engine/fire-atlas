@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
@@ -6,47 +7,59 @@ import '../../../widgets/container.dart';
 import '../../../widgets/simple_sprite_widget.dart';
 import '../../../widgets/simple_animation_widget.dart';
 
-import '../../../vendor/micro_store/micro_store.dart';
+import '../../../vendor/slices/slices.dart';
 import '../../../store/store.dart';
+
+class _PreviewSlice extends Equatable {
+  final FireAtlas? currentAtlas;
+  final BaseSelection? selectedSelection;
+
+  _PreviewSlice(this.currentAtlas, this.selectedSelection);
+
+  _PreviewSlice.fromState(FireAtlasState state)
+      : this(state.currentAtlas, state.selectedSelection);
+
+  @override
+  List<Object?> get props => [currentAtlas?.id, selectedSelection?.id];
+}
 
 class Preview extends StatelessWidget {
   @override
   Widget build(_) {
-    return MicroStoreProvider<FireAtlasState>(
-        memoFn: (store) => [store.state.selectedSelection?.id],
-        store: Store.instance,
-        builder: (ctx, store) {
-          Widget child = Center(child: Text('Nothing selected'));
+    return SliceWatcher<FireAtlasState, _PreviewSlice>(
+      slicer: (state) => _PreviewSlice.fromState(state),
+      builder: (ctx, store, slice) {
+        Widget child = Center(child: Text('Nothing selected'));
+        final currentAtlas = slice.currentAtlas!;
 
-          final currentAtlas = store.state.currentAtlas!;
-
-          if (store.state.selectedSelection != null) {
-            if (store.state.selectedSelection is SpriteSelection) {
-              child = SimpleSpriteWidget(
-                  center: true,
-                  sprite: currentAtlas
-                      .getSprite(store.state.selectedSelection!.id));
-            } else if (store.state.selectedSelection is AnimationSelection) {
-              child = AnimationPlayerWidget(
-                  animation: currentAtlas
-                      .getAnimation(store.state.selectedSelection!.id));
-            }
+        if (store.state.selectedSelection != null) {
+          if (store.state.selectedSelection is SpriteSelection) {
+            child = SimpleSpriteWidget(
+                center: true,
+                sprite:
+                    currentAtlas.getSprite(store.state.selectedSelection!.id));
+          } else if (slice.selectedSelection is AnimationSelection) {
+            child = AnimationPlayerWidget(
+                animation:
+                    currentAtlas.getAnimation(slice.selectedSelection!.id));
           }
+        }
 
-          return FContainer(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                FSubtitleTitle(title: 'Preview'),
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    child: child,
-                  ),
+        return FContainer(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              FSubtitleTitle(title: 'Preview'),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: child,
                 ),
-              ],
-            ),
-          );
-        });
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

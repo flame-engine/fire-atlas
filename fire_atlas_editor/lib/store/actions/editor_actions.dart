@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
 
-import '../../vendor/micro_store/micro_store.dart';
+import '../../vendor/slices/slices.dart';
 import '../../store/store.dart';
 
-class SetCanvasSelection extends MicroStoreAction<FireAtlasState> {
+class SetCanvasSelection extends SlicesAction<FireAtlasState> {
   Rect selection;
 
   SetCanvasSelection(this.selection);
@@ -16,7 +16,7 @@ class SetCanvasSelection extends MicroStoreAction<FireAtlasState> {
   }
 }
 
-class OpenEditorModal extends MicroStoreAction<FireAtlasState> {
+class OpenEditorModal extends SlicesAction<FireAtlasState> {
   final Widget modal;
   final double width;
   final double? height;
@@ -35,7 +35,7 @@ class OpenEditorModal extends MicroStoreAction<FireAtlasState> {
   }
 }
 
-class CloseEditorModal extends MicroStoreAction<FireAtlasState> {
+class CloseEditorModal extends SlicesAction<FireAtlasState> {
   @override
   FireAtlasState perform(state) {
     state.modal = null;
@@ -44,7 +44,7 @@ class CloseEditorModal extends MicroStoreAction<FireAtlasState> {
   }
 }
 
-class CreateMessageAction extends MicroStoreAction<FireAtlasState> {
+class CreateMessageAction extends SlicesAction<FireAtlasState> {
   final MessageType type;
   final String message;
 
@@ -70,7 +70,7 @@ class CreateMessageAction extends MicroStoreAction<FireAtlasState> {
   }
 }
 
-class DismissMessageAction extends MicroStoreAction<FireAtlasState> {
+class DismissMessageAction extends SlicesAction<FireAtlasState> {
   final Message message;
 
   DismissMessageAction({

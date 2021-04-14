@@ -1,20 +1,31 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import '../vendor/micro_store/micro_store.dart';
+import '../vendor/slices/slices.dart';
 import '../store/store.dart';
 import '../store/actions/editor_actions.dart';
 
 import './slide_container.dart';
 import './color_badge.dart';
 
+class _MessageBoardSlice extends Equatable {
+  final List<Message> messages;
+
+  _MessageBoardSlice.fromState(FireAtlasState state)
+      : messages = state.messages;
+
+  @override
+  List<Object?> get props => [messages];
+}
+
 class MessagesBoard extends StatelessWidget {
   @override
   Widget build(_) {
-    return MicroStoreProvider<FireAtlasState>(
-      store: Store.instance,
-      builder: (ctx, store) {
+    return SliceWatcher<FireAtlasState, _MessageBoardSlice>(
+      slicer: (state) => _MessageBoardSlice.fromState(state),
+      builder: (ctx, store, slice) {
         return Column(
-            children: store.state.messages
+            children: slice.messages
                 .map((message) {
                   return _Message(
                       key: Key(message.message),
