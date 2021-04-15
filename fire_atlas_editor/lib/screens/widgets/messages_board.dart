@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import '../vendor/slices/slices.dart';
-import '../store/store.dart';
-import '../store/actions/editor_actions.dart';
+import '../../vendor/slices/slices.dart';
+import '../../store/store.dart';
+import '../../store/actions/editor_actions.dart';
 
-import './slide_container.dart';
-import './color_badge.dart';
+import '../../widgets/slide_container.dart';
+import '../../widgets/color_badge.dart';
 
 class _MessageBoardSlice extends Equatable {
   final List<Message> messages;

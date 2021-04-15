@@ -6,7 +6,7 @@ import './widgets/selection_canvas/selection_canvas.dart';
 import './widgets/selection_list.dart';
 import './widgets/preview.dart';
 
-import '../../widgets/scaffold.dart';
+import '../widgets/scaffold.dart';
 import '../../widgets/button.dart';
 import '../../store/store.dart';
 
