@@ -1,9 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:fire_atlas_editor/services/storage/storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 import 'dart:html';
-import 'dart:typed_data';
 
 import '../../../vendor/slices/slices.dart';
 import '../../../store/store.dart';
@@ -31,16 +32,11 @@ class _ToolbarSlice extends Equatable {
 
 class Toolbar extends StatelessWidget {
   _launchURL(FireAtlas atlas) async {
-    final element = document.createElement('a');
-
     List<int> bytes = atlas.serialize();
-    final uint8List = Uint8List.fromList(bytes);
-    final blob = Blob([uint8List]);
-    final url = Url.createObjectUrl(blob);
-    element.setAttribute('href', url);
-    element.setAttribute('download', '${atlas.id}.fa');
+    final fileName = '${atlas.id}.fa';
 
-    element.click();
+    final storage = FireAtlasStorage();
+    await storage.exportFile(bytes, fileName);
   }
 
   @override
@@ -83,11 +79,12 @@ class Toolbar extends StatelessWidget {
                         ),
                       );
                     }),
-                FIconButton(
-                    iconData: Icons.get_app,
-                    onPress: () {
-                      _launchURL(slice.currentAtlas!);
-                    }),
+                if (kIsWeb)
+                  FIconButton(
+                      iconData: Icons.get_app,
+                      onPress: () {
+                        _launchURL(slice.currentAtlas!);
+                      }),
               ]),
               FIconButton(
                 iconData: Icons.exit_to_app,

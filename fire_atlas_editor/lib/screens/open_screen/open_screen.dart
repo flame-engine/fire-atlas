@@ -48,18 +48,18 @@ class _OpenScreenState extends State<OpenScreen> {
         _projects.add(loaded.toLastProjectEntry());
       });
       _store.dispatch(
-          CreateMessageAction(
-              message: '"${loaded.project.id}" successfully imported',
-              type: MessageType.INFO,
-          ),
+        CreateMessageAction(
+          message: '"${loaded.project.id}" successfully imported',
+          type: MessageType.INFO,
+        ),
       );
     } catch (e) {
       print(e);
       _store.dispatch(
-          CreateMessageAction(
-              message: 'Error importing atlas',
-              type: MessageType.ERROR,
-          ),
+        CreateMessageAction(
+          message: 'Error importing atlas',
+          type: MessageType.ERROR,
+        ),
       );
     }
   }

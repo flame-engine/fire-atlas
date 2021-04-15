@@ -16,18 +16,18 @@ class LoadedProjectEntry {
       throw 'Unable to transform an unsaved project to last project entry';
     }
     return LastProjectEntry(
-        currentPath,
-        project.id,
+      currentPath,
+      project.id,
     );
   }
- 
+
   LoadedProjectEntry update({
     String? path,
     FireAtlas? project,
   }) {
     return LoadedProjectEntry(
-        path ?? this.path,
-        project ?? this.project,
+      path ?? this.path,
+      project ?? this.project,
     );
   }
 }
@@ -81,7 +81,7 @@ class FireAtlasState {
   Rect? canvasSelection;
 
   FireAtlas? get currentAtlas => loadedProject?.project;
-  
+
   void set currentAtlas(FireAtlas? atlas) {
     if (atlas == null) {
       throw "Can't set a null atlas";

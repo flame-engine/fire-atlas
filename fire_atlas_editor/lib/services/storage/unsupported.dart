@@ -3,7 +3,6 @@ import 'package:fire_atlas_editor/store/store.dart';
 import './storage.dart';
 
 class FireAtlasStorage extends FireAtlasStorageApi {
-
   Future<LoadedProjectEntry> loadProject(String path) {
     throw 'Unsupported';
   }
@@ -25,6 +24,11 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   }
 
   Future<String> selectFile(_) {
+    throw 'Unsupported';
+  }
+
+  @override
+  Future<void> exportFile(List<int> bytes, String fileName) {
     throw 'Unsupported';
   }
 }

@@ -12,4 +12,5 @@ abstract class FireAtlasStorageApi {
   Future<void> rememberProject(LoadedProjectEntry entry);
   Future<LoadedProjectEntry> selectProject(BuildContext context);
   Future<String> selectFile(BuildContext context);
+  Future<void> exportFile(List<int> bytes, String fileName);
 }

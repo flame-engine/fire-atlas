@@ -1,13 +1,13 @@
-
 import 'dart:async';
 import 'dart:html';
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:fire_atlas_editor/services/storage/storage.dart';
 import 'package:fire_atlas_editor/store/store.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
-class FireAtlasStorage extends FireAtlasStorageApi{
+class FireAtlasStorage extends FireAtlasStorageApi {
   static final Storage _localStorage = window.localStorage;
 
   Future<LoadedProjectEntry> loadProject(String path) {
@@ -17,8 +17,8 @@ class FireAtlasStorage extends FireAtlasStorageApi{
     }
 
     final entry = LoadedProjectEntry(
-        path,
-        _readBase64Project(value),
+      path,
+      _readBase64Project(value),
     );
 
     return Future.value(entry);
@@ -39,10 +39,9 @@ class FireAtlasStorage extends FireAtlasStorageApi{
         .map((e) => e.key)
         .where((k) => k.startsWith('ATLAS_'))
         .map((k) {
-          final name = k.replaceFirst('ATLAS_', '');
-          return LastProjectEntry(k, name);
-        })
-    .toList();
+      final name = k.replaceFirst('ATLAS_', '');
+      return LastProjectEntry(k, name);
+    }).toList();
   }
 
   Future<void> rememberProject(LoadedProjectEntry entry) async {
@@ -62,10 +61,9 @@ class FireAtlasStorage extends FireAtlasStorageApi{
     final base64 = fileData.substring(fileData.indexOf(',') + 1);
     final atlas = _readBase64Project(base64);
 
-
     return LoadedProjectEntry(
-        'ATLAS_${atlas.id}',
-        atlas,
+      'ATLAS_${atlas.id}',
+      atlas,
     );
   }
 
@@ -92,5 +90,18 @@ class FireAtlasStorage extends FireAtlasStorageApi{
     });
 
     return completer.future;
+  }
+
+  @override
+  Future<void> exportFile(List<int> bytes, String fileName) async {
+    final uint8List = Uint8List.fromList(bytes);
+    final blob = Blob([uint8List]);
+    final url = Url.createObjectUrl(blob);
+
+    final element = document.createElement('a');
+    element.setAttribute('href', url);
+    element.setAttribute('download', fileName);
+
+    element.click();
   }
 }

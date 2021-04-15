@@ -133,7 +133,6 @@ class LoadAtlasAction extends AsyncSlicesAction<FireAtlasState> {
 
   @override
   Future<FireAtlasState> perform(state) async {
-
     final storage = FireAtlasStorage();
     final loaded = await storage.loadProject(path);
 
