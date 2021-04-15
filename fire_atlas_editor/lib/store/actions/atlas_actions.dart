@@ -1,7 +1,7 @@
 import '../../vendor/slices/slices.dart';
 import '../../store/store.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
-import '../../services/storage.dart';
+import '../../services/storage/storage.dart';
 
 import './editor_actions.dart';
 
@@ -110,8 +110,10 @@ class RemoveSelectedSelectionAction extends SlicesAction<FireAtlasState> {
 class SaveAction extends SlicesAction<FireAtlasState> {
   @override
   FireAtlasState perform(FireAtlasState state) {
-    if (state.currentAtlas != null) {
-      FireAtlasStorage.saveProject(state.currentAtlas!);
+    final project = state.loadedProject;
+    if (project != null) {
+      final storage = FireAtlasStorage();
+      storage.saveProject(project);
 
       state.hasChanges = false;
 
@@ -125,16 +127,17 @@ class SaveAction extends SlicesAction<FireAtlasState> {
 }
 
 class LoadAtlasAction extends AsyncSlicesAction<FireAtlasState> {
-  String id;
+  String path;
 
-  LoadAtlasAction(this.id);
+  LoadAtlasAction(this.path);
 
   @override
   Future<FireAtlasState> perform(state) async {
-    final atlas = FireAtlasStorage.loadProject(id);
+    final storage = FireAtlasStorage();
+    final loaded = await storage.loadProject(path);
 
-    await atlas.loadImage(clearImageData: false);
+    await loaded.project.loadImage(clearImageData: false);
 
-    return state..currentAtlas = atlas;
+    return state..loadedProject = loaded;
   }
 }

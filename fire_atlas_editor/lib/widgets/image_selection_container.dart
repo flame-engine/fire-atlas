@@ -1,3 +1,4 @@
+import 'package:fire_atlas_editor/services/storage/storage.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flame/sprite.dart';
 import 'package:flame/flame.dart';
@@ -8,7 +9,6 @@ import 'dart:ui';
 import './container.dart';
 import './simple_sprite_widget.dart';
 import './button.dart';
-import '../utils/select_file.dart';
 
 typedef OnSelectImage = void Function(String);
 
@@ -25,7 +25,7 @@ class ImageSelectionContainer extends StatelessWidget {
   });
 
   @override
-  Widget build(_) {
+  Widget build(context) {
     return Column(children: [
       Expanded(
         child: FContainer(
@@ -55,8 +55,10 @@ class ImageSelectionContainer extends StatelessWidget {
       Container(
           child: FButton(
               label: 'Select image',
-              onSelect: () {
-                selectFile(onSelectImage);
+              onSelect: () async {
+                final storage = FireAtlasStorage();
+                final imgDataUrl = await storage.selectFile(context);
+                onSelectImage(imgDataUrl);
               }))
     ]);
   }

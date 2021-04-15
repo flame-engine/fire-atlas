@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import '../../store/store.dart';
 import '../../store/actions/atlas_actions.dart';
 import '../../store/actions/editor_actions.dart';
-import '../../services/storage.dart';
+import '../../services/storage/storage.dart';
 import '../../widgets/icon_button.dart';
 import '../../widgets/button.dart';
 import '../../widgets/container.dart';
 import '../widgets/scaffold.dart';
 import '../../widgets/text.dart';
-import '../../utils/select_file.dart';
 
 import './widgets/atlas_options_container.dart';
 import './widgets/support_container.dart';
@@ -21,41 +20,48 @@ class OpenScreen extends StatefulWidget {
 }
 
 class _OpenScreenState extends State<OpenScreen> {
-  List<String> _projects = [];
+  List<LastProjectEntry> _projects = [];
+  final _storage = FireAtlasStorage();
 
   @override
   void initState() {
     super.initState();
 
-    _projects = FireAtlasStorage.listProjects();
+    _loadProjects();
   }
 
-  void _importAtlas() {
-    final _store = SlicesProvider.of<FireAtlasState>(context);
-    selectFile((fileData) {
-      try {
-        final base64 = fileData.substring(fileData.indexOf(',') + 1);
-        final atlas = FireAtlasStorage.readBase64Project(base64);
-        FireAtlasStorage.saveProject(atlas);
-        setState(() {
-          _projects.add(atlas.id);
-        });
-        _store.dispatch(
-          CreateMessageAction(
-            message: '"${atlas.id}" successfully imported',
-            type: MessageType.INFO,
-          ),
-        );
-      } catch (e) {
-        print(e);
-        _store.dispatch(
-          CreateMessageAction(
-            message: 'Error importing atlas',
-            type: MessageType.ERROR,
-          ),
-        );
-      }
+  Future<void> _loadProjects() async {
+    final loadedProjects = await _storage.lastUsedProjects();
+
+    setState(() {
+      _projects = loadedProjects;
     });
+  }
+
+  void _importAtlas() async {
+    final _store = SlicesProvider.of<FireAtlasState>(context);
+
+    try {
+      final loaded = await _storage.selectProject(context);
+      await _storage.rememberProject(loaded);
+      setState(() {
+        _projects.add(loaded.toLastProjectEntry());
+      });
+      _store.dispatch(
+        CreateMessageAction(
+          message: '"${loaded.project.id}" successfully imported',
+          type: MessageType.INFO,
+        ),
+      );
+    } catch (e) {
+      print(e);
+      _store.dispatch(
+        CreateMessageAction(
+          message: 'Error importing atlas',
+          type: MessageType.ERROR,
+        ),
+      );
+    }
   }
 
   @override
@@ -80,11 +86,11 @@ class _OpenScreenState extends State<OpenScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(p),
+                Text(p.name),
                 FIconButton(
                     iconData: Icons.folder_open,
                     onPress: () async {
-                      await _store.dispatchAsync(LoadAtlasAction(p));
+                      await _store.dispatchAsync(LoadAtlasAction(p.path));
                       Navigator.of(context).pushNamed('/editor');
                     }),
               ],
