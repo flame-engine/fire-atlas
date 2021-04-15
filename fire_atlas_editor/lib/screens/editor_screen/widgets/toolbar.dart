@@ -21,9 +21,9 @@ class _ToolbarSlice extends Equatable {
   final FireAtlas? currentAtlas;
   final bool hasChanges;
 
-  _ToolbarSlice.fromState(FireAtlasState state):
-    currentAtlas = state.currentAtlas,
-    hasChanges = state.hasChanges;
+  _ToolbarSlice.fromState(FireAtlasState state)
+      : currentAtlas = state.currentAtlas,
+        hasChanges = state.hasChanges;
 
   @override
   List<Object?> get props => [currentAtlas?.id, hasChanges];
