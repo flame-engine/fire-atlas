@@ -10,7 +10,7 @@ import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 class FireAtlasStorage extends FireAtlasStorageApi {
   static final Storage _localStorage = window.localStorage;
 
-  Future<LoadedProjectEntry> loadProject(String path) {
+  Future<LoadedProjectEntry> loadProject(String path) async {
     final value = _localStorage[path];
     if (value == null) {
       throw 'Unknow project with id $path';
@@ -21,7 +21,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
       _readBase64Project(value),
     );
 
-    return Future.value(entry);
+    return entry;
   }
 
   Future<void> saveProject(LoadedProjectEntry entry) async {
@@ -35,10 +35,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   }
 
   Future<List<LastProjectEntry>> lastUsedProjects() async {
-    return _localStorage.entries
-        .map((e) => e.key)
-        .where((k) => k.startsWith('ATLAS_'))
-        .map((k) {
+    return _localStorage.keys.where((k) => k.startsWith('ATLAS_')).map((k) {
       final name = k.replaceFirst('ATLAS_', '');
       return LastProjectEntry(k, name);
     }).toList();
@@ -56,8 +53,8 @@ class FireAtlasStorage extends FireAtlasStorageApi {
     return FireAtlas.deserialize(jsonRaw);
   }
 
-  Future<LoadedProjectEntry> selectProject(_) async {
-    final fileData = await selectFile(_);
+  Future<LoadedProjectEntry> selectProject(ctx) async {
+    final fileData = await selectFile(ctx);
     final base64 = fileData.substring(fileData.indexOf(',') + 1);
     final atlas = _readBase64Project(base64);
 
@@ -78,11 +75,12 @@ class FireAtlasStorage extends FireAtlasStorageApi {
       final files = uploadInput.files ?? [];
       if (files.length == 1) {
         final file = files[0];
-        final reader = new FileReader();
+        final reader = FileReader();
 
         reader.onLoadEnd.listen((e) {
-          if (reader.result != null) {
-            completer.complete(reader.result! as String);
+          final result = reader.result;
+          if (result != null) {
+            completer.complete(result as String);
           }
         });
         reader.readAsDataUrl(file);
