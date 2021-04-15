@@ -1,7 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
-import '../../../vendor/micro_store/micro_store.dart';
+import '../../../vendor/slices/slices.dart';
 import '../../../store/store.dart';
 import '../../../store/actions/atlas_actions.dart';
 import '../../../store/actions/editor_actions.dart';
@@ -13,13 +14,26 @@ import '../../../widgets/icon_button.dart';
 import './delete_selection_modal.dart';
 import './selection_canvas/selection_form.dart';
 
+class _SelectionListSlice extends Equatable {
+  final FireAtlas? currentAtlas;
+  final BaseSelection? selectedSelection;
+
+  _SelectionListSlice(this.currentAtlas, this.selectedSelection);
+
+  @override
+  List<Object?> get props => [currentAtlas?.id, selectedSelection?.id];
+}
+
 class SelectionList extends StatelessWidget {
   @override
   Widget build(_) {
-    return MicroStoreProvider<FireAtlasState>(
-      store: Store.instance,
-      builder: (ctx, store) {
-        final currentAtlas = store.state.currentAtlas;
+    return SliceWatcher<FireAtlasState, _SelectionListSlice>(
+      slicer: (state) => _SelectionListSlice(
+        state.currentAtlas,
+        state.selectedSelection,
+      ),
+      builder: (ctx, store, slice) {
+        final currentAtlas = slice.currentAtlas;
 
         if (currentAtlas == null) {
           return Text('No atlas selected');
@@ -58,13 +72,11 @@ class SelectionList extends StatelessWidget {
                                   Expanded(
                                     child: Text('${selection.id}',
                                         style: TextStyle(
-                                            fontWeight: ((store
-                                                        .state
-                                                        .selectedSelection
-                                                        ?.id ==
-                                                    selection.id)
-                                                ? FontWeight.bold
-                                                : FontWeight.normal))),
+                                            fontWeight:
+                                                ((slice.selectedSelection?.id ==
+                                                        selection.id)
+                                                    ? FontWeight.bold
+                                                    : FontWeight.normal))),
                                   ),
                                   Row(children: [
                                     selection is AnimationSelection
@@ -72,8 +84,7 @@ class SelectionList extends StatelessWidget {
                                             iconData: Icons.edit,
                                             onPress: () {
                                               _select(selection);
-                                              Store.instance
-                                                  .dispatch(OpenEditorModal(
+                                              store.dispatch(OpenEditorModal(
                                                 SelectionForm(
                                                   editingSelection: selection,
                                                 ),
@@ -87,7 +98,7 @@ class SelectionList extends StatelessWidget {
                                       iconData: Icons.cancel,
                                       onPress: () {
                                         _select(selection);
-                                        Store.instance.dispatch(OpenEditorModal(
+                                        store.dispatch(OpenEditorModal(
                                             DeleteSelectionModal(), 300, 200));
                                       },
                                     ),

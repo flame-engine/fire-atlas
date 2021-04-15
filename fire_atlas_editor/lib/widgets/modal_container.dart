@@ -1,20 +1,30 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/extensions.dart';
 
-import '../vendor/micro_store/micro_store.dart';
+import '../vendor/slices/slices.dart';
 import '../store/store.dart';
 import '../store/actions/editor_actions.dart';
 
 import './container.dart';
 import './icon_button.dart';
 
+class _ModalContainerSlice extends Equatable {
+  final ModalState? modal;
+
+  _ModalContainerSlice.fromState(FireAtlasState state) : modal = state.modal;
+
+  @override
+  List<Object?> get props => [modal];
+}
+
 class ModalContainer extends StatelessWidget {
   @override
   Widget build(_) {
-    return MicroStoreProvider<FireAtlasState>(
-      store: Store.instance,
-      builder: (ctx, store) {
-        final modal = store.state.modal;
+    return SliceWatcher<FireAtlasState, _ModalContainerSlice>(
+      slicer: (state) => _ModalContainerSlice.fromState(state),
+      builder: (ctx, store, slice) {
+        final modal = slice.modal;
         if (modal != null) {
           return Stack(
             children: [

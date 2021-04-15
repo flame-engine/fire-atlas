@@ -1,3 +1,4 @@
+import 'package:fire_atlas_editor/vendor/slices/slices.dart';
 import 'package:flutter/material.dart';
 
 import './widgets/toolbar.dart';
@@ -12,7 +13,8 @@ import '../../store/store.dart';
 class EditorScreen extends StatelessWidget {
   @override
   Widget build(ctx) {
-    if (Store.instance.state.currentAtlas == null) {
+    final _store = SlicesProvider.of<FireAtlasState>(ctx);
+    if (_store.state.currentAtlas == null) {
       // TODO improve this
       // To the Erick from the past: Improve what?
       return Scaffold(

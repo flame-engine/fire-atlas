@@ -1,6 +1,7 @@
+import 'package:fire_atlas_editor/store/store.dart';
+import 'package:fire_atlas_editor/vendor/slices/slices.dart';
 import 'package:flutter/material.dart';
 
-import '../../../store/store.dart';
 import '../../../store/actions/editor_actions.dart';
 import '../../../store/actions/atlas_actions.dart';
 import '../../../widgets/text.dart';
@@ -9,10 +10,11 @@ import '../../../widgets/button.dart';
 class DeleteSelectionModal extends StatelessWidget {
   @override
   Widget build(ctx) {
-    void _closeModal() => Store.instance.dispatch(CloseEditorModal());
+    final store = SlicesProvider.of<FireAtlasState>(ctx);
+    void _closeModal() => store.dispatch(CloseEditorModal());
 
     void _confirm() {
-      Store.instance.dispatch(RemoveSelectedSelectionAction());
+      store.dispatch(RemoveSelectedSelectionAction());
       _closeModal();
     }
 

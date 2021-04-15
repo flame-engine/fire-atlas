@@ -1,11 +1,11 @@
-import '../../vendor/micro_store/micro_store.dart';
+import '../../vendor/slices/slices.dart';
 import '../../store/store.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 import '../../services/storage.dart';
 
 import './editor_actions.dart';
 
-class CreateAtlasAction extends AsyncMicroStoreAction<FireAtlasState> {
+class CreateAtlasAction extends AsyncSlicesAction<FireAtlasState> {
   String id;
   String imageData;
   double tileWidth;
@@ -37,7 +37,7 @@ class CreateAtlasAction extends AsyncMicroStoreAction<FireAtlasState> {
   }
 }
 
-class UpdateAtlasImageAction extends AsyncMicroStoreAction<FireAtlasState> {
+class UpdateAtlasImageAction extends AsyncSlicesAction<FireAtlasState> {
   final String imageData;
 
   UpdateAtlasImageAction({required this.imageData});
@@ -56,7 +56,7 @@ class UpdateAtlasImageAction extends AsyncMicroStoreAction<FireAtlasState> {
   }
 }
 
-class SetSelectionAction extends MicroStoreAction<FireAtlasState> {
+class SetSelectionAction extends SlicesAction<FireAtlasState> {
   BaseSelection selection;
 
   SetSelectionAction({
@@ -76,7 +76,7 @@ class SetSelectionAction extends MicroStoreAction<FireAtlasState> {
   }
 }
 
-class SelectSelectionAction extends MicroStoreAction<FireAtlasState> {
+class SelectSelectionAction extends SlicesAction<FireAtlasState> {
   BaseSelection? selection;
 
   SelectSelectionAction({
@@ -91,7 +91,7 @@ class SelectSelectionAction extends MicroStoreAction<FireAtlasState> {
   }
 }
 
-class RemoveSelectedSelectionAction extends MicroStoreAction<FireAtlasState> {
+class RemoveSelectedSelectionAction extends SlicesAction<FireAtlasState> {
   @override
   FireAtlasState perform(FireAtlasState state) {
     final atlas = state.currentAtlas;
@@ -107,7 +107,7 @@ class RemoveSelectedSelectionAction extends MicroStoreAction<FireAtlasState> {
   }
 }
 
-class SaveAction extends MicroStoreAction<FireAtlasState> {
+class SaveAction extends SlicesAction<FireAtlasState> {
   @override
   FireAtlasState perform(FireAtlasState state) {
     if (state.currentAtlas != null) {
@@ -124,7 +124,7 @@ class SaveAction extends MicroStoreAction<FireAtlasState> {
   }
 }
 
-class LoadAtlasAction extends AsyncMicroStoreAction<FireAtlasState> {
+class LoadAtlasAction extends AsyncSlicesAction<FireAtlasState> {
   String id;
 
   LoadAtlasAction(this.id);

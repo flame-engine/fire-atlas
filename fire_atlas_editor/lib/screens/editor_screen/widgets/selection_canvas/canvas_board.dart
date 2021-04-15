@@ -1,3 +1,4 @@
+import 'package:fire_atlas_editor/vendor/slices/slices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/sprite.dart';
@@ -46,7 +47,20 @@ class CanvasBoardState extends State<CanvasBoard> {
 
   double _scale = 1.0;
 
+  @override
+  void initState() {
+    super.initState();
+
+    _scale = (widget.size.width - 200) / widget.sprite.originalSize.x;
+
+    final middleX = widget.size.width / 2;
+
+    _translateX = middleX - (widget.sprite.originalSize.x * _scale) / 2;
+    _translateY = 100;
+  }
+
   void _finishSelection(Offset offset) {
+    final _store = SlicesProvider.of<FireAtlasState>(context);
     if (_selectionEnd != offset && _selectionStart != null) {
       final _start = _selectionStart!;
       final rect = Rect.fromLTWH(
@@ -55,7 +69,7 @@ class CanvasBoardState extends State<CanvasBoard> {
         ((offset.dx - _start.dx) + 1) * widget.tileWidth,
         ((offset.dy - _start.dy) + 1) * widget.tileHeight,
       );
-      Store.instance.dispatch(SetCanvasSelection(rect));
+      _store.dispatch(SetCanvasSelection(rect));
     }
     _selectionEnd = offset;
   }
@@ -123,21 +137,10 @@ class CanvasBoardState extends State<CanvasBoard> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    _scale = (widget.size.width - 200) / widget.sprite.originalSize.x;
-
-    final middleX = widget.size.width / 2;
-
-    _translateX = middleX - (widget.sprite.originalSize.x * _scale) / 2;
-    _translateY = 100;
-  }
-
   void _createItem() {
+    final _store = SlicesProvider.of<FireAtlasState>(context);
     if (_selectionStart != null && _selectionEnd != null) {
-      Store.instance.dispatch(OpenEditorModal(
+      _store.dispatch(OpenEditorModal(
         SelectionForm(
           selectionStart: _selectionStart!,
           selectionEnd: _selectionEnd!,
@@ -146,7 +149,7 @@ class CanvasBoardState extends State<CanvasBoard> {
         600,
       ));
     } else {
-      Store.instance.dispatch(CreateMessageAction(
+      _store.dispatch(CreateMessageAction(
         type: MessageType.ERROR,
         message: 'Nothing is selected',
       ));

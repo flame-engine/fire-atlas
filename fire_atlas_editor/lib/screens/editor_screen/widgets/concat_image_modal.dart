@@ -1,3 +1,4 @@
+import 'package:fire_atlas_editor/vendor/slices/slices.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/extensions.dart';
 
@@ -23,6 +24,7 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
 
   @override
   Widget build(BuildContext ctx) {
+    final _store = SlicesProvider.of<FireAtlasState>(ctx);
     return Container(
       child: Column(
         children: [
@@ -89,12 +91,12 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                       ),
                       FButton(
                         label: 'Selection',
-                        disabled: Store.instance.state.canvasSelection == null,
+                        disabled: _store.state.canvasSelection == null,
                         selected: _selection != null,
                         onSelect: () {
                           setState(() {
                             _placement = null;
-                            _selection = Store.instance.state.canvasSelection;
+                            _selection = _store.state.canvasSelection;
                           });
                         },
                       ),
@@ -111,7 +113,7 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
               FButton(
                   label: 'Cancel',
                   onSelect: () {
-                    Store.instance.dispatch(CloseEditorModal());
+                    _store.dispatch(CloseEditorModal());
                   }),
               FButton(
                   disabled: _imageData == null ||
@@ -119,19 +121,19 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                   selected: true,
                   label: 'Ok',
                   onSelect: () async {
-                    final currentAtlas = Store.instance.state.currentAtlas!;
+                    final currentAtlas = _store.state.currentAtlas!;
                     final _newImageData = await concatenateImages(
                       currentAtlas.imageData!,
                       _imageData!,
                       _placement,
                       _selection,
                     );
-                    Store.instance.dispatchAsync(
+                    _store.dispatchAsync(
                       UpdateAtlasImageAction(
                         imageData: _newImageData,
                       ),
                     );
-                    Store.instance.dispatch(CloseEditorModal());
+                    _store.dispatch(CloseEditorModal());
                   }),
             ],
           ),

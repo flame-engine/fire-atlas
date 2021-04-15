@@ -1,3 +1,4 @@
+import 'package:fire_atlas_editor/vendor/slices/slices.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/flame.dart';
 
@@ -19,6 +20,7 @@ class _ChangeImageModalState extends State<ChangeImageModal> {
 
   @override
   Widget build(BuildContext ctx) {
+    final _store = SlicesProvider.of<FireAtlasState>(ctx);
     return Container(
       child: Column(
         children: [
@@ -41,19 +43,19 @@ class _ChangeImageModalState extends State<ChangeImageModal> {
               FButton(
                   label: 'Cancel',
                   onSelect: () {
-                    Store.instance.dispatch(CloseEditorModal());
+                    _store.dispatch(CloseEditorModal());
                   }),
               FButton(
                   disabled: _imageData == null,
                   selected: true,
                   label: 'Ok',
                   onSelect: () {
-                    Store.instance.dispatchAsync(
+                    _store.dispatchAsync(
                       UpdateAtlasImageAction(
                         imageData: _imageData!,
                       ),
                     );
-                    Store.instance.dispatch(CloseEditorModal());
+                    _store.dispatch(CloseEditorModal());
                   }),
             ],
           ),
