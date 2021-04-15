@@ -2,12 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/extensions.dart';
 
-import '../vendor/slices/slices.dart';
-import '../store/store.dart';
-import '../store/actions/editor_actions.dart';
+import '../../vendor/slices/slices.dart';
+import '../../store/store.dart';
+import '../../store/actions/editor_actions.dart';
 
-import './container.dart';
-import './icon_button.dart';
+import '../../widgets/container.dart';
+import '../../widgets/icon_button.dart';
 
 class _ModalContainerSlice extends Equatable {
   final ModalState? modal;
