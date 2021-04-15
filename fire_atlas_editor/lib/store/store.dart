@@ -4,6 +4,41 @@ import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 import 'dart:ui';
 
+class LoadedProjectEntry {
+  String? path;
+  final FireAtlas project;
+
+  LoadedProjectEntry(this.path, this.project);
+
+  LastProjectEntry toLastProjectEntry() {
+    final currentPath = path;
+    if (currentPath == null) {
+      throw 'Unable to transform an unsaved project to last project entry';
+    }
+    return LastProjectEntry(
+        currentPath,
+        project.id,
+    );
+  }
+ 
+  LoadedProjectEntry update({
+    String? path,
+    FireAtlas? project,
+  }) {
+    return LoadedProjectEntry(
+        path ?? this.path,
+        project ?? this.project,
+    );
+  }
+}
+
+class LastProjectEntry {
+  String path;
+  String name;
+
+  LastProjectEntry(this.path, this.name);
+}
+
 enum MessageType {
   ERROR,
   INFO,
@@ -38,10 +73,25 @@ class ModalState extends Equatable {
 }
 
 class FireAtlasState {
-  FireAtlas? currentAtlas;
+  LoadedProjectEntry? loadedProject;
   bool hasChanges = false;
   BaseSelection? selectedSelection;
   ModalState? modal;
   List<Message> messages = [];
   Rect? canvasSelection;
+
+  FireAtlas? get currentAtlas => loadedProject?.project;
+  
+  void set currentAtlas(FireAtlas? atlas) {
+    if (atlas == null) {
+      throw "Can't set a null atlas";
+    }
+
+    final project = loadedProject;
+    if (project != null) {
+      loadedProject = project.update(project: atlas);
+    } else {
+      loadedProject = LoadedProjectEntry(null, atlas);
+    }
+  }
 }
