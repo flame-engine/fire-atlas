@@ -12,7 +12,7 @@ class _MessageBoardSlice extends Equatable {
   final List<Message> messages;
 
   _MessageBoardSlice.fromState(FireAtlasState state)
-      : messages = state.messages;
+      : messages = state.messages.toList();
 
   @override
   List<Object?> get props => [messages];
