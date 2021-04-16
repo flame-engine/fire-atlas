@@ -19,7 +19,6 @@ dependencies:
   shared_preferences: ^2.0.5
   file_selector: ^0.8.2
   file_selector_macos: ^0.0.4
-  path: ^1.8.0
   flame_fire_atlas:
     path: ../flame_fire_atlas
 

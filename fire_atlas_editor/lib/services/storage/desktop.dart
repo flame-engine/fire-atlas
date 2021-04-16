@@ -5,7 +5,6 @@ import 'package:file_selector/file_selector.dart';
 import 'package:fire_atlas_editor/store/store.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:path/path.dart' as path;
 
 import './storage.dart';
 
