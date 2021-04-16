@@ -4,8 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
-import 'dart:html';
-
 import '../../../vendor/slices/slices.dart';
 import '../../../store/store.dart';
 import '../../../store/actions/atlas_actions.dart';
@@ -55,7 +53,7 @@ class Toolbar extends StatelessWidget {
                     iconData: Icons.save,
                     disabled: !slice.hasChanges,
                     onPress: () {
-                      store.dispatch(SaveAction());
+                      store.dispatchAsync(SaveAction());
                     }),
                 FIconButton(
                     iconData: Icons.image,

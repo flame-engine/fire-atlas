@@ -107,20 +107,38 @@ class RemoveSelectedSelectionAction extends SlicesAction<FireAtlasState> {
   }
 }
 
-class SaveAction extends SlicesAction<FireAtlasState> {
+class SaveAction extends AsyncSlicesAction<FireAtlasState> {
   @override
-  FireAtlasState perform(FireAtlasState state) {
+  Future<FireAtlasState> perform(FireAtlasState state) async {
     final project = state.loadedProject;
     if (project != null) {
-      final storage = FireAtlasStorage();
-      storage.saveProject(project);
+      try {
+        final storage = FireAtlasStorage();
 
-      state.hasChanges = false;
+        if (project.path == null) {
+          project.path = await storage.selectNewProjectPath(project.project);
+        }
 
-      store.dispatch(CreateMessageAction(
-        message: 'Atlas saved!',
-        type: MessageType.INFO,
-      ));
+        await storage.saveProject(project);
+        await storage.rememberProject(project);
+
+        state.hasChanges = false;
+
+        store.dispatch(
+          CreateMessageAction(
+            message: 'Atlas saved!',
+            type: MessageType.INFO,
+          ),
+        );
+      } catch (e) {
+        print(e);
+        store.dispatch(
+          CreateMessageAction(
+            message: 'Error trying to save project!',
+            type: MessageType.ERROR,
+          ),
+        );
+      }
     }
     return state;
   }

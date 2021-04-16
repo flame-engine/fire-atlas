@@ -10,6 +10,7 @@ import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 class FireAtlasStorage extends FireAtlasStorageApi {
   static final Storage _localStorage = window.localStorage;
 
+  @override
   Future<LoadedProjectEntry> loadProject(String path) async {
     final value = _localStorage[path];
     if (value == null) {
@@ -24,16 +25,19 @@ class FireAtlasStorage extends FireAtlasStorageApi {
     return entry;
   }
 
+  @override
   Future<void> saveProject(LoadedProjectEntry entry) async {
-    final data = entry.project.serialize();
-
-    if (entry.path == null) {
-      entry.path = 'ATLAS_${entry.project.id}';
+    final path = entry.path;
+    if (path == null) {
+      throw 'Tried to save project without path';
     }
 
-    _localStorage[entry.path!] = base64Encode(data);
+    final data = entry.project.serialize();
+
+    _localStorage[path] = base64Encode(data);
   }
 
+  @override
   Future<List<LastProjectEntry>> lastUsedProjects() async {
     return _localStorage.keys.where((k) => k.startsWith('ATLAS_')).map((k) {
       final name = k.replaceFirst('ATLAS_', '');
@@ -41,20 +45,16 @@ class FireAtlasStorage extends FireAtlasStorageApi {
     }).toList();
   }
 
+  @override
   Future<void> rememberProject(LoadedProjectEntry entry) async {
     // On web saving a project is to cache it on the localStorage, so here
     // we can just save the project
     await saveProject(entry);
   }
 
-  FireAtlas _readBase64Project(String base64) {
-    final jsonRaw = base64Decode(base64);
-
-    return FireAtlas.deserialize(jsonRaw);
-  }
-
-  Future<LoadedProjectEntry> selectProject(ctx) async {
-    final fileData = await selectFile(ctx);
+  @override
+  Future<LoadedProjectEntry> selectProject() async {
+    final fileData = await selectFile();
     final base64 = fileData.substring(fileData.indexOf(',') + 1);
     final atlas = _readBase64Project(base64);
 
@@ -65,7 +65,12 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   }
 
   @override
-  Future<String> selectFile(_) {
+  Future<String> selectNewProjectPath(atlas) async {
+    return 'ATLAS_${atlas.id}';
+  }
+
+  @override
+  Future<String> selectFile() {
     final completer = Completer<String>();
     final uploadInput = FileUploadInputElement();
     uploadInput.click();
@@ -101,5 +106,11 @@ class FireAtlasStorage extends FireAtlasStorageApi {
     element.setAttribute('download', fileName);
 
     element.click();
+  }
+
+  FireAtlas _readBase64Project(String base64) {
+    final jsonRaw = base64Decode(base64);
+
+    return FireAtlas.deserialize(jsonRaw);
   }
 }

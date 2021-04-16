@@ -42,7 +42,7 @@ class _OpenScreenState extends State<OpenScreen> {
     final _store = SlicesProvider.of<FireAtlasState>(context);
 
     try {
-      final loaded = await _storage.selectProject(context);
+      final loaded = await _storage.selectProject();
       await _storage.rememberProject(loaded);
       setState(() {
         _projects.add(loaded.toLastProjectEntry());
