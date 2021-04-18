@@ -3,27 +3,38 @@ import 'package:fire_atlas_editor/store/store.dart';
 import './storage.dart';
 
 class FireAtlasStorage extends FireAtlasStorageApi {
+  @override
   Future<LoadedProjectEntry> loadProject(String path) {
     throw 'Unsupported';
   }
 
+  @override
   Future<void> saveProject(LoadedProjectEntry entry) {
     throw 'Unsupported';
   }
 
+  @override
   Future<List<LastProjectEntry>> lastUsedProjects() {
     throw 'Unsupported';
   }
 
+  @override
   Future<void> rememberProject(LoadedProjectEntry entry) {
     throw 'Unsupported';
   }
 
-  Future<LoadedProjectEntry> selectProject(_) {
+  @override
+  Future<LoadedProjectEntry> selectProject() {
     throw 'Unsupported';
   }
 
-  Future<String> selectFile(_) {
+  @override
+  Future<String> selectFile() {
+    throw 'Unsupported';
+  }
+
+  @override
+  Future<String> selectNewProjectPath(_) {
     throw 'Unsupported';
   }
 

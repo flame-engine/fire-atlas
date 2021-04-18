@@ -1,16 +1,17 @@
 export 'unsupported.dart'
     if (dart.library.html) 'web.dart'
-    if (dart.library.io) 'mobile.dart';
+    if (dart.library.io) 'desktop.dart';
 
 import 'package:fire_atlas_editor/store/store.dart';
-import 'package:flutter/material.dart';
+import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 abstract class FireAtlasStorageApi {
   Future<LoadedProjectEntry> loadProject(String path);
   Future<void> saveProject(LoadedProjectEntry entry);
   Future<List<LastProjectEntry>> lastUsedProjects();
   Future<void> rememberProject(LoadedProjectEntry entry);
-  Future<LoadedProjectEntry> selectProject(BuildContext context);
-  Future<String> selectFile(BuildContext context);
+  Future<String> selectNewProjectPath(FireAtlas atlas);
+  Future<LoadedProjectEntry> selectProject();
+  Future<String> selectFile();
   Future<void> exportFile(List<int> bytes, String fileName);
 }

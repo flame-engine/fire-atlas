@@ -16,6 +16,9 @@ dependencies:
   url_launcher: ^6.0.3
   flame: 1.0.0-rc9
   equatable: ^2.0.0
+  shared_preferences: ^2.0.5
+  file_selector: ^0.8.2
+  file_selector_macos: ^0.0.4
   flame_fire_atlas:
     path: ../flame_fire_atlas
 

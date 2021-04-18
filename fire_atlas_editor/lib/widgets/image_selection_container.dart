@@ -3,7 +3,6 @@ import 'package:flutter/material.dart' hide Image;
 import 'package:flame/sprite.dart';
 import 'package:flame/flame.dart';
 
-import 'dart:html';
 import 'dart:ui';
 
 import './container.dart';
@@ -57,7 +56,7 @@ class ImageSelectionContainer extends StatelessWidget {
               label: 'Select image',
               onSelect: () async {
                 final storage = FireAtlasStorage();
-                final imgDataUrl = await storage.selectFile(context);
+                final imgDataUrl = await storage.selectFile();
                 onSelectImage(imgDataUrl);
               }))
     ]);
