@@ -1,6 +1,15 @@
 import 'package:flutter/widgets.dart';
 
-class SlicesStore<T> {
+class Nullable<T> {
+  final T? value;
+
+  Nullable(this.value);
+}
+
+@immutable
+abstract class SlicesState {}
+
+class SlicesStore<T extends SlicesState> {
   T state;
 
   SlicesStore(this.state);
@@ -16,14 +25,12 @@ class SlicesStore<T> {
   }
 
   void dispatch(SlicesAction<T> action) {
-    action.store = this;
-    state = action.perform(state);
+    state = action.perform(this, state);
     _notifyListeners();
   }
 
   Future<void> dispatchAsync(AsyncSlicesAction<T> action) async {
-    action.store = this;
-    state = await action.perform(state);
+    state = await action.perform(this, state);
     _notifyListeners();
   }
 
@@ -32,17 +39,17 @@ class SlicesStore<T> {
   }
 }
 
-abstract class SlicesAction<T> {
-  late SlicesStore<T> store;
-  T perform(T state);
+@immutable
+abstract class SlicesAction<T extends SlicesState> {
+  T perform(SlicesStore<T> store, T state);
 }
 
-abstract class AsyncSlicesAction<T> {
-  late SlicesStore<T> store;
-  Future<T> perform(T state);
+@immutable
+abstract class AsyncSlicesAction<T extends SlicesState> {
+  Future<T> perform(SlicesStore<T> store, T state);
 }
 
-class SlicesProvider<T> extends InheritedWidget {
+class SlicesProvider<T extends SlicesState> extends InheritedWidget {
   final SlicesStore<T> store;
 
   SlicesProvider({
@@ -54,7 +61,7 @@ class SlicesProvider<T> extends InheritedWidget {
   @override
   bool updateShouldNotify(SlicesProvider old) => store != old.store;
 
-  static SlicesStore<S> of<S>(BuildContext context) {
+  static SlicesStore<S> of<S extends SlicesState>(BuildContext context) {
     final widget =
         context.dependOnInheritedWidgetOfExactType<SlicesProvider<S>>();
 
@@ -66,12 +73,12 @@ class SlicesProvider<T> extends InheritedWidget {
   }
 }
 
-typedef SlicerFn<T, S> = S Function(T);
+typedef SlicerFn<T extends SlicesState, S> = S Function(T);
 
-typedef SliceWatcherBuilder<T, S> = Widget Function(
+typedef SliceWatcherBuilder<T extends SlicesState, S> = Widget Function(
     BuildContext, SlicesStore<T>, S);
 
-class SliceWatcher<T, S> extends StatefulWidget {
+class SliceWatcher<T extends SlicesState, S> extends StatefulWidget {
   final SliceWatcherBuilder<T, S> builder;
   final SlicerFn<T, S> slicer;
 
@@ -85,7 +92,8 @@ class SliceWatcher<T, S> extends StatefulWidget {
   State createState() => _SliceWatcherState<T, S>();
 }
 
-class _SliceWatcherState<T, S> extends State<SliceWatcher<T, S>> {
+class _SliceWatcherState<T extends SlicesState, S>
+    extends State<SliceWatcher<T, S>> {
   late SlicesStore<T> _store;
   late S _memoValue;
 

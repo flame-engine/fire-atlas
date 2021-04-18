@@ -4,15 +4,15 @@ import '../../vendor/slices/slices.dart';
 import '../../store/store.dart';
 
 class SetCanvasSelection extends SlicesAction<FireAtlasState> {
-  Rect selection;
+  final Rect selection;
 
   SetCanvasSelection(this.selection);
 
   @override
-  FireAtlasState perform(state) {
-    state.canvasSelection = selection;
-
-    return state;
+  FireAtlasState perform(_, state) {
+    return state.copyWith(
+      canvasSelection: Nullable(selection),
+    );
   }
 }
 
@@ -24,23 +24,23 @@ class OpenEditorModal extends SlicesAction<FireAtlasState> {
   OpenEditorModal(this.modal, this.width, [this.height]);
 
   @override
-  FireAtlasState perform(state) {
-    state.modal = ModalState(
-      child: modal,
-      width: width,
-      height: height,
+  FireAtlasState perform(_, state) {
+    return state.copyWith(
+      modal: Nullable(
+        ModalState(
+          child: modal,
+          width: width,
+          height: height,
+        ),
+      ),
     );
-
-    return state;
   }
 }
 
 class CloseEditorModal extends SlicesAction<FireAtlasState> {
   @override
-  FireAtlasState perform(state) {
-    state.modal = null;
-
-    return state;
+  FireAtlasState perform(_, state) {
+    return state.copyWith(modal: Nullable(null));
   }
 }
 
@@ -54,19 +54,20 @@ class CreateMessageAction extends SlicesAction<FireAtlasState> {
   });
 
   @override
-  FireAtlasState perform(state) {
+  FireAtlasState perform(_, state) {
     final existent = state.messages.where((m) => m.message == message);
 
+    final newList = state.messages.toList();
     if (existent.isEmpty) {
       final messageObj = Message(
         type: type,
         message: message,
       );
 
-      state.messages.add(messageObj);
+      newList.add(messageObj);
     }
 
-    return state;
+    return state.copyWith(messages: newList);
   }
 }
 
@@ -78,6 +79,10 @@ class DismissMessageAction extends SlicesAction<FireAtlasState> {
   });
 
   @override
-  FireAtlasState perform(state) =>
-      state..messages.removeWhere((m) => m.message == message.message);
+  FireAtlasState perform(_, state) {
+    final newList = state.messages.toList();
+    newList.removeWhere((m) => m.message == message.message);
+
+    return state.copyWith(messages: newList);
+  }
 }
