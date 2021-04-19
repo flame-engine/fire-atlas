@@ -128,12 +128,12 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                       _placement,
                       _selection,
                     );
-                    _store.dispatchAsync(
+                    _store.dispatch(CloseEditorModal());
+                    await _store.dispatchAsync(
                       UpdateAtlasImageAction(
                         imageData: _newImageData,
                       ),
                     );
-                    _store.dispatch(CloseEditorModal());
                   }),
             ],
           ),
