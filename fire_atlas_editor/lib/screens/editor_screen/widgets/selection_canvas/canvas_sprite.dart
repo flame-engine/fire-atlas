@@ -38,6 +38,7 @@ class CanvasSprite extends StatelessWidget {
         selectionEnd,
         Theme.of(ctx).primaryColor,
         Theme.of(ctx).dividerColor,
+        Theme.of(ctx).brightness == Brightness.dark,
       )),
     );
   }
@@ -52,6 +53,7 @@ class _CanvasSpritePainer extends CustomPainter {
   final double _tileHeight;
   final Offset? _selectionStart;
   final Offset? _selectionEnd;
+  final bool _darkMode;
 
   Color _selectionColor;
   Color _gridTileColor;
@@ -67,7 +69,18 @@ class _CanvasSpritePainer extends CustomPainter {
     this._selectionEnd,
     this._selectionColor,
     this._gridTileColor,
+    this._darkMode,
   );
+
+  Color _transformColor(Color color, double ammount) {
+    final raw = color.withOpacity(1);
+
+    if (_darkMode) {
+      return raw.darken(ammount);
+    } else {
+      return raw.brighten(ammount);
+    }
+  }
 
   @override
   bool shouldRepaint(_CanvasSpritePainer old) =>
@@ -83,7 +96,7 @@ class _CanvasSpritePainer extends CustomPainter {
     // Background
     canvas.drawRect(
       Offset.zero & size,
-      Paint()..color = _gridTileColor.withOpacity(1).brighten(0.6),
+      Paint()..color = _transformColor(_gridTileColor, 0.6),
     );
 
     canvas.save();
@@ -100,17 +113,16 @@ class _CanvasSpritePainer extends CustomPainter {
     // Background outline
     canvas.drawRect(
       spriteRect.inflate(1.0),
-      Paint()..color = _gridTileColor.withOpacity(1).brighten(0.2),
+      Paint()..color = _transformColor(_gridTileColor, 0.2),
     );
 
     // Checker board
     final rowCount = (_sprite.originalSize.y / _tileHeight).ceil();
     final columnCount = (_sprite.originalSize.x / _tileWidth).ceil();
 
-    final darkTilePaint = Paint()
-      ..color = _gridTileColor.withOpacity(1).brighten(0.7);
+    final darkTilePaint = Paint()..color = _transformColor(_gridTileColor, 0.7);
     final lightTilePaint = Paint()
-      ..color = _gridTileColor.withOpacity(1).brighten(0.9);
+      ..color = _transformColor(_gridTileColor, 0.9);
 
     for (var y = 0.0; y < rowCount; y++) {
       final m = y % 2;

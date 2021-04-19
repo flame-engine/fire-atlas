@@ -1,3 +1,5 @@
+import 'package:fire_atlas_editor/services/storage/storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../vendor/slices/slices.dart';
@@ -84,5 +86,19 @@ class DismissMessageAction extends SlicesAction<FireAtlasState> {
     newList.removeWhere((m) => m.message == message.message);
 
     return state.copyWith(messages: newList);
+  }
+}
+
+class ToggleThemeAction extends AsyncSlicesAction<FireAtlasState> {
+  @override
+  Future<FireAtlasState> perform(
+      SlicesStore<FireAtlasState> store, FireAtlasState state) async {
+    final newTheme =
+        state.currentTheme == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
+
+    final storage = FireAtlasStorage();
+    await storage.setConfig(kThemeMode, newTheme.toString());
+
+    return state.copyWith(currentTheme: newTheme);
   }
 }

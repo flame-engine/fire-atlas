@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fire_atlas_editor/screens/widgets/toggle_theme_button.dart';
 import 'package:fire_atlas_editor/services/storage/storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -84,12 +85,17 @@ class Toolbar extends StatelessWidget {
                         _launchURL(slice.currentAtlas!);
                       }),
               ]),
-              FIconButton(
-                iconData: Icons.exit_to_app,
-                onPress: () {
-                  store.dispatch(SelectSelectionAction(selection: null));
-                  Navigator.of(ctx).pushReplacementNamed('/');
-                },
+              Row(
+                children: [
+                  ToggleThemeButton(),
+                  FIconButton(
+                    iconData: Icons.exit_to_app,
+                    onPress: () {
+                      store.dispatch(SelectSelectionAction(selection: null));
+                      Navigator.of(ctx).pushReplacementNamed('/');
+                    },
+                  ),
+                ],
               ),
             ]),
           ],

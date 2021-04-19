@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:fire_atlas_editor/vendor/slices/slices.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
@@ -84,6 +85,7 @@ class FireAtlasState extends SlicesState {
   final Nullable<ModalState> _modal;
   final bool hasChanges;
   final List<Message> messages;
+  final ThemeMode currentTheme;
 
   FireAtlasState({
     this.hasChanges = false,
@@ -92,11 +94,12 @@ class FireAtlasState extends SlicesState {
     required Nullable<BaseSelection> selectedSelection,
     required Nullable<Rect> canvasSelection,
     required Nullable<ModalState> modal,
+    required this.currentTheme,
   })   : _selectedSelection = selectedSelection,
         _canvasSelection = canvasSelection,
         _modal = modal;
 
-  FireAtlasState.empty()
+  FireAtlasState.empty({required this.currentTheme})
       : loadedProject = Nullable(null),
         _selectedSelection = Nullable(null),
         _canvasSelection = Nullable(null),
@@ -111,6 +114,7 @@ class FireAtlasState extends SlicesState {
     Nullable<Rect>? canvasSelection,
     List<Message>? messages,
     bool? hasChanges,
+    ThemeMode? currentTheme,
   }) {
     return FireAtlasState(
       loadedProject: loadedProject ?? this.loadedProject,
@@ -119,6 +123,7 @@ class FireAtlasState extends SlicesState {
       selectedSelection: selectedSelection ?? this._selectedSelection,
       modal: modal ?? this._modal,
       canvasSelection: canvasSelection ?? this._canvasSelection,
+      currentTheme: currentTheme ?? this.currentTheme,
     );
   }
 

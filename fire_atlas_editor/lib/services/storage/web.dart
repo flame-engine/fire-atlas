@@ -108,6 +108,16 @@ class FireAtlasStorage extends FireAtlasStorageApi {
     element.click();
   }
 
+  @override
+  Future<void> setConfig(String key, String value) async {
+    _localStorage['CONFIG_$key'] = value;
+  }
+
+  @override
+  Future<String> getConfig(String key, String defaultValue) async {
+    return _localStorage['CONFIG_$key'] ?? defaultValue;
+  }
+
   FireAtlas _readBase64Project(String base64) {
     final jsonRaw = base64Decode(base64);
 
