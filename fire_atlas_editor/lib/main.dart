@@ -8,7 +8,7 @@ import './screens/editor_screen/editor_screen.dart';
 import './store/store.dart';
 
 void main() {
-  final store = SlicesStore<FireAtlasState>(FireAtlasState());
+  final store = SlicesStore<FireAtlasState>(FireAtlasState.empty());
 
   runApp(FireAtlasApp(store: store));
 }

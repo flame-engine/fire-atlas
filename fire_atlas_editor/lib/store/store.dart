@@ -1,11 +1,13 @@
 import 'package:equatable/equatable.dart';
+import 'package:fire_atlas_editor/vendor/slices/slices.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 import 'dart:ui';
 
+@immutable
 class LoadedProjectEntry {
-  String? path;
+  final String? path;
   final FireAtlas project;
 
   LoadedProjectEntry(this.path, this.project);
@@ -21,7 +23,7 @@ class LoadedProjectEntry {
     );
   }
 
-  LoadedProjectEntry update({
+  LoadedProjectEntry copyWith({
     String? path,
     FireAtlas? project,
   }) {
@@ -32,9 +34,10 @@ class LoadedProjectEntry {
   }
 }
 
+@immutable
 class LastProjectEntry {
-  String path;
-  String name;
+  final String path;
+  final String name;
 
   LastProjectEntry(this.path, this.name);
 }
@@ -44,6 +47,7 @@ enum MessageType {
   INFO,
 }
 
+@immutable
 class Message extends Equatable {
   final MessageType type;
   final String message;
@@ -57,6 +61,7 @@ class Message extends Equatable {
   List<Object?> get props => [type, message];
 }
 
+@immutable
 class ModalState extends Equatable {
   final Widget child;
   final double width;
@@ -72,26 +77,53 @@ class ModalState extends Equatable {
   List<Object?> get props => [child, width, height];
 }
 
-class FireAtlasState {
-  LoadedProjectEntry? loadedProject;
-  bool hasChanges = false;
-  BaseSelection? selectedSelection;
-  ModalState? modal;
-  List<Message> messages = [];
-  Rect? canvasSelection;
+class FireAtlasState extends SlicesState {
+  final Nullable<LoadedProjectEntry> loadedProject;
+  final Nullable<BaseSelection> _selectedSelection;
+  final Nullable<Rect> _canvasSelection;
+  final Nullable<ModalState> _modal;
+  final bool hasChanges;
+  final List<Message> messages;
 
-  FireAtlas? get currentAtlas => loadedProject?.project;
+  FireAtlasState({
+    this.hasChanges = false,
+    this.messages = const [],
+    required this.loadedProject,
+    required Nullable<BaseSelection> selectedSelection,
+    required Nullable<Rect> canvasSelection,
+    required Nullable<ModalState> modal,
+  })   : _selectedSelection = selectedSelection,
+        _canvasSelection = canvasSelection,
+        _modal = modal;
 
-  void set currentAtlas(FireAtlas? atlas) {
-    if (atlas == null) {
-      throw "Can't set a null atlas";
-    }
+  FireAtlasState.empty()
+      : loadedProject = Nullable(null),
+        _selectedSelection = Nullable(null),
+        _canvasSelection = Nullable(null),
+        _modal = Nullable(null),
+        hasChanges = false,
+        messages = [];
 
-    final project = loadedProject;
-    if (project != null) {
-      loadedProject = project.update(project: atlas);
-    } else {
-      loadedProject = LoadedProjectEntry(null, atlas);
-    }
+  FireAtlasState copyWith({
+    Nullable<LoadedProjectEntry>? loadedProject,
+    Nullable<BaseSelection>? selectedSelection,
+    Nullable<ModalState>? modal,
+    Nullable<Rect>? canvasSelection,
+    List<Message>? messages,
+    bool? hasChanges,
+  }) {
+    return FireAtlasState(
+      loadedProject: loadedProject ?? this.loadedProject,
+      hasChanges: hasChanges ?? this.hasChanges,
+      messages: messages ?? this.messages,
+      selectedSelection: selectedSelection ?? this._selectedSelection,
+      modal: modal ?? this._modal,
+      canvasSelection: canvasSelection ?? this._canvasSelection,
+    );
   }
+
+  FireAtlas? get currentAtlas => loadedProject.value?.project;
+  BaseSelection? get selectedSelection => _selectedSelection.value;
+  ModalState? get modal => _modal.value;
+  Rect? get canvasSelection => _canvasSelection.value;
 }

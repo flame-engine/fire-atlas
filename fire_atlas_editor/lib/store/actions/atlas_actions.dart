@@ -6,10 +6,10 @@ import '../../services/storage/storage.dart';
 import './editor_actions.dart';
 
 class CreateAtlasAction extends AsyncSlicesAction<FireAtlasState> {
-  String id;
-  String imageData;
-  double tileWidth;
-  double tileHeight;
+  final String id;
+  final String imageData;
+  final double tileWidth;
+  final double tileHeight;
 
   CreateAtlasAction({
     required this.id,
@@ -19,7 +19,7 @@ class CreateAtlasAction extends AsyncSlicesAction<FireAtlasState> {
   });
 
   @override
-  Future<FireAtlasState> perform(FireAtlasState state) async {
+  Future<FireAtlasState> perform(_, state) async {
     final atlas = FireAtlas(
       id: id,
       imageData: imageData,
@@ -29,11 +29,14 @@ class CreateAtlasAction extends AsyncSlicesAction<FireAtlasState> {
 
     await atlas.loadImage(clearImageData: false);
 
-    state
-      ..currentAtlas = atlas
-      ..hasChanges = true;
-
-    return state;
+    return state.copyWith(
+      hasChanges: true,
+      loadedProject: Nullable(
+        state.loadedProject.value?.copyWith(
+          project: atlas,
+        ),
+      ),
+    );
   }
 }
 
@@ -43,13 +46,19 @@ class UpdateAtlasImageAction extends AsyncSlicesAction<FireAtlasState> {
   UpdateAtlasImageAction({required this.imageData});
 
   @override
-  Future<FireAtlasState> perform(state) async {
+  Future<FireAtlasState> perform(_, state) async {
     if (state.currentAtlas != null) {
       final atlas = state.currentAtlas!;
 
-      state.hasChanges = true;
       atlas.imageData = imageData;
       await atlas.loadImage(clearImageData: false);
+
+      return state.copyWith(
+        hasChanges: true,
+        loadedProject: Nullable(
+          state.loadedProject.value?.copyWith(project: atlas),
+        ),
+      );
     }
 
     return state;
@@ -57,19 +66,25 @@ class UpdateAtlasImageAction extends AsyncSlicesAction<FireAtlasState> {
 }
 
 class SetSelectionAction extends SlicesAction<FireAtlasState> {
-  BaseSelection selection;
+  final BaseSelection selection;
 
   SetSelectionAction({
     required this.selection,
   });
 
   @override
-  FireAtlasState perform(FireAtlasState state) {
+  FireAtlasState perform(_, state) {
     final atlas = state.currentAtlas;
     if (atlas != null) {
       atlas.selections[selection.id] = selection;
-      state.selectedSelection = selection;
-      state.hasChanges = true;
+
+      return state.copyWith(
+        hasChanges: true,
+        selectedSelection: Nullable(selection),
+        loadedProject: Nullable(
+          state.loadedProject.value?.copyWith(project: atlas),
+        ),
+      );
     }
 
     return state;
@@ -77,30 +92,35 @@ class SetSelectionAction extends SlicesAction<FireAtlasState> {
 }
 
 class SelectSelectionAction extends SlicesAction<FireAtlasState> {
-  BaseSelection? selection;
+  final BaseSelection? selection;
 
   SelectSelectionAction({
     this.selection,
   });
 
   @override
-  FireAtlasState perform(FireAtlasState state) {
-    state.selectedSelection = selection;
-
-    return state;
+  FireAtlasState perform(_, FireAtlasState state) {
+    return state.copyWith(
+      selectedSelection: Nullable(selection),
+    );
   }
 }
 
 class RemoveSelectedSelectionAction extends SlicesAction<FireAtlasState> {
   @override
-  FireAtlasState perform(FireAtlasState state) {
+  FireAtlasState perform(_, state) {
     final atlas = state.currentAtlas;
     final selected = state.selectedSelection;
 
     if (atlas != null && selected != null) {
       atlas.selections.remove(selected.id);
-      state.selectedSelection = null;
-      state.hasChanges = true;
+      return state.copyWith(
+        hasChanges: true,
+        selectedSelection: Nullable(null),
+        loadedProject: Nullable(
+          state.loadedProject.value?.copyWith(project: atlas),
+        ),
+      );
     }
 
     return state;
@@ -109,25 +129,30 @@ class RemoveSelectedSelectionAction extends SlicesAction<FireAtlasState> {
 
 class SaveAction extends AsyncSlicesAction<FireAtlasState> {
   @override
-  Future<FireAtlasState> perform(FireAtlasState state) async {
-    final project = state.loadedProject;
+  Future<FireAtlasState> perform(store, state) async {
+    final project = state.loadedProject.value;
     if (project != null) {
       try {
         final storage = FireAtlasStorage();
 
-        if (project.path == null) {
-          project.path = await storage.selectNewProjectPath(project.project);
-        }
+        final path = project.path == null
+            ? await storage.selectNewProjectPath(project.project)
+            : project.path;
 
         await storage.saveProject(project);
         await storage.rememberProject(project);
-
-        state.hasChanges = false;
 
         store.dispatch(
           CreateMessageAction(
             message: 'Atlas saved!',
             type: MessageType.INFO,
+          ),
+        );
+
+        return state.copyWith(
+          hasChanges: false,
+          loadedProject: Nullable(
+            state.loadedProject.value?.copyWith(path: path),
           ),
         );
       } catch (e) {
@@ -145,17 +170,17 @@ class SaveAction extends AsyncSlicesAction<FireAtlasState> {
 }
 
 class LoadAtlasAction extends AsyncSlicesAction<FireAtlasState> {
-  String path;
+  final String path;
 
   LoadAtlasAction(this.path);
 
   @override
-  Future<FireAtlasState> perform(state) async {
+  Future<FireAtlasState> perform(_, state) async {
     final storage = FireAtlasStorage();
     final loaded = await storage.loadProject(path);
 
     await loaded.project.loadImage(clearImageData: false);
 
-    return state..loadedProject = loaded;
+    return state.copyWith(loadedProject: Nullable(loaded));
   }
 }
