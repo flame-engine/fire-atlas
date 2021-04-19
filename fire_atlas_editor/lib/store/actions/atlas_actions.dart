@@ -32,9 +32,7 @@ class CreateAtlasAction extends AsyncSlicesAction<FireAtlasState> {
     return state.copyWith(
       hasChanges: true,
       loadedProject: Nullable(
-        state.loadedProject.value?.copyWith(
-          project: atlas,
-        ),
+        LoadedProjectEntry(null, atlas),
       ),
     );
   }
@@ -139,8 +137,15 @@ class SaveAction extends AsyncSlicesAction<FireAtlasState> {
             ? await storage.selectNewProjectPath(project.project)
             : project.path;
 
-        await storage.saveProject(project);
-        await storage.rememberProject(project);
+        final newState = state.copyWith(
+          hasChanges: false,
+          loadedProject: Nullable(
+            state.loadedProject.value?.copyWith(path: path),
+          ),
+        );
+
+        await storage.saveProject(newState.loadedProject.value!);
+        await storage.rememberProject(newState.loadedProject.value!);
 
         store.dispatch(
           CreateMessageAction(
@@ -149,12 +154,7 @@ class SaveAction extends AsyncSlicesAction<FireAtlasState> {
           ),
         );
 
-        return state.copyWith(
-          hasChanges: false,
-          loadedProject: Nullable(
-            state.loadedProject.value?.copyWith(path: path),
-          ),
-        );
+        return newState;
       } catch (e) {
         print(e);
         store.dispatch(
