@@ -5,6 +5,8 @@ export 'unsupported.dart'
 import 'package:fire_atlas_editor/store/store.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
+const kThemeMode = 'THEME_MODE';
+
 abstract class FireAtlasStorageApi {
   Future<LoadedProjectEntry> loadProject(String path);
   Future<void> saveProject(LoadedProjectEntry entry);
@@ -14,4 +16,6 @@ abstract class FireAtlasStorageApi {
   Future<LoadedProjectEntry> selectProject();
   Future<String> selectFile();
   Future<void> exportFile(List<int> bytes, String fileName);
+  Future<void> setConfig(String key, String value);
+  Future<String> getConfig(String key, String defaultValue);
 }

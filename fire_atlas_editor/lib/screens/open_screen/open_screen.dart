@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fire_atlas_editor/screens/widgets/toggle_theme_button.dart';
 import 'package:fire_atlas_editor/vendor/slices/slices.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -202,6 +203,11 @@ class _OpenScreenState extends State<OpenScreen> {
                 );
               },
             ),
+          ),
+          Positioned(
+            top: 10,
+            right: 10,
+            child: ToggleThemeButton(),
           ),
         ],
       ),

@@ -42,4 +42,14 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   Future<void> exportFile(List<int> bytes, String fileName) {
     throw 'Unsupported';
   }
+
+  @override
+  Future<void> setConfig(String key, String value) {
+    throw 'Unsupported';
+  }
+
+  @override
+  Future<String> getConfig(String key, String defaulValue) {
+    throw 'Unsupported';
+  }
 }

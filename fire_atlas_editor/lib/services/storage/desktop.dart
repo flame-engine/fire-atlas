@@ -28,9 +28,11 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   Future<List<LastProjectEntry>> lastUsedProjects() async {
     final prefs = await SharedPreferences.getInstance();
 
-    return prefs.getKeys().map((k) {
-      return LastProjectEntry(prefs.getString(k)!, k);
-    }).toList();
+    return prefs
+        .getKeys()
+        .where((k) => k.startsWith('PROJECT_'))
+        .map((k) => LastProjectEntry(prefs.getString(k)!, k))
+        .toList();
   }
 
   Future<void> rememberProject(LoadedProjectEntry entry) async {
@@ -39,7 +41,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
       throw 'Tried to save an unsaved project';
     }
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(entry.project.id, path);
+    prefs.setString('PROJECT_${entry.project.id}', path);
   }
 
   Future<LoadedProjectEntry> selectProject() async {
@@ -77,5 +79,17 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   @override
   Future<void> exportFile(List<int> bytes, String fileName) {
     throw 'Unsupported';
+  }
+
+  @override
+  Future<void> setConfig(String key, String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('CONFIG_$key', value);
+  }
+
+  @override
+  Future<String> getConfig(String key, String defaultValue) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('CONFIG_$key') ?? defaultValue;
   }
 }
