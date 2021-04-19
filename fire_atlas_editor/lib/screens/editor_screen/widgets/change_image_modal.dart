@@ -50,12 +50,12 @@ class _ChangeImageModalState extends State<ChangeImageModal> {
                   selected: true,
                   label: 'Ok',
                   onSelect: () {
+                    _store.dispatch(CloseEditorModal());
                     _store.dispatchAsync(
                       UpdateAtlasImageAction(
                         imageData: _imageData!,
                       ),
                     );
-                    _store.dispatch(CloseEditorModal());
                   }),
             ],
           ),

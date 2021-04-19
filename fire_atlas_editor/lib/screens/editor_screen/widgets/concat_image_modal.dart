@@ -35,7 +35,8 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                 Expanded(
                   flex: 5,
                   child: ImageSelectionContainer(
-                    margin: EdgeInsets.all(30),
+                    margin: EdgeInsets.only(
+                        top: 30, bottom: 10, left: 10, right: 10),
                     imageData: _imageData,
                     onSelectImage: (imageData) {
                       setState(() {
@@ -50,6 +51,8 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                     children: [
                       FSubtitleTitle(title: 'Position'),
                       FButton(
+                        width: 100,
+                        padding: EdgeInsets.only(bottom: 10),
                         label: 'Top',
                         selected: _placement?.y == -1,
                         onSelect: () {
@@ -60,6 +63,8 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                         },
                       ),
                       FButton(
+                        width: 100,
+                        padding: EdgeInsets.only(bottom: 10),
                         label: 'Bottom',
                         selected: _placement?.y == 1,
                         onSelect: () {
@@ -70,6 +75,8 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                         },
                       ),
                       FButton(
+                        width: 100,
+                        padding: EdgeInsets.only(bottom: 10),
                         label: 'Left',
                         selected: _placement?.x == -1,
                         onSelect: () {
@@ -80,6 +87,8 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                         },
                       ),
                       FButton(
+                        width: 100,
+                        padding: EdgeInsets.only(bottom: 10),
                         label: 'Right',
                         selected: _placement?.x == 1,
                         onSelect: () {
@@ -90,6 +99,8 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                         },
                       ),
                       FButton(
+                        width: 100,
+                        padding: EdgeInsets.only(bottom: 10),
                         label: 'Selection',
                         disabled: _store.state.canvasSelection == null,
                         selected: _selection != null,
@@ -111,30 +122,33 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               FButton(
-                  label: 'Cancel',
-                  onSelect: () {
-                    _store.dispatch(CloseEditorModal());
-                  }),
+                label: 'Cancel',
+                onSelect: () {
+                  _store.dispatch(CloseEditorModal());
+                },
+              ),
+              SizedBox(width: 5),
               FButton(
-                  disabled: _imageData == null ||
-                      (_placement == null && _selection == null),
-                  selected: true,
-                  label: 'Ok',
-                  onSelect: () async {
-                    final currentAtlas = _store.state.currentAtlas!;
-                    final _newImageData = await concatenateImages(
-                      currentAtlas.imageData!,
-                      _imageData!,
-                      _placement,
-                      _selection,
-                    );
-                    _store.dispatchAsync(
-                      UpdateAtlasImageAction(
-                        imageData: _newImageData,
-                      ),
-                    );
-                    _store.dispatch(CloseEditorModal());
-                  }),
+                disabled: _imageData == null ||
+                    (_placement == null && _selection == null),
+                selected: true,
+                label: 'Ok',
+                onSelect: () async {
+                  final currentAtlas = _store.state.currentAtlas!;
+                  final _newImageData = await concatenateImages(
+                    currentAtlas.imageData!,
+                    _imageData!,
+                    _placement,
+                    _selection,
+                  );
+                  _store.dispatch(CloseEditorModal());
+                  await _store.dispatchAsync(
+                    UpdateAtlasImageAction(
+                      imageData: _newImageData,
+                    ),
+                  );
+                },
+              ),
             ],
           ),
           SizedBox(height: 20),
