@@ -31,7 +31,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
     return prefs
         .getKeys()
         .where((k) => k.startsWith('PROJECT_'))
-        .map((k) => LastProjectEntry(prefs.getString(k)!, k))
+        .map((k) => LastProjectEntry(prefs.getString(k)!, k.replaceFirst('PROJECT_', '')))
         .toList();
   }
 
