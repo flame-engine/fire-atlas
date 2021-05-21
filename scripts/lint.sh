@@ -23,8 +23,4 @@ function run_lint {
 cd fire_atlas_editor
 run_lint
 
-cd ..
-cd flame_fire_atlas
-run_lint
-
 exit 0
