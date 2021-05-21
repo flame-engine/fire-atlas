@@ -4,7 +4,7 @@
 
 Fire Atlas is a tool to create Texture Atlases for games.
 
-This repository holds the source code for the Editor. You can find the package source [here](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas)
+This repository holds the source code for the Editor. You can find the source of the bridge package [here](https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas)
 
 Editor Link: https://fire-atlas.flame-engine.org/
 
