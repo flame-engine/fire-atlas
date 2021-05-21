@@ -95,7 +95,7 @@ class FireAtlasState extends SlicesState {
     required Nullable<Rect> canvasSelection,
     required Nullable<ModalState> modal,
     required this.currentTheme,
-  })   : _selectedSelection = selectedSelection,
+  })  : _selectedSelection = selectedSelection,
         _canvasSelection = canvasSelection,
         _modal = modal;
 
