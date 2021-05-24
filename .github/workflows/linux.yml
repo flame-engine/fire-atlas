@@ -1,6 +1,11 @@
-name: lint
+name: linux
 
 on: push
+
+defaults:
+  run:
+    shell: bash
+    working-directory: fire_atlas_editor
 
 jobs:
   build:
@@ -11,5 +16,8 @@ jobs:
       - uses: subosito/flutter-action@v1
         with:
           channel: 'stable'
-      - run: flutter --version
-      - run: ./scripts/lint.sh
+      - run: flutter config --enable-linux-desktop
+      - run: flutter build linux 
+
+
+
