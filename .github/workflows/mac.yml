@@ -23,7 +23,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: fa_osx.zip
-          path: build/macos/Build/Products/Release/fa_osx.zip
+          path: fire_atlas_editor/build/macos/Build/Products/Release/fa_osx.zip
 
 
 
