@@ -18,12 +18,11 @@ jobs:
           channel: 'stable'
       - run: flutter config --enable-macos-desktop
       - run: flutter build macos
-      - run: cd build/macos/Build/Products/Release/ && zip -r fa_osx.zip Fire\ Atlas\ Editor.app
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
-          name: fa_osx.zip
-          path: fire_atlas_editor/build/macos/Build/Products/Release/fa_osx.zip
+          name: fa_osx
+          path: fire_atlas_editor/build/macos/Build/Products/Release/Fire\ Atlas\ Editor.app
 
 
 

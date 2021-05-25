@@ -21,5 +21,5 @@ jobs:
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
-          name: fa_windows.zip
+          name: fa_windows
           path: fire_atlas_editor/build/windows/runner/Release
