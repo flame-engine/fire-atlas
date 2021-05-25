@@ -18,6 +18,8 @@ jobs:
           channel: 'stable'
       - run: flutter config --enable-windows-desktop
       - run: flutter build windows
-
-
-
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: fa_windows.zip
+          path: fire_atlas_editor/build/windows/runner/Release
