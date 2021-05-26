@@ -102,5 +102,10 @@ jobs:
         with:
           name: fa_windows
 
-      - name: Display structure of downloaded files
-        run: ls -al
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: *.zip
+          prerelease: true
