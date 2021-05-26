@@ -19,7 +19,7 @@ jobs:
       - run: sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev
       - run: flutter config --enable-linux-desktop
       - run: flutter build linux 
-        run: mv build/linux/x64/release/bundle build/linux/x64/release/fa_linux
+      - run: mv build/linux/x64/release/bundle build/linux/x64/release/fa_linux
       - name: Upload binary
         uses: actions/upload-artifact@v2
         with:
