@@ -107,5 +107,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: *.zip
+          files: |
+            fa_linux.zip
+            fa_osx.zip
+            fa_windows.zip
           prerelease: true
