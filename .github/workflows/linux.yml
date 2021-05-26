@@ -8,6 +8,7 @@ defaults:
     working-directory: fire_atlas_editor
 
 jobs:
+  needs: lint
   build:
     runs-on: ubuntu-latest
 
