@@ -82,7 +82,7 @@ jobs:
           name: fa_windows
           path: fa_windows.zip
 
-  release:
+  release_desktop:
     needs: [linux, mac, windows]
     runs-on: ubuntu-latest
 
@@ -112,3 +112,13 @@ jobs:
             fa_osx.zip
             fa_windows.zip
           prerelease: true
+
+  release_web:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+      - uses: erickzanardo/flutter-gh-pages@v3
+        with:
+          workingDir: fire_atlas_editor
