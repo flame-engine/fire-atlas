@@ -1,4 +1,4 @@
-import 'package:fire_atlas_editor/vendor/slices/slices.dart';
+import 'package:slices/slices.dart';
 import 'package:flutter/material.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 

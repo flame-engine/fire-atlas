@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fire_atlas_editor/services/storage/storage.dart';
+import 'package:slices/slices.dart';
 
-import './vendor/slices/slices.dart';
 import './store/store.dart';
 import './main_app.dart';
 

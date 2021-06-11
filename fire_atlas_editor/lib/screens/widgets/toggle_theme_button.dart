@@ -2,8 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:fire_atlas_editor/store/actions/editor_actions.dart';
 import 'package:fire_atlas_editor/widgets/icon_button.dart';
 import 'package:flutter/material.dart';
-
-import '../../vendor/slices/slices.dart';
+import 'package:slices/slices.dart';
 
 import '../../store/store.dart';
 

@@ -1,8 +1,8 @@
 import 'package:fire_atlas_editor/services/storage/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:slices/slices.dart';
 
-import '../../vendor/slices/slices.dart';
 import '../../store/store.dart';
 
 class SetCanvasSelection extends SlicesAction<FireAtlasState> {

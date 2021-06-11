@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
+import 'package:slices/slices.dart';
 
 import '../../../widgets/text.dart';
 import '../../../widgets/container.dart';
 import '../../../widgets/simple_sprite_widget.dart';
 import '../../../widgets/simple_animation_widget.dart';
 
-import '../../../vendor/slices/slices.dart';
 import '../../../store/store.dart';
 
 class _PreviewSlice extends Equatable {

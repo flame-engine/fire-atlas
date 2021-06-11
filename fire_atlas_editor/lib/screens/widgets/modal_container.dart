@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/extensions.dart';
+import 'package:slices/slices.dart';
 
-import '../../vendor/slices/slices.dart';
 import '../../store/store.dart';
 import '../../store/actions/editor_actions.dart';
 

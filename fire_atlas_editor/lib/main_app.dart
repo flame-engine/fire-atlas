@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-
-import './vendor/slices/slices.dart';
+import 'package:slices/slices.dart';
 
 import './screens/open_screen/open_screen.dart';
 import './screens/editor_screen/editor_screen.dart';

@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
+import 'package:slices/slices.dart';
 
-import '../../../vendor/slices/slices.dart';
 import '../../../store/store.dart';
 import '../../../store/actions/atlas_actions.dart';
 import '../../../store/actions/editor_actions.dart';

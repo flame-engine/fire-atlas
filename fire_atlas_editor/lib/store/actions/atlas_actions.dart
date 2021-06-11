@@ -1,4 +1,4 @@
-import '../../vendor/slices/slices.dart';
+import 'package:slices/slices.dart';
 import '../../store/store.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 import '../../services/storage/storage.dart';

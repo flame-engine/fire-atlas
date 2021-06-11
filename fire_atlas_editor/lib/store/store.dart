@@ -1,10 +1,16 @@
 import 'package:equatable/equatable.dart';
-import 'package:fire_atlas_editor/vendor/slices/slices.dart';
+import 'package:slices/slices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 import 'dart:ui';
+
+class Nullable<T> {
+  final T? value;
+
+  Nullable(this.value);
+}
 
 @immutable
 class LoadedProjectEntry {

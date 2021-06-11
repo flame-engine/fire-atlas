@@ -1,5 +1,5 @@
 import 'package:fire_atlas_editor/store/store.dart';
-import 'package:fire_atlas_editor/vendor/slices/slices.dart';
+import 'package:slices/slices.dart';
 import 'package:flutter/material.dart';
 
 import '../../../store/actions/editor_actions.dart';
