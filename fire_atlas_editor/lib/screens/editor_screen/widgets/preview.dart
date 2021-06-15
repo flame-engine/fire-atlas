@@ -13,14 +13,20 @@ import '../../../store/store.dart';
 class _PreviewSlice extends Equatable {
   final FireAtlas? currentAtlas;
   final BaseSelection? selectedSelection;
+  final String? currentImage;
 
-  _PreviewSlice(this.currentAtlas, this.selectedSelection);
+  _PreviewSlice(this.currentAtlas, this.selectedSelection, this.currentImage);
 
   _PreviewSlice.fromState(FireAtlasState state)
-      : this(state.currentAtlas, state.selectedSelection);
+      : this(
+          state.currentAtlas,
+          state.selectedSelection,
+          state.currentAtlas?.imageData,
+        );
 
   @override
-  List<Object?> get props => [currentAtlas?.id, selectedSelection?.id];
+  List<Object?> get props =>
+      [currentAtlas?.id, selectedSelection?.id, currentImage];
 }
 
 class Preview extends StatelessWidget {
