@@ -54,16 +54,19 @@ class _FIconButtonState extends State<FIconButton> {
         color: color.withOpacity(widget.disabled || _pressed ? 0.2 : 1.0),
       ),
     );
-    return GestureDetector(
-      onTapDown: (_) => _pressStart(),
-      onTapUp: (_) => _pressReleased(),
-      onTapCancel: _pressCancel,
-      child: widget.tooltip != null
-          ? Tooltip(
-              message: widget.tooltip!,
-              child: container,
-            )
-          : container,
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTapDown: (_) => _pressStart(),
+        onTapUp: (_) => _pressReleased(),
+        onTapCancel: _pressCancel,
+        child: widget.tooltip != null
+            ? Tooltip(
+                message: widget.tooltip!,
+                child: container,
+              )
+            : container,
+      ),
     );
   }
 }

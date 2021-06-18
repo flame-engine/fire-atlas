@@ -206,28 +206,35 @@ class CanvasBoardState extends State<CanvasBoard> {
                   });
                 }
               },
-              child: GestureDetector(
-                child: ClipRect(
-                  child: CanvasSprite(
-                    sprite: widget.sprite,
-                    translateX: _translateX,
-                    translateY: _translateY,
-                    scale: _scale,
-                    tileWidth: widget.tileWidth,
-                    tileHeight: widget.tileHeight,
-                    selectionStart: _selectionStart,
-                    selectionEnd: _selectionEnd,
+              child: MouseRegion(
+                cursor: _currentTool == CanvasTools.MOVE
+                  ? _dragStart != null
+                    ? SystemMouseCursors.grabbing
+                    : SystemMouseCursors.grab
+                  : SystemMouseCursors.basic,
+                child: GestureDetector(
+                  child: ClipRect(
+                    child: CanvasSprite(
+                      sprite: widget.sprite,
+                      translateX: _translateX,
+                      translateY: _translateY,
+                      scale: _scale,
+                      tileWidth: widget.tileWidth,
+                      tileHeight: widget.tileHeight,
+                      selectionStart: _selectionStart,
+                      selectionEnd: _selectionEnd,
+                    ),
                   ),
+                  onPanStart: (details) {
+                    _handleMoveStart(details);
+                  },
+                  onPanUpdate: (details) {
+                    _handleMove(details);
+                  },
+                  onPanEnd: (details) {
+                    _handleMoveEnd();
+                  },
                 ),
-                onPanStart: (details) {
-                  _handleMoveStart(details);
-                },
-                onPanUpdate: (details) {
-                  _handleMove(details);
-                },
-                onPanEnd: (details) {
-                  _handleMoveEnd();
-                },
               ),
             ),
           ),
