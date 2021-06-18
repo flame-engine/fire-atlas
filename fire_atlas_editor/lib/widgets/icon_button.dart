@@ -5,12 +5,14 @@ class FIconButton extends StatefulWidget {
   final VoidCallback onPress;
   final bool disabled;
   final Color? color;
+  final String? tooltip;
 
   FIconButton({
     required this.iconData,
     required this.onPress,
     this.disabled = false,
     this.color,
+    this.tooltip,
   });
 
   @override
@@ -45,16 +47,23 @@ class _FIconButtonState extends State<FIconButton> {
   @override
   Widget build(ctx) {
     final color = widget.color ?? Theme.of(ctx).primaryColor;
+    final container = Container(
+      margin: EdgeInsets.all(5),
+      child: Icon(
+        widget.iconData,
+        color: color.withOpacity(widget.disabled || _pressed ? 0.2 : 1.0),
+      ),
+    );
     return GestureDetector(
       onTapDown: (_) => _pressStart(),
       onTapUp: (_) => _pressReleased(),
       onTapCancel: _pressCancel,
-      child: Container(
-          margin: EdgeInsets.all(5),
-          child: Icon(
-            widget.iconData,
-            color: color.withOpacity(widget.disabled || _pressed ? 0.2 : 1.0),
-          )),
+      child: widget.tooltip != null
+          ? Tooltip(
+              message: widget.tooltip!,
+              child: container,
+            )
+          : container,
     );
   }
 }

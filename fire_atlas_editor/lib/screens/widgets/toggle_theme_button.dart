@@ -28,7 +28,11 @@ class ToggleThemeButton extends StatelessWidget {
                 : Icons.nightlight_round,
             onPress: () {
               store.dispatchAsync(ToggleThemeAction());
-            });
+            },
+            tooltip: slice.currentTheme == ThemeMode.light
+              ? 'Change to dark mode'
+              : 'Change to light mode',
+        );
       },
     );
   }

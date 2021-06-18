@@ -106,11 +106,13 @@ class _AnimationPlayerWidget extends State<AnimationPlayerWidget>
               iconData: Icons.play_arrow,
               onPress: _initAnimation,
               disabled: _playing,
+              tooltip: 'Play',
             ),
             FIconButton(
               iconData: Icons.stop,
               onPress: _pauseAnimation,
               disabled: !_playing,
+              tooltip: 'Stop',
             ),
           ],
         ),
