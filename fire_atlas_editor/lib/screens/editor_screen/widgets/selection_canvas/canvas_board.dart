@@ -167,18 +167,17 @@ class CanvasBoardState extends State<CanvasBoard> {
           Row(
             children: [
               FIconButton(
-                  onPress: () =>
-                      setState(() => _currentTool = CanvasTools.SELECTION),
-                  iconData: Icons.select_all,
-                  disabled: _currentTool == CanvasTools.SELECTION,
-                  tooltip: 'Selection tool',
+                onPress: () =>
+                    setState(() => _currentTool = CanvasTools.SELECTION),
+                iconData: Icons.select_all,
+                disabled: _currentTool == CanvasTools.SELECTION,
+                tooltip: 'Selection tool',
               ),
               FIconButton(
-                  onPress: () =>
-                      setState(() => _currentTool = CanvasTools.MOVE),
-                  iconData: Icons.open_with,
-                  disabled: _currentTool == CanvasTools.MOVE,
-                  tooltip: 'Move tool',
+                onPress: () => setState(() => _currentTool = CanvasTools.MOVE),
+                iconData: Icons.open_with,
+                disabled: _currentTool == CanvasTools.MOVE,
+                tooltip: 'Move tool',
               ),
               FIconButton(
                 iconData: Icons.zoom_in,

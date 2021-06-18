@@ -59,38 +59,38 @@ class Toolbar extends StatelessWidget {
                   tooltip: 'Save project',
                 ),
                 FIconButton(
-                    iconData: Icons.image,
-                    onPress: () {
-                      store.dispatch(
-                        OpenEditorModal(
-                          ChangeImageModal(),
-                          400,
-                          500,
-                        ),
-                      );
-                    },
-                    tooltip: 'Update base image',
+                  iconData: Icons.image,
+                  onPress: () {
+                    store.dispatch(
+                      OpenEditorModal(
+                        ChangeImageModal(),
+                        400,
+                        500,
+                      ),
+                    );
+                  },
+                  tooltip: 'Update base image',
                 ),
                 FIconButton(
-                    iconData: Icons.add_photo_alternate,
-                    onPress: () {
-                      store.dispatch(
-                        OpenEditorModal(
-                          ConcatImageModal(),
-                          600,
-                          500,
-                        ),
-                      );
-                    },
-                    tooltip: 'Add image',
+                  iconData: Icons.add_photo_alternate,
+                  onPress: () {
+                    store.dispatch(
+                      OpenEditorModal(
+                        ConcatImageModal(),
+                        600,
+                        500,
+                      ),
+                    );
+                  },
+                  tooltip: 'Add image',
                 ),
                 if (kIsWeb)
                   FIconButton(
-                      iconData: Icons.get_app,
-                      onPress: () {
-                        _launchURL(slice.currentAtlas!);
-                      },
-                      tooltip: 'Export atlas',
+                    iconData: Icons.get_app,
+                    onPress: () {
+                      _launchURL(slice.currentAtlas!);
+                    },
+                    tooltip: 'Export atlas',
                   ),
               ]),
               Row(

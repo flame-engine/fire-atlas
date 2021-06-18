@@ -23,13 +23,13 @@ class ToggleThemeButton extends StatelessWidget {
       slicer: (state) => _ToggleThemeButtonSlice.fromState(state),
       builder: (context, store, slice) {
         return FIconButton(
-            iconData: slice.currentTheme == ThemeMode.light
-                ? Icons.wb_sunny
-                : Icons.nightlight_round,
-            onPress: () {
-              store.dispatchAsync(ToggleThemeAction());
-            },
-            tooltip: slice.currentTheme == ThemeMode.light
+          iconData: slice.currentTheme == ThemeMode.light
+              ? Icons.wb_sunny
+              : Icons.nightlight_round,
+          onPress: () {
+            store.dispatchAsync(ToggleThemeAction());
+          },
+          tooltip: slice.currentTheme == ThemeMode.light
               ? 'Change to dark mode'
               : 'Change to light mode',
         );
