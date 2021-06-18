@@ -208,10 +208,10 @@ class CanvasBoardState extends State<CanvasBoard> {
               },
               child: MouseRegion(
                 cursor: _currentTool == CanvasTools.MOVE
-                  ? _dragStart != null
-                    ? SystemMouseCursors.grabbing
-                    : SystemMouseCursors.grab
-                  : SystemMouseCursors.basic,
+                    ? _dragStart != null
+                        ? SystemMouseCursors.grabbing
+                        : SystemMouseCursors.grab
+                    : SystemMouseCursors.basic,
                 child: GestureDetector(
                   child: ClipRect(
                     child: CanvasSprite(
