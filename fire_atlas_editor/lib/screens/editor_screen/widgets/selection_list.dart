@@ -66,19 +66,19 @@ class SelectionList extends StatelessWidget {
                           child: GestureDetector(
                             onTap: () => _select(selection),
                             child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Text('${selection.id}',
-                                        style: TextStyle(
-                                            fontWeight:
-                                                ((slice.selectedSelection?.id ==
-                                                        selection.id)
-                                                    ? FontWeight.bold
-                                                    : FontWeight.normal))),
-                                  ),
-                                  Row(children: [
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text('${selection.id}',
+                                      style: TextStyle(
+                                          fontWeight:
+                                              ((slice.selectedSelection?.id ==
+                                                      selection.id)
+                                                  ? FontWeight.bold
+                                                  : FontWeight.normal))),
+                                ),
+                                Row(
+                                  children: [
                                     selection is AnimationSelection
                                         ? FIconButton(
                                             iconData: Icons.edit,
@@ -92,6 +92,7 @@ class SelectionList extends StatelessWidget {
                                                 500,
                                               ));
                                             },
+                                            tooltip: 'Edit selection',
                                           )
                                         : Container(),
                                     FIconButton(
@@ -101,9 +102,12 @@ class SelectionList extends StatelessWidget {
                                         store.dispatch(OpenEditorModal(
                                             DeleteSelectionModal(), 300, 200));
                                       },
+                                      tooltip: 'Edit selection',
                                     ),
-                                  ]),
-                                ]),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       })

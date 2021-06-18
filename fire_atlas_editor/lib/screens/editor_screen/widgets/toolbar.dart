@@ -51,39 +51,47 @@ class Toolbar extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Row(children: [
                 FIconButton(
-                    iconData: Icons.save,
-                    disabled: !slice.hasChanges,
-                    onPress: () {
-                      store.dispatchAsync(SaveAction());
-                    }),
+                  iconData: Icons.save,
+                  disabled: !slice.hasChanges,
+                  onPress: () {
+                    store.dispatchAsync(SaveAction());
+                  },
+                  tooltip: 'Save project',
+                ),
                 FIconButton(
-                    iconData: Icons.image,
-                    onPress: () {
-                      store.dispatch(
-                        OpenEditorModal(
-                          ChangeImageModal(),
-                          400,
-                          500,
-                        ),
-                      );
-                    }),
+                  iconData: Icons.image,
+                  onPress: () {
+                    store.dispatch(
+                      OpenEditorModal(
+                        ChangeImageModal(),
+                        400,
+                        500,
+                      ),
+                    );
+                  },
+                  tooltip: 'Update base image',
+                ),
                 FIconButton(
-                    iconData: Icons.add_photo_alternate,
-                    onPress: () {
-                      store.dispatch(
-                        OpenEditorModal(
-                          ConcatImageModal(),
-                          600,
-                          500,
-                        ),
-                      );
-                    }),
+                  iconData: Icons.add_photo_alternate,
+                  onPress: () {
+                    store.dispatch(
+                      OpenEditorModal(
+                        ConcatImageModal(),
+                        600,
+                        500,
+                      ),
+                    );
+                  },
+                  tooltip: 'Add image',
+                ),
                 if (kIsWeb)
                   FIconButton(
-                      iconData: Icons.get_app,
-                      onPress: () {
-                        _launchURL(slice.currentAtlas!);
-                      }),
+                    iconData: Icons.get_app,
+                    onPress: () {
+                      _launchURL(slice.currentAtlas!);
+                    },
+                    tooltip: 'Export atlas',
+                  ),
               ]),
               Row(
                 children: [
@@ -94,6 +102,7 @@ class Toolbar extends StatelessWidget {
                       store.dispatch(SelectSelectionAction(selection: null));
                       Navigator.of(ctx).pushReplacementNamed('/');
                     },
+                    tooltip: 'Close atlas',
                   ),
                 ],
               ),
