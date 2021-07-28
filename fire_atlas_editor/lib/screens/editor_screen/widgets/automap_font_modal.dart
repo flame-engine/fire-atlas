@@ -64,7 +64,6 @@ class _AutoMapFontModalState extends State<AutoMapFontModal> {
     int y = 0;
 
     _controller.text.characters.forEach((e) {
-
       if (x * _currentAtlas.tileWidth >= widget.currentSprite.image.width) {
         x = 0;
         y++;

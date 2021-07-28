@@ -68,7 +68,7 @@ class SetSelectionAction extends SlicesAction<FireAtlasState> {
 
   SetSelectionAction({
     required BaseSelection selection,
-  }): this.selections = [selection];
+  }) : this.selections = [selection];
 
   SetSelectionAction.multiple({
     required this.selections,
