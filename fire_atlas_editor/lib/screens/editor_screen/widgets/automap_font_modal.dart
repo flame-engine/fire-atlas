@@ -64,6 +64,12 @@ class _AutoMapFontModalState extends State<AutoMapFontModal> {
     int y = 0;
 
     _controller.text.characters.forEach((e) {
+
+      if (x * _currentAtlas.tileWidth >= widget.currentSprite.image.width) {
+        x = 0;
+        y++;
+      }
+
       final selection = SpriteSelection(
         info: Selection(
           id: e,
@@ -119,7 +125,6 @@ class _AutoMapFontModalState extends State<AutoMapFontModal> {
           ),
           SizedBox(height: 20),
           FSubtitleTitle(title: 'Preview'),
-          SizedBox(height: 40),
           Expanded(
               child: CustomPaint(
             painter: _AutoMapPreviewPainter(
@@ -166,7 +171,7 @@ class _AutoMapPreviewPainter extends CustomPainter {
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2;
 
-  final TextConfig _config = TextConfig(fontSize: 10, color: _paint.color);
+  final TextConfig _config = TextConfig(fontSize: 8, color: _paint.color);
 
   final Sprite sprite;
   final List<SpriteSelection> selections;
@@ -205,8 +210,8 @@ class _AutoMapPreviewPainter extends CustomPainter {
         canvas,
         selection.id,
         Vector2(
-          rect.right - _config.fontSize / 2,
-          rect.top - _config.fontSize - 1,
+          rect.left + 2,
+          rect.top + 2,
         ),
       );
     });
