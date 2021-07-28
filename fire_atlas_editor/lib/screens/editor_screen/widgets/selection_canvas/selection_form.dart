@@ -41,7 +41,7 @@ class _SelectionFormState extends State<SelectionForm> {
   bool _animationLoop = true;
 
   @override
-  initState() {
+  void initState() {
     super.initState();
 
     if (widget.editingSelection != null) {
@@ -70,13 +70,15 @@ class _SelectionFormState extends State<SelectionForm> {
     final w = (selectionEnd.dx - selectionStart.dx).toInt();
     final h = (selectionEnd.dy - selectionStart.dy).toInt();
 
-    return Selection(
+    final selection = Selection(
       id: selectionNameController.text,
       x: selectionStart.dx.toInt(),
       y: selectionStart.dy.toInt(),
       w: w,
       h: h,
     );
+
+    return selection;
   }
 
   void _createSprite() {

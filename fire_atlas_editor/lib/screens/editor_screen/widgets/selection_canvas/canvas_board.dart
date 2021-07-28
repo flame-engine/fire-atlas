@@ -1,3 +1,4 @@
+import 'package:fire_atlas_editor/screens/editor_screen/widgets/automap_font_modal.dart';
 import 'package:slices/slices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
@@ -156,6 +157,17 @@ class CanvasBoardState extends State<CanvasBoard> {
     }
   }
 
+  void _autoMapFont() {
+    final _store = SlicesProvider.of<FireAtlasState>(context);
+    _store.dispatch(
+      OpenEditorModal(
+        AutoMapFontModal(currentSprite: widget.sprite),
+        800,
+        600,
+      ),
+    );
+  }
+
   @override
   Widget build(ctx) {
     List<Widget> children = [];
@@ -193,6 +205,11 @@ class CanvasBoardState extends State<CanvasBoard> {
                 iconData: Icons.add_box,
                 onPress: _createItem,
                 tooltip: 'Create selection',
+              ),
+              FIconButton(
+                iconData: Icons.font_download,
+                onPress: _autoMapFont,
+                tooltip: 'Auto map bitmap font',
               ),
             ],
           ),
