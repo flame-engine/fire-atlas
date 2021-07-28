@@ -1,3 +1,5 @@
+import 'package:fire_atlas_editor/store/actions/atlas_actions.dart';
+import 'package:fire_atlas_editor/store/actions/editor_actions.dart';
 import 'package:fire_atlas_editor/store/store.dart';
 import 'package:fire_atlas_editor/widgets/button.dart';
 import 'package:fire_atlas_editor/widgets/text.dart';
@@ -65,14 +67,15 @@ class _AutoMapFontModalState extends State<AutoMapFontModal> {
       final selection = SpriteSelection(
         info: Selection(
           id: e,
-          x: (x * _currentAtlas.tileWidth).toInt(),
-          y: (y * _currentAtlas.tileHeight).toInt(),
-          w: _currentAtlas.tileWidth.toInt(),
-          h: _currentAtlas.tileHeight.toInt(),
+          x: x,
+          y: y,
+          w: 0,
+          h: 0,
         ),
       );
 
       x++;
+
       _selections.add(selection);
     });
 
@@ -98,29 +101,59 @@ class _AutoMapFontModalState extends State<AutoMapFontModal> {
           ),
           SizedBox(height: 20),
           Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                FButton(
-                    label: 'Lower case letters',
-                    onSelect: () {
-                      _controller.text += _lowcaseLetters;
-                    },
-                ),
-                FButton(
-                    label: 'Upper case letters',
-                    onSelect: () {
-                      _controller.text += _upcaseLetters;
-                    },
-                ),
-              ],
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              FButton(
+                label: 'Lower case letters',
+                onSelect: () {
+                  _controller.text += _lowcaseLetters;
+                },
+              ),
+              FButton(
+                label: 'Upper case letters',
+                onSelect: () {
+                  _controller.text += _upcaseLetters;
+                },
+              ),
+            ],
           ),
-          Text('Preview'),
+          SizedBox(height: 20),
+          FSubtitleTitle(title: 'Preview'),
           SizedBox(height: 40),
           Expanded(
               child: CustomPaint(
             painter: _AutoMapPreviewPainter(
-                widget.currentSprite, _currentSelections),
+              widget.currentSprite,
+              _currentSelections,
+              _currentAtlas.tileWidth,
+              _currentAtlas.tileHeight,
+            ),
           )),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FButton(
+                label: 'Cancel',
+                onSelect: () {
+                  _store.dispatch(CloseEditorModal());
+                },
+              ),
+              const SizedBox(width: 20),
+              FButton(
+                label: 'Confirm',
+                selected: true,
+                onSelect: () {
+                  _store.dispatch(
+                    SetSelectionAction.multiple(
+                      selections: _currentSelections,
+                    ),
+                  );
+                  _store.dispatch(CloseEditorModal());
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
         ],
       ),
     );
@@ -138,7 +171,15 @@ class _AutoMapPreviewPainter extends CustomPainter {
   final Sprite sprite;
   final List<SpriteSelection> selections;
 
-  _AutoMapPreviewPainter(this.sprite, this.selections);
+  final double tileWidth;
+  final double tileHeight;
+
+  _AutoMapPreviewPainter(
+    this.sprite,
+    this.selections,
+    this.tileWidth,
+    this.tileHeight,
+  );
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -153,10 +194,10 @@ class _AutoMapPreviewPainter extends CustomPainter {
 
     selections.forEach((selection) {
       final rect = Rect.fromLTWH(
-        selection.x.toDouble(),
-        selection.y.toDouble(),
-        selection.w.toDouble(),
-        selection.h.toDouble(),
+        selection.x.toDouble() * tileWidth,
+        selection.y.toDouble() * tileHeight,
+        (selection.w.toDouble() * tileWidth) + tileWidth,
+        (selection.h.toDouble() * tileHeight) + tileHeight,
       );
 
       canvas.drawRect(rect, _paint);

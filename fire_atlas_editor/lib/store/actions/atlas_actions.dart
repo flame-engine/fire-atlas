@@ -64,21 +64,27 @@ class UpdateAtlasImageAction extends AsyncSlicesAction<FireAtlasState> {
 }
 
 class SetSelectionAction extends SlicesAction<FireAtlasState> {
-  final BaseSelection selection;
+  final List<BaseSelection> selections;
 
   SetSelectionAction({
-    required this.selection,
+    required BaseSelection selection,
+  }): this.selections = [selection];
+
+  SetSelectionAction.multiple({
+    required this.selections,
   });
 
   @override
   FireAtlasState perform(_, state) {
     final atlas = state.currentAtlas;
-    if (atlas != null) {
-      atlas.selections[selection.id] = selection;
+    if (atlas != null && selections.length > 0) {
+      for (var selection in selections) {
+        atlas.selections[selection.id] = selection;
+      }
 
       return state.copyWith(
         hasChanges: true,
-        selectedSelection: Nullable(selection),
+        selectedSelection: Nullable(selections.last),
         loadedProject: Nullable(
           state.loadedProject.value?.copyWith(project: atlas),
         ),
