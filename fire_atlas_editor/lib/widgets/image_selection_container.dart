@@ -36,7 +36,7 @@ class ImageSelectionContainer extends StatelessWidget {
             margin: margin,
             child: imageData != null
                 ? FutureBuilder<Image>(
-                    // todo image name
+                    // TODO(erick): image name
                     future: Flame.images.fromBase64('', imageData!),
                     builder: (ctx, snapshot) {
                       if (snapshot.hasData) {
