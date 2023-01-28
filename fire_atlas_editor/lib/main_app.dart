@@ -1,12 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:fire_atlas_editor/screens/editor_screen/editor_screen.dart';
+import 'package:fire_atlas_editor/screens/open_screen/open_screen.dart';
+import 'package:fire_atlas_editor/store/store.dart';
+import 'package:fire_atlas_editor/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:slices/slices.dart';
-
-import './screens/open_screen/open_screen.dart';
-import './screens/editor_screen/editor_screen.dart';
-
-import './store/store.dart';
-import './theme.dart';
 
 class _FireAtlasAppSlice extends Equatable {
   final ThemeMode currentTheme;
@@ -21,9 +19,10 @@ class _FireAtlasAppSlice extends Equatable {
 class FireAtlasApp extends StatelessWidget {
   final SlicesStore<FireAtlasState> store;
 
-  FireAtlasApp({
+  const FireAtlasApp({
+    Key? key,
     required this.store,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +36,9 @@ class FireAtlasApp extends StatelessWidget {
             theme: theme,
             darkTheme: darkTheme,
             themeMode: slice.currentTheme,
-            home: OpenScreen(),
+            home: const OpenScreen(),
             routes: {
-              '/editor': (_) => EditorScreen(),
+              '/editor': (_) => const EditorScreen(),
             },
           );
         },

@@ -1,16 +1,13 @@
 import 'package:fire_atlas_editor/screens/editor_screen/widgets/automap_font_modal.dart';
-import 'package:slices/slices.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
+import 'package:fire_atlas_editor/screens/editor_screen/widgets/selection_canvas/canvas_sprite.dart';
+import 'package:fire_atlas_editor/screens/editor_screen/widgets/selection_canvas/selection_form.dart';
+import 'package:fire_atlas_editor/store/actions/editor_actions.dart';
+import 'package:fire_atlas_editor/store/store.dart';
+import 'package:fire_atlas_editor/widgets/icon_button.dart';
 import 'package:flame/sprite.dart';
-
-import '../../../../widgets/icon_button.dart';
-
-import './canvas_sprite.dart';
-import './selection_form.dart';
-
-import '../../../../store/store.dart';
-import '../../../../store/actions/editor_actions.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:slices/slices.dart';
 
 enum CanvasTools {
   SELECTION,
@@ -23,12 +20,13 @@ class CanvasBoard extends StatefulWidget {
   final double tileWidth;
   final double tileHeight;
 
-  CanvasBoard({
+  const CanvasBoard({
+    Key? key,
     required this.sprite,
     required this.size,
     required this.tileWidth,
     required this.tileHeight,
-  });
+  }) : super(key: key);
 
   @override
   State createState() => CanvasBoardState();
@@ -76,9 +74,8 @@ class CanvasBoardState extends State<CanvasBoard> {
   }
 
   Offset _calculateIndexClick(Offset offset) {
-    final int x =
-        ((offset.dx - _translateX) / (widget.tileWidth * _scale)).floor();
-    final int y =
+    final x = ((offset.dx - _translateX) / (widget.tileWidth * _scale)).floor();
+    final y =
         ((offset.dy - _translateY) / (widget.tileHeight * _scale)).floor();
 
     return Offset(x.toDouble(), y.toDouble());
@@ -141,19 +138,23 @@ class CanvasBoardState extends State<CanvasBoard> {
   void _createItem() {
     final _store = SlicesProvider.of<FireAtlasState>(context);
     if (_selectionStart != null && _selectionEnd != null) {
-      _store.dispatch(OpenEditorModal(
-        SelectionForm(
-          selectionStart: _selectionStart!,
-          selectionEnd: _selectionEnd!,
+      _store.dispatch(
+        OpenEditorModal(
+          SelectionForm(
+            selectionStart: _selectionStart,
+            selectionEnd: _selectionEnd,
+          ),
+          400,
+          600,
         ),
-        400,
-        600,
-      ));
+      );
     } else {
-      _store.dispatch(CreateMessageAction(
-        type: MessageType.ERROR,
-        message: 'Nothing is selected',
-      ));
+      _store.dispatch(
+        CreateMessageAction(
+          type: MessageType.ERROR,
+          message: 'Nothing is selected',
+        ),
+      );
     }
   }
 
@@ -169,96 +170,91 @@ class CanvasBoardState extends State<CanvasBoard> {
   }
 
   @override
-  Widget build(ctx) {
-    List<Widget> children = [];
-
-    children.add(
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              FIconButton(
-                onPress: () =>
-                    setState(() => _currentTool = CanvasTools.SELECTION),
-                iconData: Icons.select_all,
-                disabled: _currentTool == CanvasTools.SELECTION,
-                tooltip: 'Selection tool',
-              ),
-              FIconButton(
-                onPress: () => setState(() => _currentTool = CanvasTools.MOVE),
-                iconData: Icons.open_with,
-                disabled: _currentTool == CanvasTools.MOVE,
-                tooltip: 'Move tool',
-              ),
-              FIconButton(
-                iconData: Icons.zoom_in,
-                onPress: _zoomIn,
-                tooltip: 'Zoom in',
-              ),
-              FIconButton(
-                iconData: Icons.zoom_out,
-                onPress: _zoomOut,
-                tooltip: 'Zoom out',
-              ),
-              FIconButton(
-                iconData: Icons.add_box,
-                onPress: _createItem,
-                tooltip: 'Create selection',
-              ),
-              FIconButton(
-                iconData: Icons.font_download,
-                onPress: _autoMapFont,
-                tooltip: 'Auto map bitmap font',
-              ),
-            ],
-          ),
-          Expanded(
-            child: Listener(
-              onPointerSignal: (s) {
-                if (s is PointerScrollEvent) {
-                  setState(() {
-                    _translateX += s.scrollDelta.dx;
-                    _translateY += s.scrollDelta.dy;
-                  });
-                }
-              },
-              child: MouseRegion(
-                cursor: _currentTool == CanvasTools.MOVE
-                    ? _dragStart != null
-                        ? SystemMouseCursors.grabbing
-                        : SystemMouseCursors.grab
-                    : SystemMouseCursors.basic,
-                child: GestureDetector(
-                  child: ClipRect(
-                    child: CanvasSprite(
-                      sprite: widget.sprite,
-                      translateX: _translateX,
-                      translateY: _translateY,
-                      scale: _scale,
-                      tileWidth: widget.tileWidth,
-                      tileHeight: widget.tileHeight,
-                      selectionStart: _selectionStart,
-                      selectionEnd: _selectionEnd,
+  Widget build(BuildContext ctx) {
+    return Stack(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                FIconButton(
+                  onPress: () =>
+                      setState(() => _currentTool = CanvasTools.SELECTION),
+                  iconData: Icons.select_all,
+                  disabled: _currentTool == CanvasTools.SELECTION,
+                  tooltip: 'Selection tool',
+                ),
+                FIconButton(
+                  onPress: () =>
+                      setState(() => _currentTool = CanvasTools.MOVE),
+                  iconData: Icons.open_with,
+                  disabled: _currentTool == CanvasTools.MOVE,
+                  tooltip: 'Move tool',
+                ),
+                FIconButton(
+                  iconData: Icons.zoom_in,
+                  onPress: _zoomIn,
+                  tooltip: 'Zoom in',
+                ),
+                FIconButton(
+                  iconData: Icons.zoom_out,
+                  onPress: _zoomOut,
+                  tooltip: 'Zoom out',
+                ),
+                FIconButton(
+                  iconData: Icons.add_box,
+                  onPress: _createItem,
+                  tooltip: 'Create selection',
+                ),
+                FIconButton(
+                  iconData: Icons.font_download,
+                  onPress: _autoMapFont,
+                  tooltip: 'Auto map bitmap font',
+                ),
+              ],
+            ),
+            Expanded(
+              child: Listener(
+                onPointerSignal: (s) {
+                  if (s is PointerScrollEvent) {
+                    setState(() {
+                      _translateX += s.scrollDelta.dx;
+                      _translateY += s.scrollDelta.dy;
+                    });
+                  }
+                },
+                child: MouseRegion(
+                  cursor: _currentTool == CanvasTools.MOVE
+                      ? _dragStart != null
+                          ? SystemMouseCursors.grabbing
+                          : SystemMouseCursors.grab
+                      : SystemMouseCursors.basic,
+                  child: GestureDetector(
+                    onPanStart: _handleMoveStart,
+                    onPanUpdate: _handleMove,
+                    onPanEnd: (details) {
+                      _handleMoveEnd();
+                    },
+                    child: ClipRect(
+                      child: CanvasSprite(
+                        sprite: widget.sprite,
+                        translateX: _translateX,
+                        translateY: _translateY,
+                        scale: _scale,
+                        tileWidth: widget.tileWidth,
+                        tileHeight: widget.tileHeight,
+                        selectionStart: _selectionStart,
+                        selectionEnd: _selectionEnd,
+                      ),
                     ),
                   ),
-                  onPanStart: (details) {
-                    _handleMoveStart(details);
-                  },
-                  onPanUpdate: (details) {
-                    _handleMove(details);
-                  },
-                  onPanEnd: (details) {
-                    _handleMoveEnd();
-                  },
                 ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      ],
     );
-
-    return Stack(children: children);
   }
 }

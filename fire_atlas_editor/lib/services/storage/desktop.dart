@@ -1,14 +1,14 @@
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:file_selector/file_selector.dart';
+import 'package:fire_atlas_editor/services/storage/storage.dart';
 import 'package:fire_atlas_editor/store/store.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import './storage.dart';
-
 class FireAtlasStorage extends FireAtlasStorageApi {
+  @override
   Future<LoadedProjectEntry> loadProject(String path) async {
     final file = File(path);
     final raw = await file.readAsBytes();
@@ -16,6 +16,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
     return LoadedProjectEntry(path, atlas);
   }
 
+  @override
   Future<void> saveProject(LoadedProjectEntry entry) async {
     final path = entry.path;
     if (path == null) {
@@ -25,17 +26,23 @@ class FireAtlasStorage extends FireAtlasStorageApi {
     await file.writeAsBytes(entry.project.serialize());
   }
 
+  @override
   Future<List<LastProjectEntry>> lastUsedProjects() async {
     final prefs = await SharedPreferences.getInstance();
 
     return prefs
         .getKeys()
         .where((k) => k.startsWith('PROJECT_'))
-        .map((k) => LastProjectEntry(
-            prefs.getString(k)!, k.replaceFirst('PROJECT_', '')))
+        .map(
+          (k) => LastProjectEntry(
+            prefs.getString(k)!,
+            k.replaceFirst('PROJECT_', ''),
+          ),
+        )
         .toList();
   }
 
+  @override
   Future<void> rememberProject(LoadedProjectEntry entry) async {
     final path = entry.path;
     if (path == null) {
@@ -45,15 +52,17 @@ class FireAtlasStorage extends FireAtlasStorageApi {
     prefs.setString('PROJECT_${entry.project.id}', path);
   }
 
+  @override
   Future<LoadedProjectEntry> selectProject() async {
-    final typeGroup = XTypeGroup(label: 'fire atlas', extensions: ['fa']);
+    const typeGroup = XTypeGroup(label: 'fire atlas', extensions: ['fa']);
     final file = await _selectDialog(typeGroup);
     final bytes = await file.readAsBytes();
     final atlas = FireAtlas.deserialize(bytes);
     return LoadedProjectEntry(file.path, atlas);
   }
 
-  Future<String> selectNewProjectPath(atlas) async {
+  @override
+  Future<String> selectNewProjectPath(FireAtlas atlas) async {
     final file = await getSavePath(suggestedName: '${atlas.id}.fa');
     if (file == null) {
       throw 'Nothing selected';
@@ -61,6 +70,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
     return file;
   }
 
+  @override
   Future<String> selectFile() async {
     final file = await _selectDialog();
     final bytes = await file.readAsBytes();
@@ -68,7 +78,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   }
 
   Future<XFile> _selectDialog([XTypeGroup? typeGroup]) async {
-    final group = typeGroup ?? XTypeGroup();
+    final group = typeGroup ?? const XTypeGroup();
     final file = await openFile(acceptedTypeGroups: [group]);
     if (file == null) {
       throw 'Not file selected';

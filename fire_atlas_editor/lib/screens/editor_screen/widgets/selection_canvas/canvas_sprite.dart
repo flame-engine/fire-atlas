@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flame/sprite.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/sprite.dart';
+import 'package:flutter/material.dart';
 
 class CanvasSprite extends StatelessWidget {
   final Sprite sprite;
@@ -12,7 +12,8 @@ class CanvasSprite extends StatelessWidget {
   final Offset? selectionStart;
   final Offset? selectionEnd;
 
-  CanvasSprite({
+  const CanvasSprite({
+    Key? key,
     required this.sprite,
     required this.translateX,
     required this.translateY,
@@ -21,30 +22,31 @@ class CanvasSprite extends StatelessWidget {
     required this.tileHeight,
     this.selectionStart,
     this.selectionEnd,
-  });
+  }) : super(key: key);
 
   @override
-  Widget build(ctx) {
+  Widget build(BuildContext ctx) {
     return Container(
       child: CustomPaint(
-          painter: _CanvasSpritePainer(
-        sprite,
-        translateX,
-        translateY,
-        scale,
-        tileWidth,
-        tileHeight,
-        selectionStart,
-        selectionEnd,
-        Theme.of(ctx).primaryColor,
-        Theme.of(ctx).dividerColor,
-        Theme.of(ctx).brightness == Brightness.dark,
-      )),
+        painter: _CanvasSpritePainter(
+          sprite,
+          translateX,
+          translateY,
+          scale,
+          tileWidth,
+          tileHeight,
+          selectionStart,
+          selectionEnd,
+          Theme.of(ctx).primaryColor,
+          Theme.of(ctx).dividerColor,
+          Theme.of(ctx).brightness == Brightness.dark,
+        ),
+      ),
     );
   }
 }
 
-class _CanvasSpritePainer extends CustomPainter {
+class _CanvasSpritePainter extends CustomPainter {
   final Sprite _sprite;
   final double _x;
   final double _y;
@@ -55,10 +57,10 @@ class _CanvasSpritePainer extends CustomPainter {
   final Offset? _selectionEnd;
   final bool _darkMode;
 
-  Color _selectionColor;
-  Color _gridTileColor;
+  final Color _selectionColor;
+  final Color _gridTileColor;
 
-  _CanvasSpritePainer(
+  _CanvasSpritePainter(
     this._sprite,
     this._x,
     this._y,
@@ -72,18 +74,18 @@ class _CanvasSpritePainer extends CustomPainter {
     this._darkMode,
   );
 
-  Color _transformColor(Color color, double ammount) {
+  Color _transformColor(Color color, double amount) {
     final raw = color.withOpacity(1);
 
     if (_darkMode) {
-      return raw.darken(ammount);
+      return raw.darken(amount);
     } else {
-      return raw.brighten(ammount);
+      return raw.brighten(amount);
     }
   }
 
   @override
-  bool shouldRepaint(_CanvasSpritePainer old) =>
+  bool shouldRepaint(_CanvasSpritePainter old) =>
       old._sprite != _sprite ||
       old._x != _x ||
       old._y != _y ||
@@ -131,9 +133,14 @@ class _CanvasSpritePainer extends CustomPainter {
 
       for (var x = 0.0; x < columnCount; x++) {
         canvas.drawRect(
-            Rect.fromLTWH(
-                x * _tileWidth, y * _tileHeight, _tileWidth, _tileHeight),
-            x % 2 == 0 ? p1 : p2);
+          Rect.fromLTWH(
+            x * _tileWidth,
+            y * _tileHeight,
+            _tileWidth,
+            _tileHeight,
+          ),
+          x % 2 == 0 ? p1 : p2,
+        );
       }
     }
 
@@ -144,13 +151,13 @@ class _CanvasSpritePainer extends CustomPainter {
     final _start = _selectionStart;
     final _end = _selectionEnd;
     if (_start != null && _end != null) {
-      final size = _end - _start + Offset(1, 1);
+      final size = _end - _start + const Offset(1, 1);
       canvas.drawRect(
         Rect.fromLTWH(
-          (_start.dx * _tileWidth),
-          (_start.dy * _tileHeight),
-          (size.dx * _tileWidth),
-          (size.dy * _tileHeight),
+          _start.dx * _tileWidth,
+          _start.dy * _tileHeight,
+          size.dx * _tileWidth,
+          size.dy * _tileHeight,
         ),
         Paint()
           ..style = PaintingStyle.stroke

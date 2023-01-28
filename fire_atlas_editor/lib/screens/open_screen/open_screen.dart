@@ -1,24 +1,24 @@
 import 'dart:io';
 
+import 'package:fire_atlas_editor/screens/open_screen/widgets/atlas_options_container.dart';
+import 'package:fire_atlas_editor/screens/open_screen/widgets/support_container.dart';
+import 'package:fire_atlas_editor/screens/widgets/scaffold.dart';
 import 'package:fire_atlas_editor/screens/widgets/toggle_theme_button.dart';
-import 'package:slices/slices.dart';
+import 'package:fire_atlas_editor/services/storage/storage.dart';
+import 'package:fire_atlas_editor/store/actions/atlas_actions.dart';
+import 'package:fire_atlas_editor/store/actions/editor_actions.dart';
+import 'package:fire_atlas_editor/store/store.dart';
+import 'package:fire_atlas_editor/widgets/button.dart';
+import 'package:fire_atlas_editor/widgets/container.dart';
+import 'package:fire_atlas_editor/widgets/icon_button.dart';
+import 'package:fire_atlas_editor/widgets/text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '../../store/store.dart';
-import '../../store/actions/atlas_actions.dart';
-import '../../store/actions/editor_actions.dart';
-import '../../services/storage/storage.dart';
-import '../../widgets/icon_button.dart';
-import '../../widgets/button.dart';
-import '../../widgets/container.dart';
-import '../widgets/scaffold.dart';
-import '../../widgets/text.dart';
-
-import './widgets/atlas_options_container.dart';
-import './widgets/support_container.dart';
+import 'package:slices/slices.dart';
 
 class OpenScreen extends StatefulWidget {
+  const OpenScreen({Key? key}) : super(key: key);
+
   @override
   State createState() => _OpenScreenState();
 }
@@ -42,7 +42,7 @@ class _OpenScreenState extends State<OpenScreen> {
     });
   }
 
-  void _importAtlas() async {
+  Future<void> _importAtlas() async {
     final _store = SlicesProvider.of<FireAtlasState>(context);
 
     try {
@@ -67,68 +67,72 @@ class _OpenScreenState extends State<OpenScreen> {
 
   void _newAtlas() {
     final _store = SlicesProvider.of<FireAtlasState>(context);
-    _store.dispatch(OpenEditorModal(
-      AtlasOptionsContainer(
-        onConfirm: (
-          String atlasName,
-          String imageData,
-          double tileWidth,
-          double tileHeight,
-        ) async {
-          _store.dispatch(CloseEditorModal());
+    _store.dispatch(
+      OpenEditorModal(
+        AtlasOptionsContainer(
+          onConfirm: (
+            String atlasName,
+            String imageData,
+            double tileWidth,
+            double tileHeight,
+          ) async {
+            _store.dispatch(CloseEditorModal());
 
-          await _store.dispatchAsync(
-            CreateAtlasAction(
-              id: atlasName,
-              imageData: imageData,
-              tileWidth: tileWidth,
-              tileHeight: tileHeight,
-            ),
-          );
-          Navigator.of(context).pushNamed('/editor');
-        },
-        onCancel: () {
-          _store.dispatch(CloseEditorModal());
-        },
+            await _store.dispatchAsync(
+              CreateAtlasAction(
+                id: atlasName,
+                imageData: imageData,
+                tileWidth: tileWidth,
+                tileHeight: tileHeight,
+              ),
+            );
+            Navigator.of(context).pushNamed('/editor');
+          },
+          onCancel: () {
+            _store.dispatch(CloseEditorModal());
+          },
+        ),
+        600,
+        600,
       ),
-      600,
-      600,
-    ));
+    );
   }
 
   @override
   Widget build(_) {
     final _store = SlicesProvider.of<FireAtlasState>(context);
-    List<Widget> children = [];
+    final children = <Widget>[];
+    final containerChildren = <Widget>[];
 
-    List<Widget> containerChildren = [];
-
-    containerChildren.add(FTitle(title: 'Recent projects:'));
+    containerChildren.add(const FTitle(title: 'Recent projects:'));
 
     if (_projects.isEmpty) {
       containerChildren
-          .add(Center(child: FLabel(label: 'No projects created yet')));
+          .add(const Center(child: FLabel(label: 'No projects created yet')));
     }
 
     _projects.forEach((p) {
       containerChildren.add(
         Container(
-          margin: EdgeInsets.only(left: 10, right: 10, top: 5),
-          child: Column(children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(p.name),
-                FIconButton(
+          margin: const EdgeInsets.only(left: 10, right: 10, top: 5),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(p.name),
+                  FIconButton(
                     iconData: Icons.folder_open,
                     onPress: () async {
                       await _store.dispatchAsync(LoadAtlasAction(p.path));
                       Navigator.of(context).pushNamed('/editor');
-                    }),
-              ],
-            ),
-            Divider(),
-          ]),
+                    },
+                  ),
+                ],
+              ),
+              const Divider(),
+            ],
+          ),
         ),
       );
     });
@@ -165,23 +169,26 @@ class _OpenScreenState extends State<OpenScreen> {
                         FContainer(
                           width: 400,
                           child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                    child: SingleChildScrollView(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: SingleChildScrollView(
                                   child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: containerChildren),
-                                )),
-                                _Buttons(
-                                  importAtlas: _importAtlas,
-                                  newAtlas: _newAtlas,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: containerChildren,
+                                  ),
                                 ),
-                                SizedBox(height: 20),
-                              ]),
+                              ),
+                              _Buttons(
+                                importAtlas: _importAtlas,
+                                newAtlas: _newAtlas,
+                              ),
+                              const SizedBox(height: 20),
+                            ],
+                          ),
                         ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),
@@ -196,7 +203,7 @@ class _OpenScreenState extends State<OpenScreen> {
               onSelect: () {
                 _store.dispatch(
                   OpenEditorModal(
-                    SupportContainer(),
+                    const SupportContainer(),
                     500,
                     300,
                   ),
@@ -204,7 +211,7 @@ class _OpenScreenState extends State<OpenScreen> {
               },
             ),
           ),
-          Positioned(
+          const Positioned(
             top: 10,
             right: 10,
             child: ToggleThemeButton(),
@@ -222,7 +229,7 @@ class _Buttons extends StatelessWidget {
   final VoidCallback importAtlas;
   final VoidCallback newAtlas;
 
-  _Buttons({
+  const _Buttons({
     required this.importAtlas,
     required this.newAtlas,
   });
@@ -236,7 +243,7 @@ class _Buttons extends StatelessWidget {
           label: 'Open atlas',
           onSelect: importAtlas,
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         FButton(
           label: 'New atlas',
           onSelect: newAtlas,

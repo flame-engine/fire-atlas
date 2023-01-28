@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:fire_atlas_editor/main_app.dart';
 import 'package:fire_atlas_editor/services/storage/storage.dart';
+import 'package:fire_atlas_editor/store/store.dart';
+import 'package:flutter/material.dart';
 import 'package:slices/slices.dart';
-
-import './store/store.dart';
-import './main_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

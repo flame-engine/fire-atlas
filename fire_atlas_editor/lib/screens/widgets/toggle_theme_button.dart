@@ -1,10 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:fire_atlas_editor/store/actions/editor_actions.dart';
+import 'package:fire_atlas_editor/store/store.dart';
 import 'package:fire_atlas_editor/widgets/icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:slices/slices.dart';
-
-import '../../store/store.dart';
 
 class _ToggleThemeButtonSlice extends Equatable {
   final ThemeMode currentTheme;
@@ -17,6 +16,8 @@ class _ToggleThemeButtonSlice extends Equatable {
 }
 
 class ToggleThemeButton extends StatelessWidget {
+  const ToggleThemeButton({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return SliceWatcher<FireAtlasState, _ToggleThemeButtonSlice>(

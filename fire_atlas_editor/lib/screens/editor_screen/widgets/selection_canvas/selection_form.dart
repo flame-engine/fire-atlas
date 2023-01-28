@@ -1,15 +1,13 @@
-import 'package:slices/slices.dart';
-import 'package:flutter/material.dart';
+import 'package:fire_atlas_editor/store/actions/atlas_actions.dart';
+import 'package:fire_atlas_editor/store/actions/editor_actions.dart';
+import 'package:fire_atlas_editor/store/store.dart';
+import 'package:fire_atlas_editor/utils/validators.dart';
+import 'package:fire_atlas_editor/widgets/button.dart';
+import 'package:fire_atlas_editor/widgets/input_text_row.dart';
+import 'package:fire_atlas_editor/widgets/text.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
-
-import '../../../../widgets/text.dart';
-import '../../../../widgets/button.dart';
-import '../../../../widgets/input_text_row.dart';
-
-import '../../../../utils/validators.dart';
-import '../../../../store/store.dart';
-import '../../../../store/actions/atlas_actions.dart';
-import '../../../../store/actions/editor_actions.dart';
+import 'package:flutter/material.dart';
+import 'package:slices/slices.dart';
 
 class SelectionForm extends StatefulWidget {
   final Offset? selectionStart;
@@ -17,11 +15,12 @@ class SelectionForm extends StatefulWidget {
 
   final AnimationSelection? editingSelection;
 
-  SelectionForm({
+  const SelectionForm({
+    Key? key,
     this.selectionStart,
     this.selectionEnd,
     this.editingSelection,
-  });
+  }) : super(key: key);
 
   @override
   State createState() => _SelectionFormState();
@@ -61,8 +60,12 @@ class _SelectionFormState extends State<SelectionForm> {
   }
 
   Selection _fillSelectionBaseValues() {
-    if (widget.selectionEnd == null) throw 'Selection end is null';
-    if (widget.selectionStart == null) throw 'Selection start is null';
+    if (widget.selectionEnd == null) {
+      throw 'Selection end is null';
+    }
+    if (widget.selectionStart == null) {
+      throw 'Selection start is null';
+    }
 
     final selectionEnd = widget.selectionEnd!;
     final selectionStart = widget.selectionStart!;
@@ -159,14 +162,17 @@ class _SelectionFormState extends State<SelectionForm> {
   }
 
   @override
-  Widget build(ctx) {
-    List<Widget> children = [];
+  Widget build(BuildContext ctx) {
+    final children = <Widget>[];
 
     children
-      ..add(SizedBox(height: 5))
-      ..add(FTitle(
-          title:
-              '${widget.editingSelection == null ? 'New' : 'Edit'} selection item'))
+      ..add(const SizedBox(height: 5))
+      ..add(
+        FTitle(
+          title: '${widget.editingSelection == null ? 'New' : 'Edit'} '
+              'selection item',
+        ),
+      )
       ..add(
         InputTextRow(
           label: 'Selection name:',
@@ -175,51 +181,53 @@ class _SelectionFormState extends State<SelectionForm> {
           autofocus: true,
         ),
       )
-      ..add(SizedBox(height: 10));
+      ..add(const SizedBox(height: 10));
 
     if (widget.editingSelection == null) {
       children
-        ..add(Text('Selection type'))
-        ..add(SizedBox(height: 10))
+        ..add(const Text('Selection type'))
+        ..add(const SizedBox(height: 10))
         ..add(
           Container(
-              width: 200,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    FButton(
-                      label: 'Sprite',
-                      selected: _selectionType == SelectionType.SPRITE,
-                      onSelect: () =>
-                          _chooseSelectionType(SelectionType.SPRITE),
-                    ),
-                    FButton(
-                      label: 'Animation',
-                      selected: _selectionType == SelectionType.ANIMATION,
-                      onSelect: () =>
-                          _chooseSelectionType(SelectionType.ANIMATION),
-                    ),
-                  ])),
+            width: 200,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                FButton(
+                  label: 'Sprite',
+                  selected: _selectionType == SelectionType.SPRITE,
+                  onSelect: () => _chooseSelectionType(SelectionType.SPRITE),
+                ),
+                FButton(
+                  label: 'Animation',
+                  selected: _selectionType == SelectionType.ANIMATION,
+                  onSelect: () => _chooseSelectionType(SelectionType.ANIMATION),
+                ),
+              ],
+            ),
+          ),
         );
     }
 
     if (_selectionType == SelectionType.SPRITE) {
       children
-        ..add(SizedBox(height: 20))
-        ..add(FButton(
-          label: 'Create sprite',
-          onSelect: _createSprite,
-        ));
+        ..add(const SizedBox(height: 20))
+        ..add(
+          FButton(
+            label: 'Create sprite',
+            onSelect: _createSprite,
+          ),
+        );
     } else if (_selectionType == SelectionType.ANIMATION) {
       children
-        ..add(SizedBox(height: 10))
+        ..add(const SizedBox(height: 10))
         ..add(
           InputTextRow(
             label: 'Frame count:',
             inputController: frameCountController,
           ),
         )
-        ..add(SizedBox(height: 10));
+        ..add(const SizedBox(height: 10));
 
       children
         ..add(
@@ -228,31 +236,37 @@ class _SelectionFormState extends State<SelectionForm> {
             inputController: stepTimeController,
           ),
         )
-        ..add(SizedBox(height: 20));
+        ..add(const SizedBox(height: 20));
 
       children
-        ..add(FLabel(label: 'Loop animation', fontSize: 12))
-        ..add(Checkbox(
+        ..add(const FLabel(label: 'Loop animation', fontSize: 12))
+        ..add(
+          Checkbox(
             value: _animationLoop,
             onChanged: (v) {
               if (v != null) {
                 setState(() => _animationLoop = v);
               }
-            }))
-        ..add(SizedBox(height: 20));
+            },
+          ),
+        )
+        ..add(const SizedBox(height: 20));
 
-      children.add(FButton(
-        label:
-            '${widget.editingSelection == null ? 'Create' : 'Save'} animation',
-        onSelect: _createAnimation,
-      ));
+      children.add(
+        FButton(
+          label: '${widget.editingSelection == null ? 'Create' : 'Save'} '
+              'animation',
+          onSelect: _createAnimation,
+        ),
+      );
     }
 
     return Container(
-        width: 400,
-        padding: EdgeInsets.only(left: 20, right: 20),
-        child: Column(
-          children: children,
-        ));
+      width: 400,
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: Column(
+        children: children,
+      ),
+    );
   }
 }

@@ -1,3 +1,8 @@
+include: package:flame_lint/analysis_options.yaml
+
 linter:
   rules:
+    avoid_catches_without_on_clauses: false
     avoid_web_libraries_in_flutter: false
+    avoid_print: false
+    constant_identifier_names: false

@@ -4,16 +4,17 @@ class FLabel extends StatelessWidget {
   final String label;
   final double? fontSize;
 
-  FLabel({
+  const FLabel({
+    Key? key,
     required this.label,
     this.fontSize,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext ctx) {
     return Text(
       label,
-      style: Theme.of(ctx).textTheme.bodyText2?.copyWith(fontSize: fontSize),
+      style: Theme.of(ctx).textTheme.bodyMedium?.copyWith(fontSize: fontSize),
     );
   }
 }
@@ -22,7 +23,7 @@ class _FTitle extends StatelessWidget {
   final String title;
   final TextStyle? style;
 
-  _FTitle({
+  const _FTitle({
     required this.title,
     this.style,
   });
@@ -30,49 +31,53 @@ class _FTitle extends StatelessWidget {
   @override
   Widget build(BuildContext ctx) {
     return Container(
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(width: 2, color: Theme.of(ctx).dividerColor),
-          ),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(width: 2, color: Theme.of(ctx).dividerColor),
         ),
-        margin: EdgeInsets.only(
-          bottom: 25,
-          top: 5,
-          left: 5,
-          right: 5,
-        ),
-        child: Center(
-            child: Text(
+      ),
+      margin: const EdgeInsets.only(
+        bottom: 25,
+        top: 5,
+        left: 5,
+        right: 5,
+      ),
+      child: Center(
+        child: Text(
           title,
           style: style,
-        )));
+        ),
+      ),
+    );
   }
 }
 
 class FTitle extends StatelessWidget {
   final String title;
 
-  FTitle({
+  const FTitle({
+    Key? key,
     required this.title,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext ctx) => _FTitle(
         title: title,
-        style: Theme.of(ctx).textTheme.headline4,
+        style: Theme.of(ctx).textTheme.headlineMedium,
       );
 }
 
 class FSubtitleTitle extends StatelessWidget {
   final String title;
 
-  FSubtitleTitle({
+  const FSubtitleTitle({
+    Key? key,
     required this.title,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext ctx) => _FTitle(
         title: title,
-        style: Theme.of(ctx).textTheme.headline6,
+        style: Theme.of(ctx).textTheme.titleLarge,
       );
 }

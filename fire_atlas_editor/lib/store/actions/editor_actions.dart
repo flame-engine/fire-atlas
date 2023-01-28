@@ -1,9 +1,7 @@
 import 'package:fire_atlas_editor/services/storage/storage.dart';
+import 'package:fire_atlas_editor/store/store.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:slices/slices.dart';
-
-import '../../store/store.dart';
 
 class SetCanvasSelection extends SlicesAction<FireAtlasState> {
   final Rect selection;
@@ -11,7 +9,7 @@ class SetCanvasSelection extends SlicesAction<FireAtlasState> {
   SetCanvasSelection(this.selection);
 
   @override
-  FireAtlasState perform(_, state) {
+  FireAtlasState perform(_, FireAtlasState state) {
     return state.copyWith(
       canvasSelection: Nullable(selection),
     );
@@ -26,7 +24,7 @@ class OpenEditorModal extends SlicesAction<FireAtlasState> {
   OpenEditorModal(this.modal, this.width, [this.height]);
 
   @override
-  FireAtlasState perform(_, state) {
+  FireAtlasState perform(_, FireAtlasState state) {
     return state.copyWith(
       modal: Nullable(
         ModalState(
@@ -41,7 +39,7 @@ class OpenEditorModal extends SlicesAction<FireAtlasState> {
 
 class CloseEditorModal extends SlicesAction<FireAtlasState> {
   @override
-  FireAtlasState perform(_, state) {
+  FireAtlasState perform(_, FireAtlasState state) {
     return state.copyWith(modal: Nullable(null));
   }
 }
@@ -56,7 +54,7 @@ class CreateMessageAction extends SlicesAction<FireAtlasState> {
   });
 
   @override
-  FireAtlasState perform(_, state) {
+  FireAtlasState perform(_, FireAtlasState state) {
     final existent = state.messages.where((m) => m.message == message);
 
     final newList = state.messages.toList();
@@ -81,7 +79,7 @@ class DismissMessageAction extends SlicesAction<FireAtlasState> {
   });
 
   @override
-  FireAtlasState perform(_, state) {
+  FireAtlasState perform(_, FireAtlasState state) {
     final newList = state.messages.toList();
     newList.removeWhere((m) => m.message == message.message);
 
@@ -92,7 +90,9 @@ class DismissMessageAction extends SlicesAction<FireAtlasState> {
 class ToggleThemeAction extends AsyncSlicesAction<FireAtlasState> {
   @override
   Future<FireAtlasState> perform(
-      SlicesStore<FireAtlasState> store, FireAtlasState state) async {
+    SlicesStore<FireAtlasState> store,
+    FireAtlasState state,
+  ) async {
     final newTheme =
         state.currentTheme == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
 

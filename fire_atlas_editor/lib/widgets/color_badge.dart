@@ -1,22 +1,23 @@
-import 'package:flutter/material.dart';
 import 'package:flame/extensions.dart';
+import 'package:flutter/material.dart';
 
 class ColorBadge extends StatelessWidget {
   final String label;
   final Color color;
 
-  ColorBadge({
+  const ColorBadge({
+    Key? key,
     required this.label,
     required this.color,
-  });
+  }) : super(key: key);
 
   @override
-  Widget build(ctx) {
+  Widget build(BuildContext ctx) {
     final textColor = color.brighten(0.85);
 
     return Container(
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(5),
       color: color,
       child: Text(label, style: TextStyle(color: textColor)),
     );

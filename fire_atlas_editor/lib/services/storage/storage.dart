@@ -1,9 +1,9 @@
+import 'package:fire_atlas_editor/store/store.dart';
+import 'package:flame_fire_atlas/flame_fire_atlas.dart';
+
 export 'unsupported.dart'
     if (dart.library.html) 'web.dart'
     if (dart.library.io) 'desktop.dart';
-
-import 'package:fire_atlas_editor/store/store.dart';
-import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 const kThemeMode = 'THEME_MODE';
 

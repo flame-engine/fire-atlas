@@ -9,8 +9,8 @@ import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 import 'package:flutter/material.dart';
 import 'package:slices/slices.dart';
 
-const _lowcaseLetters = 'abcdefghijklmnopqrstuvwxyz';
-const _upcaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const _lowercaseLetters = 'abcdefghijklmnopqrstuvwxyz';
+const _uppercaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 class AutoMapFontModal extends StatefulWidget {
   final Sprite currentSprite;
@@ -37,9 +37,7 @@ class _AutoMapFontModalState extends State<AutoMapFontModal> {
     super.initState();
     _controller = TextEditingController();
 
-    _controller.addListener(() {
-      _calculateSelections();
-    });
+    _controller.addListener(_calculateSelections);
   }
 
   @override
@@ -60,8 +58,8 @@ class _AutoMapFontModalState extends State<AutoMapFontModal> {
   void _calculateSelections() {
     final _selections = <SpriteSelection>[];
 
-    int x = 0;
-    int y = 0;
+    var x = 0;
+    var y = 0;
 
     _controller.text.characters.forEach((e) {
       if (x * _currentAtlas.tileWidth >= widget.currentSprite.image.width) {
@@ -97,42 +95,43 @@ class _AutoMapFontModalState extends State<AutoMapFontModal> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FSubtitleTitle(title: 'Map Bitmap Font'),
-          SizedBox(height: 20),
+          const FSubtitleTitle(title: 'Map Bitmap Font'),
+          const SizedBox(height: 20),
           TextField(
             controller: _controller,
             autofocus: true,
-            decoration: InputDecoration(labelText: 'Characters'),
+            decoration: const InputDecoration(labelText: 'Characters'),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               FButton(
                 label: 'Lower case letters',
                 onSelect: () {
-                  _controller.text += _lowcaseLetters;
+                  _controller.text += _lowercaseLetters;
                 },
               ),
               FButton(
                 label: 'Upper case letters',
                 onSelect: () {
-                  _controller.text += _upcaseLetters;
+                  _controller.text += _uppercaseLetters;
                 },
               ),
             ],
           ),
-          SizedBox(height: 20),
-          FSubtitleTitle(title: 'Preview'),
+          const SizedBox(height: 20),
+          const FSubtitleTitle(title: 'Preview'),
           Expanded(
-              child: CustomPaint(
-            painter: _AutoMapPreviewPainter(
-              widget.currentSprite,
-              _currentSelections,
-              _currentAtlas.tileWidth,
-              _currentAtlas.tileHeight,
+            child: CustomPaint(
+              painter: _AutoMapPreviewPainter(
+                widget.currentSprite,
+                _currentSelections,
+                _currentAtlas.tileWidth,
+                _currentAtlas.tileHeight,
+              ),
             ),
-          )),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -165,12 +164,17 @@ class _AutoMapFontModalState extends State<AutoMapFontModal> {
 }
 
 class _AutoMapPreviewPainter extends CustomPainter {
-  static Paint _paint = Paint()
+  static final Paint _paint = Paint()
     ..color = Colors.red
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2;
 
-  final TextConfig _config = TextConfig(fontSize: 8, color: _paint.color);
+  final TextPaint _config = TextPaint(
+    style: TextStyle(
+      fontSize: 8,
+      color: _paint.color,
+    ),
+  );
 
   final Sprite sprite;
   final List<SpriteSelection> selections;
