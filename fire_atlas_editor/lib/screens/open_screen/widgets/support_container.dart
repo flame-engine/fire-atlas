@@ -6,7 +6,11 @@ class SupportContainer extends StatelessWidget {
   const SupportContainer({Key? key}) : super(key: key);
 
   Future<void> _open(String url) async {
+    // TODO(luan): fix
+    // ignore: deprecated_member_use
     if (await canLaunch(url)) {
+      // TODO(luan): fix
+      // ignore: deprecated_member_use
       await launch(url);
     } else {
       throw 'Could not launch $url';

@@ -54,7 +54,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
 
   @override
   Future<LoadedProjectEntry> selectProject() async {
-    final typeGroup = XTypeGroup(label: 'fire atlas', extensions: ['fa']);
+    const typeGroup = XTypeGroup(label: 'fire atlas', extensions: ['fa']);
     final file = await _selectDialog(typeGroup);
     final bytes = await file.readAsBytes();
     final atlas = FireAtlas.deserialize(bytes);
@@ -78,7 +78,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   }
 
   Future<XFile> _selectDialog([XTypeGroup? typeGroup]) async {
-    final group = typeGroup ?? XTypeGroup();
+    final group = typeGroup ?? const XTypeGroup();
     final file = await openFile(acceptedTypeGroups: [group]);
     if (file == null) {
       throw 'Not file selected';
