@@ -1,9 +1,10 @@
+import 'dart:convert';
+import 'dart:math';
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
-import 'dart:ui';
-import 'dart:convert';
-import 'dart:typed_data';
-import 'dart:math';
 
 Future<String> concatenateImages(
   String originalData,
@@ -22,13 +23,13 @@ Future<String> concatenateImages(
 
   if (placement != null) {
     if (placement.x < 0 || placement.y < 0) {
-      canvas.drawImage(newImage, Offset(0, 0), paint);
+      canvas.drawImage(newImage, Offset.zero, paint);
       final newX = newImage.width * placement.x * -1;
       final newY = newImage.height * placement.y * -1;
 
       canvas.drawImage(original, Offset(newX, newY), paint);
     } else {
-      canvas.drawImage(original, Offset(0, 0), paint);
+      canvas.drawImage(original, Offset.zero, paint);
 
       final newX = original.width * placement.x;
       final newY = original.height * placement.y;
@@ -36,7 +37,7 @@ Future<String> concatenateImages(
       canvas.drawImage(newImage, Offset(newX, newY), paint);
     }
   } else if (selection != null) {
-    canvas.drawImage(original, Offset(0, 0), paint);
+    canvas.drawImage(original, Offset.zero, paint);
     canvas.drawImageRect(
       newImage,
       Rect.fromLTWH(
@@ -52,18 +53,22 @@ Future<String> concatenateImages(
 
   final picture = recorder.endRecording();
   final finalImage = await picture.toImage(
-    max(original.width + (newImage.width * (placement?.x ?? 0)).abs().toInt(),
-        newImage.width),
-    max(original.height + (newImage.height * (placement?.y ?? 0)).abs().toInt(),
-        newImage.height),
+    max(
+      original.width + (newImage.width * (placement?.x ?? 0)).abs().toInt(),
+      newImage.width,
+    ),
+    max(
+      original.height + (newImage.height * (placement?.y ?? 0)).abs().toInt(),
+      newImage.height,
+    ),
   );
 
   final byteData = await finalImage.toByteData(format: ImageByteFormat.png);
   if (byteData == null) {
     throw 'Empty file generated';
   }
-  final Uint8List bytes = Uint8List.view(byteData.buffer);
+  final bytes = Uint8List.view(byteData.buffer);
 
-  final data = "data:image/png;base64,${base64Encode(bytes)}";
+  final data = 'data:image/png;base64,${base64Encode(bytes)}';
   return data;
 }

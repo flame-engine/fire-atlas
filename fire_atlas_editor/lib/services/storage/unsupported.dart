@@ -1,6 +1,5 @@
+import 'package:fire_atlas_editor/services/storage/storage.dart';
 import 'package:fire_atlas_editor/store/store.dart';
-
-import './storage.dart';
 
 class FireAtlasStorage extends FireAtlasStorageApi {
   @override
@@ -49,7 +48,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   }
 
   @override
-  Future<String> getConfig(String key, String defaulValue) {
+  Future<String> getConfig(String key, String defaultValue) {
     throw 'Unsupported';
   }
 }

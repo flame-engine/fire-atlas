@@ -1,21 +1,23 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:fire_atlas_editor/store/store.dart';
+import 'package:fire_atlas_editor/widgets/container.dart';
+import 'package:fire_atlas_editor/widgets/simple_animation_widget.dart';
+import 'package:fire_atlas_editor/widgets/simple_sprite_widget.dart';
+import 'package:fire_atlas_editor/widgets/text.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
+import 'package:flutter/material.dart';
 import 'package:slices/slices.dart';
-
-import '../../../widgets/text.dart';
-import '../../../widgets/container.dart';
-import '../../../widgets/simple_sprite_widget.dart';
-import '../../../widgets/simple_animation_widget.dart';
-
-import '../../../store/store.dart';
 
 class _PreviewSlice extends Equatable {
   final FireAtlas? currentAtlas;
   final BaseSelection? selectedSelection;
   final String? currentImage;
 
-  _PreviewSlice(this.currentAtlas, this.selectedSelection, this.currentImage);
+  const _PreviewSlice(
+    this.currentAtlas,
+    this.selectedSelection,
+    this.currentImage,
+  );
 
   _PreviewSlice.fromState(FireAtlasState state)
       : this(
@@ -30,24 +32,26 @@ class _PreviewSlice extends Equatable {
 }
 
 class Preview extends StatelessWidget {
+  const Preview({Key? key}) : super(key: key);
+
   @override
   Widget build(_) {
     return SliceWatcher<FireAtlasState, _PreviewSlice>(
       slicer: (state) => _PreviewSlice.fromState(state),
       builder: (ctx, store, slice) {
-        Widget child = Center(child: Text('Nothing selected'));
+        Widget child = const Center(child: Text('Nothing selected'));
         final currentAtlas = slice.currentAtlas!;
 
         if (store.state.selectedSelection != null) {
           if (store.state.selectedSelection is SpriteSelection) {
             child = SimpleSpriteWidget(
-                center: true,
-                sprite:
-                    currentAtlas.getSprite(store.state.selectedSelection!.id));
+              center: true,
+              sprite: currentAtlas.getSprite(store.state.selectedSelection!.id),
+            );
           } else if (slice.selectedSelection is AnimationSelection) {
             child = AnimationPlayerWidget(
-                animation:
-                    currentAtlas.getAnimation(slice.selectedSelection!.id));
+              animation: currentAtlas.getAnimation(slice.selectedSelection!.id),
+            );
           }
         }
 
@@ -55,10 +59,10 @@ class Preview extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              FSubtitleTitle(title: 'Preview'),
+              const FSubtitleTitle(title: 'Preview'),
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: child,
                 ),
               ),

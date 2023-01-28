@@ -7,13 +7,14 @@ class FIconButton extends StatefulWidget {
   final Color? color;
   final String? tooltip;
 
-  FIconButton({
+  const FIconButton({
+    Key? key,
     required this.iconData,
     required this.onPress,
     this.disabled = false,
     this.color,
     this.tooltip,
-  });
+  }) : super(key: key);
 
   @override
   State createState() => _FIconButtonState();
@@ -23,7 +24,9 @@ class _FIconButtonState extends State<FIconButton> {
   bool _pressed = false;
 
   void _pressReleased() {
-    if (widget.disabled) return;
+    if (widget.disabled) {
+      return;
+    }
     widget.onPress.call();
     setState(() {
       _pressed = false;
@@ -31,24 +34,28 @@ class _FIconButtonState extends State<FIconButton> {
   }
 
   void _pressStart() {
-    if (widget.disabled) return;
+    if (widget.disabled) {
+      return;
+    }
     setState(() {
       _pressed = true;
     });
   }
 
   void _pressCancel() {
-    if (widget.disabled) return;
+    if (widget.disabled) {
+      return;
+    }
     setState(() {
       _pressed = false;
     });
   }
 
   @override
-  Widget build(ctx) {
+  Widget build(BuildContext ctx) {
     final color = widget.color ?? Theme.of(ctx).primaryColor;
     final container = Container(
-      margin: EdgeInsets.all(5),
+      margin: const EdgeInsets.all(5),
       child: Icon(
         widget.iconData,
         color: color.withOpacity(widget.disabled || _pressed ? 0.2 : 1.0),
@@ -62,7 +69,7 @@ class _FIconButtonState extends State<FIconButton> {
         onTapCancel: _pressCancel,
         child: widget.tooltip != null
             ? Tooltip(
-                message: widget.tooltip!,
+                message: widget.tooltip,
                 child: container,
               )
             : container,

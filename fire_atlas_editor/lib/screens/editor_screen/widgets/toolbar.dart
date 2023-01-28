@@ -1,21 +1,18 @@
 import 'package:equatable/equatable.dart';
+import 'package:fire_atlas_editor/screens/editor_screen/widgets/change_image_modal.dart';
+import 'package:fire_atlas_editor/screens/editor_screen/widgets/concat_image_modal.dart';
 import 'package:fire_atlas_editor/screens/widgets/toggle_theme_button.dart';
 import 'package:fire_atlas_editor/services/storage/storage.dart';
+import 'package:fire_atlas_editor/store/actions/atlas_actions.dart';
+import 'package:fire_atlas_editor/store/actions/editor_actions.dart';
+import 'package:fire_atlas_editor/store/store.dart';
+import 'package:fire_atlas_editor/widgets/container.dart';
+import 'package:fire_atlas_editor/widgets/icon_button.dart';
+import 'package:fire_atlas_editor/widgets/text.dart';
+import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 import 'package:slices/slices.dart';
-
-import '../../../store/store.dart';
-import '../../../store/actions/atlas_actions.dart';
-import '../../../store/actions/editor_actions.dart';
-
-import './change_image_modal.dart';
-import './concat_image_modal.dart';
-
-import '../../../widgets/container.dart';
-import '../../../widgets/icon_button.dart';
-import '../../../widgets/text.dart';
 
 class _ToolbarSlice extends Equatable {
   final FireAtlas? currentAtlas;
@@ -30,8 +27,10 @@ class _ToolbarSlice extends Equatable {
 }
 
 class Toolbar extends StatelessWidget {
-  _launchURL(FireAtlas atlas) async {
-    List<int> bytes = atlas.serialize();
+  const Toolbar({Key? key}) : super(key: key);
+
+  Future<void> _launchURL(FireAtlas atlas) async {
+    final bytes = atlas.serialize();
     final fileName = '${atlas.id}.fa';
 
     final storage = FireAtlasStorage();
@@ -39,7 +38,7 @@ class Toolbar extends StatelessWidget {
   }
 
   @override
-  Widget build(ctx) {
+  Widget build(BuildContext ctx) {
     return SliceWatcher<FireAtlasState, _ToolbarSlice>(
       slicer: (state) => _ToolbarSlice.fromState(state),
       builder: (ctx, store, slice) => FContainer(
@@ -47,66 +46,73 @@ class Toolbar extends StatelessWidget {
         child: Column(
           children: [
             FLabel(
-                label: 'Working on: ${slice.currentAtlas?.id}', fontSize: 12),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Row(children: [
-                FIconButton(
-                  iconData: Icons.save,
-                  disabled: !slice.hasChanges,
-                  onPress: () {
-                    store.dispatchAsync(SaveAction());
-                  },
-                  tooltip: 'Save project',
-                ),
-                FIconButton(
-                  iconData: Icons.image,
-                  onPress: () {
-                    store.dispatch(
-                      OpenEditorModal(
-                        ChangeImageModal(),
-                        400,
-                        500,
+              label: 'Working on: ${slice.currentAtlas?.id}',
+              fontSize: 12,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    FIconButton(
+                      iconData: Icons.save,
+                      disabled: !slice.hasChanges,
+                      onPress: () {
+                        store.dispatchAsync(SaveAction());
+                      },
+                      tooltip: 'Save project',
+                    ),
+                    FIconButton(
+                      iconData: Icons.image,
+                      onPress: () {
+                        store.dispatch(
+                          OpenEditorModal(
+                            const ChangeImageModal(),
+                            400,
+                            500,
+                          ),
+                        );
+                      },
+                      tooltip: 'Update base image',
+                    ),
+                    FIconButton(
+                      iconData: Icons.add_photo_alternate,
+                      onPress: () {
+                        store.dispatch(
+                          OpenEditorModal(
+                            const ConcatImageModal(),
+                            600,
+                            500,
+                          ),
+                        );
+                      },
+                      tooltip: 'Add image',
+                    ),
+                    if (kIsWeb)
+                      FIconButton(
+                        iconData: Icons.get_app,
+                        onPress: () {
+                          _launchURL(slice.currentAtlas!);
+                        },
+                        tooltip: 'Export atlas',
                       ),
-                    );
-                  },
-                  tooltip: 'Update base image',
+                  ],
                 ),
-                FIconButton(
-                  iconData: Icons.add_photo_alternate,
-                  onPress: () {
-                    store.dispatch(
-                      OpenEditorModal(
-                        ConcatImageModal(),
-                        600,
-                        500,
-                      ),
-                    );
-                  },
-                  tooltip: 'Add image',
+                Row(
+                  children: [
+                    const ToggleThemeButton(),
+                    FIconButton(
+                      iconData: Icons.exit_to_app,
+                      onPress: () {
+                        store.dispatch(SelectSelectionAction());
+                        Navigator.of(ctx).pushReplacementNamed('/');
+                      },
+                      tooltip: 'Close atlas',
+                    ),
+                  ],
                 ),
-                if (kIsWeb)
-                  FIconButton(
-                    iconData: Icons.get_app,
-                    onPress: () {
-                      _launchURL(slice.currentAtlas!);
-                    },
-                    tooltip: 'Export atlas',
-                  ),
-              ]),
-              Row(
-                children: [
-                  ToggleThemeButton(),
-                  FIconButton(
-                    iconData: Icons.exit_to_app,
-                    onPress: () {
-                      store.dispatch(SelectSelectionAction(selection: null));
-                      Navigator.of(ctx).pushReplacementNamed('/');
-                    },
-                    tooltip: 'Close atlas',
-                  ),
-                ],
-              ),
-            ]),
+              ],
+            ),
           ],
         ),
       ),

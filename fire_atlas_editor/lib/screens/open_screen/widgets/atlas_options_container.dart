@@ -1,34 +1,33 @@
-import 'package:slices/slices.dart';
-import 'package:flutter/material.dart' hide Image;
+import 'package:fire_atlas_editor/store/actions/editor_actions.dart';
+import 'package:fire_atlas_editor/store/store.dart';
+import 'package:fire_atlas_editor/utils/validators.dart';
+import 'package:fire_atlas_editor/widgets/button.dart';
+import 'package:fire_atlas_editor/widgets/image_selection_container.dart';
+import 'package:fire_atlas_editor/widgets/input_text_row.dart';
+import 'package:fire_atlas_editor/widgets/text.dart';
 import 'package:flame/flame.dart';
-
-import '../../../store/store.dart';
-import '../../../store/actions/editor_actions.dart';
-import '../../../widgets/text.dart';
-import '../../../widgets/button.dart';
-import '../../../widgets/input_text_row.dart';
-import '../../../widgets/image_selection_container.dart';
-
-import '../../../utils/validators.dart';
+import 'package:flutter/material.dart' hide Image;
+import 'package:slices/slices.dart';
 
 class AtlasOptionsContainer extends StatefulWidget {
   final void Function() onCancel;
   final Function(String, String, double, double) onConfirm;
 
-  AtlasOptionsContainer({
+  const AtlasOptionsContainer({
+    Key? key,
     required this.onCancel,
     required this.onConfirm,
-  });
+  }) : super(key: key);
 
   @override
-  State createState() => _AtlaOptionsContainerState();
+  State createState() => _AtlasOptionsContainerState();
 }
 
-class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
+class _AtlasOptionsContainerState extends State<AtlasOptionsContainer> {
   String? _imageData;
-  late final atlasNameController;
-  late final tileWidthController;
-  late final tileHeightController;
+  late final TextEditingController atlasNameController;
+  late final TextEditingController tileWidthController;
+  late final TextEditingController tileHeightController;
 
   @override
   void initState() {
@@ -54,49 +53,61 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
     final atlasName = atlasNameController.text;
 
     if (atlasName.isEmpty) {
-      _store.dispatch(CreateMessageAction(
-        message: 'Atlas name is required',
-        type: MessageType.ERROR,
-      ));
+      _store.dispatch(
+        CreateMessageAction(
+          message: 'Atlas name is required',
+          type: MessageType.ERROR,
+        ),
+      );
       return;
     }
     if (tileWidthRaw.isEmpty) {
-      _store.dispatch(CreateMessageAction(
-        message: 'Tile Width is required',
-        type: MessageType.ERROR,
-      ));
+      _store.dispatch(
+        CreateMessageAction(
+          message: 'Tile Width is required',
+          type: MessageType.ERROR,
+        ),
+      );
       return;
     }
 
     if (tileHeightRaw.isEmpty) {
-      _store.dispatch(CreateMessageAction(
-        message: 'Tile Height is required',
-        type: MessageType.ERROR,
-      ));
+      _store.dispatch(
+        CreateMessageAction(
+          message: 'Tile Height is required',
+          type: MessageType.ERROR,
+        ),
+      );
       return;
     }
 
     if (tileWidthRaw.isNotEmpty && !isValidNumber(tileWidthRaw)) {
-      _store.dispatch(CreateMessageAction(
-        message: 'Tile Width must be a number',
-        type: MessageType.ERROR,
-      ));
+      _store.dispatch(
+        CreateMessageAction(
+          message: 'Tile Width must be a number',
+          type: MessageType.ERROR,
+        ),
+      );
       return;
     }
 
     if (tileHeightRaw.isNotEmpty && !isValidNumber(tileHeightRaw)) {
-      _store.dispatch(CreateMessageAction(
-        message: 'Tile Height must be a number',
-        type: MessageType.ERROR,
-      ));
+      _store.dispatch(
+        CreateMessageAction(
+          message: 'Tile Height must be a number',
+          type: MessageType.ERROR,
+        ),
+      );
       return;
     }
 
     if (_imageData == null) {
-      _store.dispatch(CreateMessageAction(
-        message: 'An image must be selected',
-        type: MessageType.ERROR,
-      ));
+      _store.dispatch(
+        CreateMessageAction(
+          message: 'An image must be selected',
+          type: MessageType.ERROR,
+        ),
+      );
       return;
     }
 
@@ -113,63 +124,73 @@ class _AtlaOptionsContainerState extends State<AtlasOptionsContainer> {
   }
 
   @override
-  Widget build(ctx) {
+  Widget build(BuildContext ctx) {
     return Container(
       width: 600,
       height: 400,
       color: Theme.of(ctx).dialogBackgroundColor,
-      padding: EdgeInsets.all(20),
-      child: Column(children: [
-        FTitle(title: 'New atlas'),
-        SizedBox(height: 20),
-        Expanded(
-            child:
-                Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          const FTitle(title: 'New atlas'),
+          const SizedBox(height: 20),
           Expanded(
-              flex: 5,
-              child: Column(
-                children: [
-                  InputTextRow(
-                    label: 'Atlas name:',
-                    inputController: atlasNameController,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: Column(
+                    children: [
+                      InputTextRow(
+                        label: 'Atlas name:',
+                        inputController: atlasNameController,
+                      ),
+                      const SizedBox(height: 40),
+                      InputTextRow(
+                        label: 'Tile Width:',
+                        inputController: tileWidthController,
+                      ),
+                      const SizedBox(height: 40),
+                      InputTextRow(
+                        label: 'Tile Height:',
+                        inputController: tileHeightController,
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 40),
-                  InputTextRow(
-                    label: 'Tile Width:',
-                    inputController: tileWidthController,
+                ),
+                Expanded(
+                  flex: 5,
+                  child: ImageSelectionContainer(
+                    imageData: _imageData,
+                    onSelectImage: (imageData) {
+                      Flame.images.clearCache();
+                      setState(() {
+                        _imageData = imageData;
+                      });
+                    },
                   ),
-                  SizedBox(height: 40),
-                  InputTextRow(
-                    label: 'Tile Height:',
-                    inputController: tileHeightController,
-                  ),
-                ],
-              )),
-          Expanded(
-            flex: 5,
-            child: ImageSelectionContainer(
-                imageData: _imageData,
-                onSelectImage: (imageData) {
-                  Flame.images.clearCache();
-                  setState(() {
-                    _imageData = imageData;
-                  });
-                }),
+                ),
+              ],
+            ),
           ),
-        ])),
-        SizedBox(height: 20),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          FButton(
-            label: 'Cancel',
-            onSelect: _cancel,
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FButton(
+                label: 'Cancel',
+                onSelect: _cancel,
+              ),
+              const SizedBox(width: 20),
+              FButton(
+                label: 'Ok',
+                onSelect: _confirm,
+              ),
+            ],
           ),
-          SizedBox(width: 20),
-          FButton(
-            label: 'Ok',
-            onSelect: _confirm,
-          ),
-        ]),
-      ]),
+        ],
+      ),
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:html';
 import 'dart:convert';
+import 'dart:html';
 import 'dart:typed_data';
 
 import 'package:fire_atlas_editor/services/storage/storage.dart';
@@ -14,7 +14,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   Future<LoadedProjectEntry> loadProject(String path) async {
     final value = _localStorage[path];
     if (value == null) {
-      throw 'Unknow project with id $path';
+      throw 'Unknown project with id $path';
     }
 
     final entry = LoadedProjectEntry(
@@ -65,7 +65,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   }
 
   @override
-  Future<String> selectNewProjectPath(atlas) async {
+  Future<String> selectNewProjectPath(FireAtlas atlas) async {
     return 'ATLAS_${atlas.id}';
   }
 
@@ -98,7 +98,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   @override
   Future<void> exportFile(List<int> bytes, String fileName) async {
     final uint8List = Uint8List.fromList(bytes);
-    final blob = Blob([uint8List]);
+    final blob = Blob(<Uint8List>[uint8List]);
     final url = Url.createObjectUrl(blob);
 
     final element = document.createElement('a');

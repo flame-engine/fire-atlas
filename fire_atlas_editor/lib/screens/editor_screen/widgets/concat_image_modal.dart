@@ -1,18 +1,17 @@
-import 'package:slices/slices.dart';
-import 'package:flutter/material.dart';
+import 'package:fire_atlas_editor/services/images.dart';
+import 'package:fire_atlas_editor/store/actions/atlas_actions.dart';
+import 'package:fire_atlas_editor/store/actions/editor_actions.dart';
+import 'package:fire_atlas_editor/store/store.dart';
+import 'package:fire_atlas_editor/widgets/button.dart';
+import 'package:fire_atlas_editor/widgets/image_selection_container.dart';
+import 'package:fire_atlas_editor/widgets/text.dart';
 import 'package:flame/extensions.dart';
-
-import '../../../store/store.dart';
-import '../../../store/actions/editor_actions.dart';
-import '../../../store/actions/atlas_actions.dart';
-
-import '../../../services/images.dart';
-
-import '../../../widgets/text.dart';
-import '../../../widgets/button.dart';
-import '../../../widgets/image_selection_container.dart';
+import 'package:flutter/material.dart';
+import 'package:slices/slices.dart';
 
 class ConcatImageModal extends StatefulWidget {
+  const ConcatImageModal({Key? key}) : super(key: key);
+
   @override
   State createState() => _ConcatImageModalState();
 }
@@ -28,15 +27,19 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
     return Container(
       child: Column(
         children: [
-          FSubtitleTitle(title: 'Add image'),
+          const FSubtitleTitle(title: 'Add image'),
           Expanded(
             child: Row(
               children: [
                 Expanded(
                   flex: 5,
                   child: ImageSelectionContainer(
-                    margin: EdgeInsets.only(
-                        top: 30, bottom: 10, left: 10, right: 10),
+                    margin: const EdgeInsets.only(
+                      top: 30,
+                      bottom: 10,
+                      left: 10,
+                      right: 10,
+                    ),
                     imageData: _imageData,
                     onSelectImage: (imageData) {
                       setState(() {
@@ -49,10 +52,10 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                   flex: 5,
                   child: Column(
                     children: [
-                      FSubtitleTitle(title: 'Position'),
+                      const FSubtitleTitle(title: 'Position'),
                       FButton(
                         width: 100,
-                        padding: EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.only(bottom: 10),
                         label: 'Top',
                         selected: _placement?.y == -1,
                         onSelect: () {
@@ -64,7 +67,7 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                       ),
                       FButton(
                         width: 100,
-                        padding: EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.only(bottom: 10),
                         label: 'Bottom',
                         selected: _placement?.y == 1,
                         onSelect: () {
@@ -76,7 +79,7 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                       ),
                       FButton(
                         width: 100,
-                        padding: EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.only(bottom: 10),
                         label: 'Left',
                         selected: _placement?.x == -1,
                         onSelect: () {
@@ -88,7 +91,7 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                       ),
                       FButton(
                         width: 100,
-                        padding: EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.only(bottom: 10),
                         label: 'Right',
                         selected: _placement?.x == 1,
                         onSelect: () {
@@ -100,7 +103,7 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                       ),
                       FButton(
                         width: 100,
-                        padding: EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.only(bottom: 10),
                         label: 'Selection',
                         disabled: _store.state.canvasSelection == null,
                         selected: _selection != null,
@@ -117,7 +120,7 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
               ],
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -127,7 +130,7 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                   _store.dispatch(CloseEditorModal());
                 },
               ),
-              SizedBox(width: 5),
+              const SizedBox(width: 5),
               FButton(
                 disabled: _imageData == null ||
                     (_placement == null && _selection == null),
@@ -151,7 +154,7 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
               ),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
         ],
       ),
     );

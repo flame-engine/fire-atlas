@@ -1,10 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:slices/slices.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
-
-import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:slices/slices.dart';
 
 class Nullable<T> {
   final T? value;
@@ -17,7 +14,7 @@ class LoadedProjectEntry {
   final String? path;
   final FireAtlas project;
 
-  LoadedProjectEntry(this.path, this.project);
+  const LoadedProjectEntry(this.path, this.project);
 
   LastProjectEntry toLastProjectEntry() {
     final currentPath = path;
@@ -46,7 +43,7 @@ class LastProjectEntry {
   final String path;
   final String name;
 
-  LastProjectEntry(this.path, this.name);
+  const LastProjectEntry(this.path, this.name);
 }
 
 enum MessageType {
@@ -59,7 +56,7 @@ class Message extends Equatable {
   final MessageType type;
   final String message;
 
-  Message({
+  const Message({
     required this.type,
     required this.message,
   });
@@ -74,7 +71,7 @@ class ModalState extends Equatable {
   final double width;
   final double? height;
 
-  ModalState({
+  const ModalState({
     required this.child,
     required this.width,
     this.height,
@@ -126,9 +123,9 @@ class FireAtlasState extends SlicesState {
       loadedProject: loadedProject ?? this.loadedProject,
       hasChanges: hasChanges ?? this.hasChanges,
       messages: messages ?? this.messages,
-      selectedSelection: selectedSelection ?? this._selectedSelection,
-      modal: modal ?? this._modal,
-      canvasSelection: canvasSelection ?? this._canvasSelection,
+      selectedSelection: selectedSelection ?? _selectedSelection,
+      modal: modal ?? _modal,
+      canvasSelection: canvasSelection ?? _canvasSelection,
       currentTheme: currentTheme ?? this.currentTheme,
     );
   }

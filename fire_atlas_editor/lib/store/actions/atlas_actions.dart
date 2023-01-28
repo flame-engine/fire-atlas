@@ -1,9 +1,8 @@
-import 'package:slices/slices.dart';
-import '../../store/store.dart';
+import 'package:fire_atlas_editor/services/storage/storage.dart';
+import 'package:fire_atlas_editor/store/actions/editor_actions.dart';
+import 'package:fire_atlas_editor/store/store.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
-import '../../services/storage/storage.dart';
-
-import './editor_actions.dart';
+import 'package:slices/slices.dart';
 
 class CreateAtlasAction extends AsyncSlicesAction<FireAtlasState> {
   final String id;
@@ -19,7 +18,7 @@ class CreateAtlasAction extends AsyncSlicesAction<FireAtlasState> {
   });
 
   @override
-  Future<FireAtlasState> perform(_, state) async {
+  Future<FireAtlasState> perform(_, FireAtlasState state) async {
     final atlas = FireAtlas(
       id: id,
       imageData: imageData,
@@ -44,7 +43,7 @@ class UpdateAtlasImageAction extends AsyncSlicesAction<FireAtlasState> {
   UpdateAtlasImageAction({required this.imageData});
 
   @override
-  Future<FireAtlasState> perform(_, state) async {
+  Future<FireAtlasState> perform(_, FireAtlasState state) async {
     if (state.currentAtlas != null) {
       final atlas = state.currentAtlas!;
 
@@ -68,17 +67,17 @@ class SetSelectionAction extends SlicesAction<FireAtlasState> {
 
   SetSelectionAction({
     required BaseSelection selection,
-  }) : this.selections = [selection];
+  }) : selections = [selection];
 
   SetSelectionAction.multiple({
     required this.selections,
   });
 
   @override
-  FireAtlasState perform(_, state) {
+  FireAtlasState perform(_, FireAtlasState state) {
     final atlas = state.currentAtlas;
-    if (atlas != null && selections.length > 0) {
-      for (var selection in selections) {
+    if (atlas != null && selections.isNotEmpty) {
+      for (final selection in selections) {
         atlas.selections[selection.id] = selection;
       }
 
@@ -112,7 +111,7 @@ class SelectSelectionAction extends SlicesAction<FireAtlasState> {
 
 class RemoveSelectedSelectionAction extends SlicesAction<FireAtlasState> {
   @override
-  FireAtlasState perform(_, state) {
+  FireAtlasState perform(_, FireAtlasState state) {
     final atlas = state.currentAtlas;
     final selected = state.selectedSelection;
 
@@ -133,15 +132,17 @@ class RemoveSelectedSelectionAction extends SlicesAction<FireAtlasState> {
 
 class SaveAction extends AsyncSlicesAction<FireAtlasState> {
   @override
-  Future<FireAtlasState> perform(store, state) async {
+  Future<FireAtlasState> perform(
+    SlicesStore<FireAtlasState> store,
+    FireAtlasState state,
+  ) async {
     final project = state.loadedProject.value;
     if (project != null) {
       try {
         final storage = FireAtlasStorage();
 
-        final path = project.path == null
-            ? await storage.selectNewProjectPath(project.project)
-            : project.path;
+        final path =
+            project.path ?? await storage.selectNewProjectPath(project.project);
 
         final newState = state.copyWith(
           hasChanges: false,
@@ -181,7 +182,7 @@ class LoadAtlasAction extends AsyncSlicesAction<FireAtlasState> {
   LoadAtlasAction(this.path);
 
   @override
-  Future<FireAtlasState> perform(_, state) async {
+  Future<FireAtlasState> perform(_, FireAtlasState state) async {
     final storage = FireAtlasStorage();
     final loaded = await storage.loadProject(path);
 

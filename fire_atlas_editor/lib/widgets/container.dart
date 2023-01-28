@@ -8,17 +8,18 @@ class FContainer extends StatelessWidget {
   final EdgeInsets margin;
   final EdgeInsets padding;
 
-  FContainer({
+  const FContainer({
+    Key? key,
     this.child,
     this.height,
     this.width,
     this.color,
     this.margin = const EdgeInsets.all(2.5),
-    this.padding = const EdgeInsets.all(0),
-  });
+    this.padding = EdgeInsets.zero,
+  }) : super(key: key);
 
   @override
-  Widget build(ctx) {
+  Widget build(BuildContext ctx) {
     final containerColor = color ?? Theme.of(ctx).dialogBackgroundColor;
     return Container(
       decoration: BoxDecoration(

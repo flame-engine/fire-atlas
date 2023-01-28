@@ -1,10 +1,11 @@
+import 'package:fire_atlas_editor/widgets/text.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../widgets/text.dart';
-
 class SupportContainer extends StatelessWidget {
-  void _open(String url) async {
+  const SupportContainer({Key? key}) : super(key: key);
+
+  Future<void> _open(String url) async {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -20,11 +21,11 @@ class SupportContainer extends StatelessWidget {
           height: 150,
           child: Image.asset('assets/Logo.png'),
         ),
-        FLabel(label: 'Fire Atlas, is, and will always be free.'),
-        FLabel(
-            label:
-                'But if it is useful to you, considere supporting our work!'),
-        SizedBox(height: 20),
+        const FLabel(label: 'Fire Atlas, is, and will always be free.'),
+        const FLabel(
+          label: 'But if it is useful to you, consider supporting our work!',
+        ),
+        const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -32,24 +33,24 @@ class SupportContainer extends StatelessWidget {
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-                  _open('https://www.patreon.com/fireslime');
+                  _open('https://www.patreon.com/bluefireoss');
                 },
                 child: Image.asset(
-                  "assets/patreon_button.png",
+                  'assets/patreon_button.png',
                   width: 150,
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
             Material(
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-                  _open('https://www.buymeacoffee.com/fireslime');
+                  _open('https://www.buymeacoffee.com/bluefire');
                 },
                 child: Image.asset(
-                  "assets/coffee_button.png",
+                  'assets/coffee_button.png',
                   width: 150,
                   fit: BoxFit.cover,
                 ),
