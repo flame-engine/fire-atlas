@@ -2,6 +2,7 @@ import 'package:fire_atlas_editor/services/storage/storage.dart';
 import 'package:fire_atlas_editor/store/actions/editor_actions.dart';
 import 'package:fire_atlas_editor/store/store.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
+import 'package:flutter/rendering.dart';
 import 'package:slices/slices.dart';
 
 class CreateAtlasAction extends AsyncSlicesAction<FireAtlasState> {
@@ -163,7 +164,7 @@ class SaveAction extends AsyncSlicesAction<FireAtlasState> {
 
         return newState;
       } catch (e) {
-        print(e);
+        debugPrint(e.toString());
         store.dispatch(
           CreateMessageAction(
             message: 'Error trying to save project!',

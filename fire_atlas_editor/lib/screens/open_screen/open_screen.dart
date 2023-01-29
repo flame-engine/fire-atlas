@@ -55,7 +55,7 @@ class _OpenScreenState extends State<OpenScreen> {
       await _store.dispatchAsync(LoadAtlasAction(loaded.path!));
       Navigator.of(context).pushNamed('/editor');
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       _store.dispatch(
         CreateMessageAction(
           message: 'Error importing atlas',
