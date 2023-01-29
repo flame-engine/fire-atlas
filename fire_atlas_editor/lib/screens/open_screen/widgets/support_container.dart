@@ -2,16 +2,15 @@ import 'package:fire_atlas_editor/widgets/text.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+final _patreonUrl = Uri.parse('https://www.patreon.com/bluefireoss');
+final _buyMeACoffeeUrl = Uri.parse('https://www.buymeacoffee.com/bluefire');
+
 class SupportContainer extends StatelessWidget {
   const SupportContainer({Key? key}) : super(key: key);
 
-  Future<void> _open(String url) async {
-    // TODO(luan): fix
-    // ignore: deprecated_member_use
-    if (await canLaunch(url)) {
-      // TODO(luan): fix
-      // ignore: deprecated_member_use
-      await launch(url);
+  Future<void> _open(Uri url) async {
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
     } else {
       throw 'Could not launch $url';
     }
@@ -37,7 +36,7 @@ class SupportContainer extends StatelessWidget {
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-                  _open('https://www.patreon.com/bluefireoss');
+                  _open(_patreonUrl);
                 },
                 child: Image.asset(
                   'assets/patreon_button.png',
@@ -51,7 +50,7 @@ class SupportContainer extends StatelessWidget {
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-                  _open('https://www.buymeacoffee.com/bluefire');
+                  _open(_buyMeACoffeeUrl);
                 },
                 child: Image.asset(
                   'assets/coffee_button.png',

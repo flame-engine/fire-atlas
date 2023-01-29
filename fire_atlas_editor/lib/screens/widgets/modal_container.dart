@@ -55,9 +55,7 @@ class ModalContainer extends StatelessWidget {
                             alignment: Alignment.centerRight,
                             child: FIconButton(
                               iconData: Icons.close,
-                              // TODO(luan): fix
-                              // ignore: deprecated_member_use
-                              color: Theme.of(ctx).buttonColor,
+                              color: Theme.of(ctx).indicatorColor,
                               onPress: () {
                                 store.dispatch(CloseEditorModal());
                               },

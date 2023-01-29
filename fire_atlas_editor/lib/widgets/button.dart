@@ -22,9 +22,7 @@ class FButton extends StatelessWidget {
   Widget build(BuildContext ctx) {
     final theme = Theme.of(ctx);
 
-    // TODO(luan): fix
-    // ignore: deprecated_member_use
-    final color = selected ? theme.primaryColor : theme.buttonColor;
+    final color = selected ? theme.primaryColor : theme.indicatorColor;
 
     return Container(
       padding: padding,
