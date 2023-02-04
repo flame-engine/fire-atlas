@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:fire_atlas_editor/screens/editor_screen/widgets/change_image_modal.dart';
 import 'package:fire_atlas_editor/screens/editor_screen/widgets/concat_image_modal.dart';
+import 'package:fire_atlas_editor/screens/editor_screen/widgets/rename_atlas_modal.dart';
 import 'package:fire_atlas_editor/screens/widgets/toggle_theme_button.dart';
 import 'package:fire_atlas_editor/services/storage/storage.dart';
 import 'package:fire_atlas_editor/store/actions/atlas_actions.dart';
@@ -13,8 +14,6 @@ import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:slices/slices.dart';
-
-import 'rename_atlas_modal.dart';
 
 class _ToolbarSlice extends Equatable {
   final FireAtlas? currentAtlas;
