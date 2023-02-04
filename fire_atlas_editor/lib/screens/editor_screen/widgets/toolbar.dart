@@ -14,6 +14,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:slices/slices.dart';
 
+import 'rename_atlas_modal.dart';
+
 class _ToolbarSlice extends Equatable {
   final FireAtlas? currentAtlas;
   final bool hasChanges;
@@ -61,6 +63,21 @@ class Toolbar extends StatelessWidget {
                         store.dispatchAsync(SaveAction());
                       },
                       tooltip: 'Save project',
+                    ),
+                    FIconButton(
+                      iconData: Icons.edit,
+                      onPress: () {
+                        store.dispatch(
+                          OpenEditorModal(
+                            RenameAtlasModal(
+                              currentName: store.state.currentAtlas?.id,
+                            ),
+                            400,
+                            500,
+                          ),
+                        );
+                      },
+                      tooltip: 'Rename project',
                     ),
                     FIconButton(
                       iconData: Icons.image,
