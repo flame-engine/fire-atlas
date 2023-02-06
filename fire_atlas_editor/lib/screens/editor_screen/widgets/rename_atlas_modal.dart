@@ -65,7 +65,7 @@ class _RenameAtlasModalState extends State<RenameAtlasModal> {
       store.dispatch(
         CreateMessageAction(
           type: MessageType.ERROR,
-          message: 'You must inform the name to rename.',
+          message: 'The new name is required.',
         ),
       );
     } else {
