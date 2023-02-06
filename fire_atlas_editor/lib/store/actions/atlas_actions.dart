@@ -177,6 +177,33 @@ class SaveAction extends AsyncSlicesAction<FireAtlasState> {
   }
 }
 
+class RenameAtlasAction extends AsyncSlicesAction<FireAtlasState> {
+  final String newAtlasId;
+
+  RenameAtlasAction({required this.newAtlasId});
+
+  @override
+  Future<FireAtlasState> perform(
+    SlicesStore<FireAtlasState> store,
+    FireAtlasState state,
+  ) async {
+    final atlas = state.currentAtlas;
+    if (atlas == null) {
+      return state;
+    }
+
+    atlas.id = newAtlasId;
+    return state.copyWith(
+      hasChanges: true,
+      loadedProject: Nullable(
+        state.loadedProject.value?.copyWith(
+          project: atlas,
+        ),
+      ),
+    );
+  }
+}
+
 class LoadAtlasAction extends AsyncSlicesAction<FireAtlasState> {
   final String path;
 

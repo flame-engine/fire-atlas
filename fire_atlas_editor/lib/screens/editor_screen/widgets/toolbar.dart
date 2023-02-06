@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:fire_atlas_editor/screens/editor_screen/widgets/change_image_modal.dart';
 import 'package:fire_atlas_editor/screens/editor_screen/widgets/concat_image_modal.dart';
+import 'package:fire_atlas_editor/screens/editor_screen/widgets/rename_atlas_modal.dart';
 import 'package:fire_atlas_editor/screens/widgets/toggle_theme_button.dart';
 import 'package:fire_atlas_editor/services/storage/storage.dart';
 import 'package:fire_atlas_editor/store/actions/atlas_actions.dart';
@@ -61,6 +62,21 @@ class Toolbar extends StatelessWidget {
                         store.dispatchAsync(SaveAction());
                       },
                       tooltip: 'Save project',
+                    ),
+                    FIconButton(
+                      iconData: Icons.edit,
+                      onPress: () {
+                        store.dispatch(
+                          OpenEditorModal(
+                            RenameAtlasModal(
+                              currentName: store.state.currentAtlas?.id,
+                            ),
+                            400,
+                            500,
+                          ),
+                        );
+                      },
+                      tooltip: 'Rename project',
                     ),
                     FIconButton(
                       iconData: Icons.image,
