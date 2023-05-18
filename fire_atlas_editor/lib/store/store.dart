@@ -91,13 +91,13 @@ class FireAtlasState extends SlicesState {
   final ThemeMode currentTheme;
 
   FireAtlasState({
-    this.hasChanges = false,
-    this.messages = const [],
     required this.loadedProject,
     required Nullable<BaseSelection> selectedSelection,
     required Nullable<Rect> canvasSelection,
     required Nullable<ModalState> modal,
     required this.currentTheme,
+    this.hasChanges = false,
+    this.messages = const [],
   })  : _selectedSelection = selectedSelection,
         _canvasSelection = canvasSelection,
         _modal = modal;

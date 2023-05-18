@@ -5,10 +5,10 @@ class FLabel extends StatelessWidget {
   final double? fontSize;
 
   const FLabel({
-    Key? key,
     required this.label,
     this.fontSize,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext ctx) {
@@ -56,9 +56,9 @@ class FTitle extends StatelessWidget {
   final String title;
 
   const FTitle({
-    Key? key,
     required this.title,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext ctx) => _FTitle(
@@ -71,9 +71,9 @@ class FSubtitleTitle extends StatelessWidget {
   final String title;
 
   const FSubtitleTitle({
-    Key? key,
     required this.title,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext ctx) => _FTitle(

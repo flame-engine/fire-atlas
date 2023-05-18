@@ -9,10 +9,10 @@ class SimpleSpriteLoaderWidget extends StatelessWidget {
   final bool center;
 
   const SimpleSpriteLoaderWidget({
-    Key? key,
     required this.future,
+    super.key,
     this.center = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext ctx) {
@@ -41,16 +41,14 @@ class SimpleSpriteWidget extends StatelessWidget {
   final bool center;
 
   const SimpleSpriteWidget({
-    Key? key,
     required this.sprite,
+    super.key,
     this.center = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(_) {
-    return Container(
-      child: CustomPaint(painter: _SimpleSpritePainter(sprite, center)),
-    );
+    return CustomPaint(painter: _SimpleSpritePainter(sprite, center: center));
   }
 }
 
@@ -58,7 +56,7 @@ class _SimpleSpritePainter extends CustomPainter {
   final Sprite _sprite;
   final bool _center;
 
-  _SimpleSpritePainter(this._sprite, this._center);
+  _SimpleSpritePainter(this._sprite, {required bool center}) : _center = center;
 
   @override
   bool shouldRepaint(_SimpleSpritePainter old) => old._sprite != _sprite;

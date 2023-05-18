@@ -189,10 +189,10 @@ packages:
     dependency: "direct main"
     description:
       name: flame_lint
-      sha256: "537bca1509730377b048631f56b16749b011cb11468599de9f435f200806f61b"
+      sha256: eadebb2a5a010029c3bbc2b64a9e5bea4d1a8a48a52ce2eee344a6901a5707da
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.0"
+    version: "0.2.0+2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -542,5 +542,5 @@ packages:
     source: hosted
     version: "0.2.0+3"
 sdks:
-  dart: ">=3.0.0-0 <4.0.0"
+  dart: ">=3.0.0 <4.0.0"
   flutter: ">=3.3.0"

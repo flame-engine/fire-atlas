@@ -16,16 +16,16 @@ class ImageSelectionContainer extends StatelessWidget {
   final EdgeInsets margin;
 
   const ImageSelectionContainer({
-    Key? key,
-    this.imageData,
     required this.onSelectImage,
+    this.imageData,
     this.margin = const EdgeInsets.only(
       left: 30,
       right: 2.5,
       top: 2.5,
       bottom: 2.5,
     ),
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -57,15 +57,13 @@ class ImageSelectionContainer extends StatelessWidget {
                 : const Center(child: Text('No image selected')),
           ),
         ),
-        Container(
-          child: FButton(
-            label: 'Select image',
-            onSelect: () async {
-              final storage = FireAtlasStorage();
-              final imgDataUrl = await storage.selectFile();
-              onSelectImage(imgDataUrl);
-            },
-          ),
+        FButton(
+          label: 'Select image',
+          onSelect: () async {
+            final storage = FireAtlasStorage();
+            final imgDataUrl = await storage.selectFile();
+            onSelectImage(imgDataUrl);
+          },
         )
       ],
     );

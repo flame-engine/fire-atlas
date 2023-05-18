@@ -17,12 +17,12 @@ class _ModalContainerSlice extends Equatable {
 }
 
 class ModalContainer extends StatelessWidget {
-  const ModalContainer({Key? key}) : super(key: key);
+  const ModalContainer({super.key});
 
   @override
   Widget build(_) {
     return SliceWatcher<FireAtlasState, _ModalContainerSlice>(
-      slicer: (state) => _ModalContainerSlice.fromState(state),
+      slicer: _ModalContainerSlice.fromState,
       builder: (ctx, store, slice) {
         final modal = slice.modal;
         if (modal != null) {

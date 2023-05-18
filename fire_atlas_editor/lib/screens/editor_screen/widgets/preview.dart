@@ -32,12 +32,12 @@ class _PreviewSlice extends Equatable {
 }
 
 class Preview extends StatelessWidget {
-  const Preview({Key? key}) : super(key: key);
+  const Preview({super.key});
 
   @override
   Widget build(_) {
     return SliceWatcher<FireAtlasState, _PreviewSlice>(
-      slicer: (state) => _PreviewSlice.fromState(state),
+      slicer: _PreviewSlice.fromState,
       builder: (ctx, store, slice) {
         Widget child = const Center(child: Text('Nothing selected'));
         final currentAtlas = slice.currentAtlas!;

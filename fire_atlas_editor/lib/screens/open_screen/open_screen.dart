@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:slices/slices.dart';
 
 class OpenScreen extends StatefulWidget {
-  const OpenScreen({Key? key}) : super(key: key);
+  const OpenScreen({super.key});
 
   @override
   State createState() => _OpenScreenState();
@@ -43,7 +43,7 @@ class _OpenScreenState extends State<OpenScreen> {
   }
 
   Future<void> _importAtlas() async {
-    final _store = SlicesProvider.of<FireAtlasState>(context);
+    final store = SlicesProvider.of<FireAtlasState>(context);
 
     try {
       final loaded = await _storage.selectProject();
@@ -52,11 +52,11 @@ class _OpenScreenState extends State<OpenScreen> {
         _projects.add(loaded.toLastProjectEntry());
       });
 
-      await _store.dispatchAsync(LoadAtlasAction(loaded.path!));
+      await store.dispatchAsync(LoadAtlasAction(loaded.path!));
       Navigator.of(context).pushNamed('/editor');
     } catch (e) {
       debugPrint(e.toString());
-      _store.dispatch(
+      store.dispatch(
         CreateMessageAction(
           message: 'Error importing atlas',
           type: MessageType.ERROR,
@@ -66,8 +66,8 @@ class _OpenScreenState extends State<OpenScreen> {
   }
 
   void _newAtlas() {
-    final _store = SlicesProvider.of<FireAtlasState>(context);
-    _store.dispatch(
+    final store = SlicesProvider.of<FireAtlasState>(context);
+    store.dispatch(
       OpenEditorModal(
         AtlasOptionsContainer(
           onConfirm: (
@@ -76,9 +76,9 @@ class _OpenScreenState extends State<OpenScreen> {
             double tileWidth,
             double tileHeight,
           ) async {
-            _store.dispatch(CloseEditorModal());
+            store.dispatch(CloseEditorModal());
 
-            await _store.dispatchAsync(
+            await store.dispatchAsync(
               CreateAtlasAction(
                 id: atlasName,
                 imageData: imageData,
@@ -89,7 +89,7 @@ class _OpenScreenState extends State<OpenScreen> {
             Navigator.of(context).pushNamed('/editor');
           },
           onCancel: () {
-            _store.dispatch(CloseEditorModal());
+            store.dispatch(CloseEditorModal());
           },
         ),
         600,
@@ -100,7 +100,7 @@ class _OpenScreenState extends State<OpenScreen> {
 
   @override
   Widget build(_) {
-    final _store = SlicesProvider.of<FireAtlasState>(context);
+    final store = SlicesProvider.of<FireAtlasState>(context);
     final children = <Widget>[];
     final containerChildren = <Widget>[];
 
@@ -124,7 +124,7 @@ class _OpenScreenState extends State<OpenScreen> {
                   FIconButton(
                     iconData: Icons.folder_open,
                     onPress: () async {
-                      await _store.dispatchAsync(LoadAtlasAction(p.path));
+                      await store.dispatchAsync(LoadAtlasAction(p.path));
                       Navigator.of(context).pushNamed('/editor');
                     },
                   ),
@@ -201,7 +201,7 @@ class _OpenScreenState extends State<OpenScreen> {
             child: FButton(
               label: 'Support this project',
               onSelect: () {
-                _store.dispatch(
+                store.dispatch(
                   OpenEditorModal(
                     const SupportContainer(),
                     500,

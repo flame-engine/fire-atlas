@@ -9,14 +9,14 @@ class FButton extends StatelessWidget {
   final void Function() onSelect;
 
   const FButton({
-    Key? key,
+    required this.label,
+    required this.onSelect,
+    super.key,
     this.selected = false,
     this.disabled = false,
     this.width,
     this.padding,
-    required this.label,
-    required this.onSelect,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext ctx) {

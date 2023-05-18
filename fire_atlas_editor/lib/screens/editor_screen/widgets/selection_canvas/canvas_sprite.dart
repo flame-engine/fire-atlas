@@ -13,34 +13,32 @@ class CanvasSprite extends StatelessWidget {
   final Offset? selectionEnd;
 
   const CanvasSprite({
-    Key? key,
     required this.sprite,
     required this.translateX,
     required this.translateY,
     required this.scale,
     required this.tileWidth,
     required this.tileHeight,
+    super.key,
     this.selectionStart,
     this.selectionEnd,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext ctx) {
-    return Container(
-      child: CustomPaint(
-        painter: _CanvasSpritePainter(
-          sprite,
-          translateX,
-          translateY,
-          scale,
-          tileWidth,
-          tileHeight,
-          selectionStart,
-          selectionEnd,
-          Theme.of(ctx).primaryColor,
-          Theme.of(ctx).dividerColor,
-          Theme.of(ctx).brightness == Brightness.dark,
-        ),
+    return CustomPaint(
+      painter: _CanvasSpritePainter(
+        sprite,
+        translateX,
+        translateY,
+        scale,
+        tileWidth,
+        tileHeight,
+        selectionStart,
+        selectionEnd,
+        Theme.of(ctx).primaryColor,
+        Theme.of(ctx).dividerColor,
+        Theme.of(ctx).brightness == Brightness.dark,
       ),
     );
   }
@@ -71,6 +69,7 @@ class _CanvasSpritePainter extends CustomPainter {
     this._selectionEnd,
     this._selectionColor,
     this._gridTileColor,
+    // ignore: avoid_positional_boolean_parameters
     this._darkMode,
   );
 
@@ -148,14 +147,14 @@ class _CanvasSpritePainter extends CustomPainter {
     _sprite.render(canvas);
 
     // Selection
-    final _start = _selectionStart;
-    final _end = _selectionEnd;
-    if (_start != null && _end != null) {
-      final size = _end - _start + const Offset(1, 1);
+    final start = _selectionStart;
+    final end = _selectionEnd;
+    if (start != null && end != null) {
+      final size = end - start + const Offset(1, 1);
       canvas.drawRect(
         Rect.fromLTWH(
-          _start.dx * _tileWidth,
-          _start.dy * _tileHeight,
+          start.dx * _tileWidth,
+          start.dy * _tileHeight,
           size.dx * _tileWidth,
           size.dy * _tileHeight,
         ),

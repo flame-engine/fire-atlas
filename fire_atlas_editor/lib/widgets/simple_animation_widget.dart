@@ -9,9 +9,9 @@ class SimpleAnimationLoaderWidget extends StatelessWidget {
   final Future<SpriteAnimation> future;
 
   const SimpleAnimationLoaderWidget({
-    Key? key,
     required this.future,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext ctx) {
@@ -36,9 +36,9 @@ class AnimationPlayerWidget extends StatefulWidget {
   final SpriteAnimation animation;
 
   const AnimationPlayerWidget({
-    Key? key,
     required this.animation,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State createState() => _AnimationPlayerWidget();

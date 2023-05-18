@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final _patreonUrl = Uri.parse('https://www.patreon.com/bluefireoss');
-final _buyMeACoffeeUrl = Uri.parse('https://www.buymeacoffee.com/bluefire');
 
 class SupportContainer extends StatelessWidget {
-  const SupportContainer({Key? key}) : super(key: key);
+  const SupportContainer({super.key});
 
   Future<void> _open(Uri url) async {
     if (await canLaunchUrl(url)) {
@@ -40,20 +39,6 @@ class SupportContainer extends StatelessWidget {
                 },
                 child: Image.asset(
                   'assets/patreon_button.png',
-                  width: 150,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            const SizedBox(width: 20),
-            Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  _open(_buyMeACoffeeUrl);
-                },
-                child: Image.asset(
-                  'assets/coffee_button.png',
                   width: 150,
                   fit: BoxFit.cover,
                 ),

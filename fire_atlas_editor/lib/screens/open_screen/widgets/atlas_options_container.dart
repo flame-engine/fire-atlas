@@ -14,10 +14,10 @@ class AtlasOptionsContainer extends StatefulWidget {
   final Function(String, String, double, double) onConfirm;
 
   const AtlasOptionsContainer({
-    Key? key,
     required this.onCancel,
     required this.onConfirm,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State createState() => _AtlasOptionsContainerState();
@@ -47,13 +47,13 @@ class _AtlasOptionsContainerState extends State<AtlasOptionsContainer> {
   }
 
   void _confirm() {
-    final _store = SlicesProvider.of<FireAtlasState>(context);
+    final store = SlicesProvider.of<FireAtlasState>(context);
     final tileWidthRaw = tileWidthController.text;
     final tileHeightRaw = tileHeightController.text;
     final atlasName = atlasNameController.text;
 
     if (atlasName.isEmpty) {
-      _store.dispatch(
+      store.dispatch(
         CreateMessageAction(
           message: 'Atlas name is required',
           type: MessageType.ERROR,
@@ -62,7 +62,7 @@ class _AtlasOptionsContainerState extends State<AtlasOptionsContainer> {
       return;
     }
     if (tileWidthRaw.isEmpty) {
-      _store.dispatch(
+      store.dispatch(
         CreateMessageAction(
           message: 'Tile Width is required',
           type: MessageType.ERROR,
@@ -72,7 +72,7 @@ class _AtlasOptionsContainerState extends State<AtlasOptionsContainer> {
     }
 
     if (tileHeightRaw.isEmpty) {
-      _store.dispatch(
+      store.dispatch(
         CreateMessageAction(
           message: 'Tile Height is required',
           type: MessageType.ERROR,
@@ -82,7 +82,7 @@ class _AtlasOptionsContainerState extends State<AtlasOptionsContainer> {
     }
 
     if (tileWidthRaw.isNotEmpty && !isValidNumber(tileWidthRaw)) {
-      _store.dispatch(
+      store.dispatch(
         CreateMessageAction(
           message: 'Tile Width must be a number',
           type: MessageType.ERROR,
@@ -92,7 +92,7 @@ class _AtlasOptionsContainerState extends State<AtlasOptionsContainer> {
     }
 
     if (tileHeightRaw.isNotEmpty && !isValidNumber(tileHeightRaw)) {
-      _store.dispatch(
+      store.dispatch(
         CreateMessageAction(
           message: 'Tile Height must be a number',
           type: MessageType.ERROR,
@@ -102,7 +102,7 @@ class _AtlasOptionsContainerState extends State<AtlasOptionsContainer> {
     }
 
     if (_imageData == null) {
-      _store.dispatch(
+      store.dispatch(
         CreateMessageAction(
           message: 'An image must be selected',
           type: MessageType.ERROR,
