@@ -16,11 +16,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
       - run: sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev
-      - run: flutter config --enable-linux-desktop
+      - run: cd packages/combustile_editor && flutter build linux
       - run: flutter build linux
       - name: Zips the build
         uses: papeloto/action-zip@v1
@@ -66,7 +66,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
       - run: flutter config --enable-windows-desktop
@@ -118,7 +118,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
       - uses: erickzanardo/flutter-gh-pages@v3
         with:
           workingDir: fire_atlas_editor
