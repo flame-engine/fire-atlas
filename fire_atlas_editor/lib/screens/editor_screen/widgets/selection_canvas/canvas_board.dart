@@ -21,12 +21,12 @@ class CanvasBoard extends StatefulWidget {
   final double tileHeight;
 
   const CanvasBoard({
-    Key? key,
     required this.sprite,
     required this.size,
     required this.tileWidth,
     required this.tileHeight,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State createState() => CanvasBoardState();
@@ -59,16 +59,16 @@ class CanvasBoardState extends State<CanvasBoard> {
   }
 
   void _finishSelection(Offset offset) {
-    final _store = SlicesProvider.of<FireAtlasState>(context);
+    final store = SlicesProvider.of<FireAtlasState>(context);
     if (_selectionEnd != offset && _selectionStart != null) {
-      final _start = _selectionStart!;
+      final start = _selectionStart!;
       final rect = Rect.fromLTWH(
-        _start.dx * widget.tileWidth,
-        _start.dy * widget.tileHeight,
-        ((offset.dx - _start.dx) + 1) * widget.tileWidth,
-        ((offset.dy - _start.dy) + 1) * widget.tileHeight,
+        start.dx * widget.tileWidth,
+        start.dy * widget.tileHeight,
+        ((offset.dx - start.dx) + 1) * widget.tileWidth,
+        ((offset.dy - start.dy) + 1) * widget.tileHeight,
       );
-      _store.dispatch(SetCanvasSelection(rect));
+      store.dispatch(SetCanvasSelection(rect));
     }
     _selectionEnd = offset;
   }
@@ -82,10 +82,10 @@ class CanvasBoardState extends State<CanvasBoard> {
   }
 
   void _handleMove(DragUpdateDetails details) {
-    final _last = _lastDrag;
-    if (_last != null) {
+    final last = _lastDrag;
+    if (last != null) {
       setState(() {
-        final delta = details.localPosition - _last;
+        final delta = details.localPosition - last;
 
         if (_currentTool == CanvasTools.MOVE) {
           _translateX += delta.dx;
@@ -136,9 +136,9 @@ class CanvasBoardState extends State<CanvasBoard> {
   }
 
   void _createItem() {
-    final _store = SlicesProvider.of<FireAtlasState>(context);
+    final store = SlicesProvider.of<FireAtlasState>(context);
     if (_selectionStart != null && _selectionEnd != null) {
-      _store.dispatch(
+      store.dispatch(
         OpenEditorModal(
           SelectionForm(
             selectionStart: _selectionStart,
@@ -149,7 +149,7 @@ class CanvasBoardState extends State<CanvasBoard> {
         ),
       );
     } else {
-      _store.dispatch(
+      store.dispatch(
         CreateMessageAction(
           type: MessageType.ERROR,
           message: 'Nothing is selected',
@@ -159,8 +159,8 @@ class CanvasBoardState extends State<CanvasBoard> {
   }
 
   void _autoMapFont() {
-    final _store = SlicesProvider.of<FireAtlasState>(context);
-    _store.dispatch(
+    final store = SlicesProvider.of<FireAtlasState>(context);
+    store.dispatch(
       OpenEditorModal(
         AutoMapFontModal(currentSprite: widget.sprite),
         800,

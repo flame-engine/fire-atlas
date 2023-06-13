@@ -20,16 +20,16 @@ class FireAtlasApp extends StatelessWidget {
   final SlicesStore<FireAtlasState> store;
 
   const FireAtlasApp({
-    Key? key,
     required this.store,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return SlicesProvider(
       store: store,
       child: SliceWatcher<FireAtlasState, _FireAtlasAppSlice>(
-        slicer: (state) => _FireAtlasAppSlice.fromState(state),
+        slicer: _FireAtlasAppSlice.fromState,
         builder: (context, store, slice) {
           return MaterialApp(
             title: 'Fire Atlas Editor',

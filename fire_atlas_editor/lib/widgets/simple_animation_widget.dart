@@ -9,9 +9,9 @@ class SimpleAnimationLoaderWidget extends StatelessWidget {
   final Future<SpriteAnimation> future;
 
   const SimpleAnimationLoaderWidget({
-    Key? key,
     required this.future,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext ctx) {
@@ -36,9 +36,9 @@ class AnimationPlayerWidget extends StatefulWidget {
   final SpriteAnimation animation;
 
   const AnimationPlayerWidget({
-    Key? key,
     required this.animation,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State createState() => _AnimationPlayerWidget();
@@ -50,28 +50,31 @@ class _AnimationPlayerWidget extends State<AnimationPlayerWidget>
   int _lastUpdated = 0;
   bool _playing = false;
 
+  late final SpriteAnimationTicker _ticker;
+
   @override
   void initState() {
     super.initState();
+    _ticker = widget.animation.ticker();
 
     _controller = AnimationController(vsync: this)
       ..addListener(() {
         final now = DateTime.now().millisecond;
 
         final double dt = max(0, (now - _lastUpdated) / 1000);
-        widget.animation.update(dt);
+        _ticker.update(dt);
 
         setState(() {
           _lastUpdated = now;
         });
       });
 
-    widget.animation.onComplete = _pauseAnimation;
+    _ticker.onComplete = _pauseAnimation;
   }
 
   void _initAnimation() {
     setState(() {
-      widget.animation.reset();
+      _ticker.reset();
       _playing = true;
       _lastUpdated = DateTime.now().millisecond;
       _controller.repeat(
@@ -100,7 +103,7 @@ class _AnimationPlayerWidget extends State<AnimationPlayerWidget>
       children: [
         Positioned.fill(
           child: SimpleSpriteWidget(
-            sprite: widget.animation.getSprite(),
+            sprite: _ticker.getSprite(),
             center: true,
           ),
         ),

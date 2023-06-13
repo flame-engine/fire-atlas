@@ -8,13 +8,13 @@ class FIconButton extends StatefulWidget {
   final String? tooltip;
 
   const FIconButton({
-    Key? key,
     required this.iconData,
     required this.onPress,
     this.disabled = false,
     this.color,
     this.tooltip,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State createState() => _FIconButtonState();

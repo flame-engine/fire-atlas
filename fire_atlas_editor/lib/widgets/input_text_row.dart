@@ -8,12 +8,12 @@ class InputTextRow extends StatelessWidget {
   final bool autofocus;
 
   const InputTextRow({
-    Key? key,
     required this.inputController,
     required this.label,
+    super.key,
     this.enabled = true,
     this.autofocus = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext ctx) {

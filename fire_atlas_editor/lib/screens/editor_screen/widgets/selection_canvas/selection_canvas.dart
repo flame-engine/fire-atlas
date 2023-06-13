@@ -28,12 +28,12 @@ class _SelectionCanvasSlice extends Equatable {
 }
 
 class SelectionCanvas extends StatelessWidget {
-  const SelectionCanvas({Key? key}) : super(key: key);
+  const SelectionCanvas({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SliceWatcher<FireAtlasState, _SelectionCanvasSlice>(
-      slicer: (state) => _SelectionCanvasSlice.fromState(state),
+      slicer: _SelectionCanvasSlice.fromState,
       builder: (context, store, slice) {
         if (!slice.isLoaded()) {
           return const Text('No atlas selected');

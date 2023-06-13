@@ -16,12 +16,12 @@ class _ToggleThemeButtonSlice extends Equatable {
 }
 
 class ToggleThemeButton extends StatelessWidget {
-  const ToggleThemeButton({Key? key}) : super(key: key);
+  const ToggleThemeButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SliceWatcher<FireAtlasState, _ToggleThemeButtonSlice>(
-      slicer: (state) => _ToggleThemeButtonSlice.fromState(state),
+      slicer: _ToggleThemeButtonSlice.fromState,
       builder: (context, store, slice) {
         return FIconButton(
           iconData: slice.currentTheme == ThemeMode.light

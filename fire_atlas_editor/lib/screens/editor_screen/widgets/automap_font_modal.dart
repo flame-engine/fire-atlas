@@ -16,9 +16,9 @@ class AutoMapFontModal extends StatefulWidget {
   final Sprite currentSprite;
 
   const AutoMapFontModal({
-    Key? key,
     required this.currentSprite,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -44,9 +44,9 @@ class _AutoMapFontModalState extends State<AutoMapFontModal> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final _store = SlicesProvider.of<FireAtlasState>(context);
+    final store = SlicesProvider.of<FireAtlasState>(context);
 
-    final atlas = _store.state.currentAtlas;
+    final atlas = store.state.currentAtlas;
 
     if (atlas == null) {
       throw "Can't map a bitmap font without a atlas selected";
@@ -56,7 +56,7 @@ class _AutoMapFontModalState extends State<AutoMapFontModal> {
   }
 
   void _calculateSelections() {
-    final _selections = <SpriteSelection>[];
+    final selections = <SpriteSelection>[];
 
     var x = 0;
     var y = 0;
@@ -79,17 +79,17 @@ class _AutoMapFontModalState extends State<AutoMapFontModal> {
 
       x++;
 
-      _selections.add(selection);
+      selections.add(selection);
     });
 
     setState(() {
-      _currentSelections = _selections;
+      _currentSelections = selections;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final _store = SlicesProvider.of<FireAtlasState>(context);
+    final store = SlicesProvider.of<FireAtlasState>(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
@@ -138,7 +138,7 @@ class _AutoMapFontModalState extends State<AutoMapFontModal> {
               FButton(
                 label: 'Cancel',
                 onSelect: () {
-                  _store.dispatch(CloseEditorModal());
+                  store.dispatch(CloseEditorModal());
                 },
               ),
               const SizedBox(width: 20),
@@ -146,12 +146,12 @@ class _AutoMapFontModalState extends State<AutoMapFontModal> {
                 label: 'Confirm',
                 selected: true,
                 onSelect: () {
-                  _store.dispatch(
+                  store.dispatch(
                     SetSelectionAction.multiple(
                       selections: _currentSelections,
                     ),
                   );
-                  _store.dispatch(CloseEditorModal());
+                  store.dispatch(CloseEditorModal());
                 },
               ),
             ],

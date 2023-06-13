@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:slices/slices.dart';
 
 class ChangeImageModal extends StatefulWidget {
-  const ChangeImageModal({Key? key}) : super(key: key);
+  const ChangeImageModal({super.key});
 
   @override
   State createState() => _ChangeImageModalState();
@@ -20,51 +20,49 @@ class _ChangeImageModalState extends State<ChangeImageModal> {
 
   @override
   Widget build(BuildContext ctx) {
-    final _store = SlicesProvider.of<FireAtlasState>(ctx);
-    return Container(
-      child: Column(
-        children: [
-          const FSubtitleTitle(title: 'Update image'),
-          Expanded(
-            child: ImageSelectionContainer(
-              margin: const EdgeInsets.all(30),
-              imageData: _imageData,
-              onSelectImage: (imageData) {
-                Flame.images.clearCache();
-                setState(() {
-                  _imageData = imageData;
-                });
+    final store = SlicesProvider.of<FireAtlasState>(ctx);
+    return Column(
+      children: [
+        const FSubtitleTitle(title: 'Update image'),
+        Expanded(
+          child: ImageSelectionContainer(
+            margin: const EdgeInsets.all(30),
+            imageData: _imageData,
+            onSelectImage: (imageData) {
+              Flame.images.clearCache();
+              setState(() {
+                _imageData = imageData;
+              });
+            },
+          ),
+        ),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FButton(
+              label: 'Cancel',
+              onSelect: () {
+                store.dispatch(CloseEditorModal());
               },
             ),
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              FButton(
-                label: 'Cancel',
-                onSelect: () {
-                  _store.dispatch(CloseEditorModal());
-                },
-              ),
-              FButton(
-                disabled: _imageData == null,
-                selected: true,
-                label: 'Ok',
-                onSelect: () {
-                  _store.dispatch(CloseEditorModal());
-                  _store.dispatchAsync(
-                    UpdateAtlasImageAction(
-                      imageData: _imageData!,
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-        ],
-      ),
+            FButton(
+              disabled: _imageData == null,
+              selected: true,
+              label: 'Ok',
+              onSelect: () {
+                store.dispatch(CloseEditorModal());
+                store.dispatchAsync(
+                  UpdateAtlasImageAction(
+                    imageData: _imageData!,
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+      ],
     );
   }
 }

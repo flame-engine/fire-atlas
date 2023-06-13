@@ -22,7 +22,7 @@ class _SelectionListSlice extends Equatable {
 }
 
 class SelectionList extends StatelessWidget {
-  const SelectionList({Key? key}) : super(key: key);
+  const SelectionList({super.key});
 
   @override
   Widget build(_) {
@@ -38,7 +38,7 @@ class SelectionList extends StatelessWidget {
           return const Text('No atlas selected');
         }
 
-        void _select(BaseSelection selection) =>
+        void select(BaseSelection selection) =>
             store.dispatch(SelectSelectionAction(selection: selection));
 
         return FContainer(
@@ -64,7 +64,7 @@ class SelectionList extends StatelessWidget {
                               ),
                             ),
                             child: GestureDetector(
-                              onTap: () => _select(selection),
+                              onTap: () => select(selection),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -87,7 +87,7 @@ class SelectionList extends StatelessWidget {
                                         FIconButton(
                                           iconData: Icons.edit,
                                           onPress: () {
-                                            _select(selection);
+                                            select(selection);
                                             store.dispatch(
                                               OpenEditorModal(
                                                 SelectionForm(
@@ -105,7 +105,7 @@ class SelectionList extends StatelessWidget {
                                       FIconButton(
                                         iconData: Icons.cancel,
                                         onPress: () {
-                                          _select(selection);
+                                          select(selection);
                                           store.dispatch(
                                             OpenEditorModal(
                                               const DeleteSelectionModal(),

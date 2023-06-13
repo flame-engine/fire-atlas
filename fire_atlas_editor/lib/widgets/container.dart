@@ -9,14 +9,14 @@ class FContainer extends StatelessWidget {
   final EdgeInsets padding;
 
   const FContainer({
-    Key? key,
+    super.key,
     this.child,
     this.height,
     this.width,
     this.color,
     this.margin = const EdgeInsets.all(2.5),
     this.padding = EdgeInsets.zero,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext ctx) {

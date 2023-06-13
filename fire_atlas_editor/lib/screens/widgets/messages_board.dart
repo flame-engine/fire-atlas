@@ -17,12 +17,12 @@ class _MessageBoardSlice extends Equatable {
 }
 
 class MessagesBoard extends StatelessWidget {
-  const MessagesBoard({Key? key}) : super(key: key);
+  const MessagesBoard({super.key});
 
   @override
   Widget build(_) {
     return SliceWatcher<FireAtlasState, _MessageBoardSlice>(
-      slicer: (state) => _MessageBoardSlice.fromState(state),
+      slicer: _MessageBoardSlice.fromState,
       builder: (ctx, store, slice) {
         return Column(
           children: slice.messages
@@ -50,8 +50,8 @@ class _Message extends StatelessWidget {
   const _Message({
     required this.message,
     required this.onVanish,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext ctx) {

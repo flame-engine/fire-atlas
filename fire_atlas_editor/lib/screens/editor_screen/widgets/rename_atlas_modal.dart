@@ -10,8 +10,7 @@ import 'package:slices/slices.dart';
 class RenameAtlasModal extends StatefulWidget {
   final String? currentName;
 
-  const RenameAtlasModal({Key? key, required this.currentName})
-      : super(key: key);
+  const RenameAtlasModal({required this.currentName, super.key});
 
   @override
   State createState() => _RenameAtlasModalState();

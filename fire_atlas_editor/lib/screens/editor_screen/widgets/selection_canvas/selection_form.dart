@@ -16,11 +16,11 @@ class SelectionForm extends StatefulWidget {
   final AnimationSelection? editingSelection;
 
   const SelectionForm({
-    Key? key,
+    super.key,
     this.selectionStart,
     this.selectionEnd,
     this.editingSelection,
-  }) : super(key: key);
+  });
 
   @override
   State createState() => _SelectionFormState();
@@ -53,9 +53,9 @@ class _SelectionFormState extends State<SelectionForm> {
     }
   }
 
-  void _chooseSelectionType(SelectionType _type) {
+  void _chooseSelectionType(SelectionType type) {
     setState(() {
-      _selectionType = _type;
+      _selectionType = type;
     });
   }
 
@@ -85,18 +85,18 @@ class _SelectionFormState extends State<SelectionForm> {
   }
 
   void _createSprite() {
-    final _store = SlicesProvider.of<FireAtlasState>(context);
+    final store = SlicesProvider.of<FireAtlasState>(context);
     if (selectionNameController.text.isNotEmpty) {
       final info = _fillSelectionBaseValues();
-      _store.dispatch(
+      store.dispatch(
         SetSelectionAction(
           selection: SpriteSelection(info: info),
         ),
       );
 
-      _store.dispatch(CloseEditorModal());
+      store.dispatch(CloseEditorModal());
     } else {
-      _store.dispatch(
+      store.dispatch(
         CreateMessageAction(
           type: MessageType.ERROR,
           message: 'You must inform the selection name',
@@ -106,12 +106,12 @@ class _SelectionFormState extends State<SelectionForm> {
   }
 
   void _createAnimation() {
-    final _store = SlicesProvider.of<FireAtlasState>(context);
+    final store = SlicesProvider.of<FireAtlasState>(context);
     if (selectionNameController.text.isNotEmpty &&
         frameCountController.text.isNotEmpty &&
         stepTimeController.text.isNotEmpty) {
       if (!isValidNumber(frameCountController.text)) {
-        _store.dispatch(
+        store.dispatch(
           CreateMessageAction(
             type: MessageType.ERROR,
             message: 'Frame count is not a valid number',
@@ -122,7 +122,7 @@ class _SelectionFormState extends State<SelectionForm> {
       }
 
       if (!isValidNumber(stepTimeController.text)) {
-        _store.dispatch(
+        store.dispatch(
           CreateMessageAction(
             type: MessageType.ERROR,
             message: 'Step time is not a valid number',
@@ -146,13 +146,13 @@ class _SelectionFormState extends State<SelectionForm> {
         ..stepTime = stepTime
         ..loop = _animationLoop;
 
-      _store.dispatch(
+      store.dispatch(
         SetSelectionAction(selection: selectionToSave),
       );
 
-      _store.dispatch(CloseEditorModal());
+      store.dispatch(CloseEditorModal());
     } else {
-      _store.dispatch(
+      store.dispatch(
         CreateMessageAction(
           type: MessageType.ERROR,
           message: 'All fields are required',

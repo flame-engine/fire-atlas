@@ -9,12 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:slices/slices.dart';
 
 class EditorScreen extends StatelessWidget {
-  const EditorScreen({Key? key}) : super(key: key);
+  const EditorScreen({super.key});
 
   @override
   Widget build(BuildContext ctx) {
-    final _store = SlicesProvider.of<FireAtlasState>(ctx);
-    if (_store.state.currentAtlas == null) {
+    final store = SlicesProvider.of<FireAtlasState>(ctx);
+    if (store.state.currentAtlas == null) {
       return Scaffold(
         body: Center(
           child: Column(
@@ -36,10 +36,10 @@ class EditorScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Body
-        Expanded(
+        const Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: const [
+            children: [
               Toolbar(),
               Expanded(
                 child: SelectionCanvas(),
@@ -49,8 +49,8 @@ class EditorScreen extends StatelessWidget {
         ),
         Container(
           width: 400,
-          child: Column(
-            children: const [
+          child: const Column(
+            children: [
               Expanded(
                 flex: 4,
                 child: Preview(),

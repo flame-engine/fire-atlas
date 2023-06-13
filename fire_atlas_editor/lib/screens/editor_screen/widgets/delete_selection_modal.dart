@@ -7,16 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:slices/slices.dart';
 
 class DeleteSelectionModal extends StatelessWidget {
-  const DeleteSelectionModal({Key? key}) : super(key: key);
+  const DeleteSelectionModal({super.key});
 
   @override
   Widget build(BuildContext ctx) {
     final store = SlicesProvider.of<FireAtlasState>(ctx);
-    void _closeModal() => store.dispatch(CloseEditorModal());
+    void closeModal() => store.dispatch(CloseEditorModal());
 
-    void _confirm() {
+    void confirm() {
       store.dispatch(RemoveSelectedSelectionAction());
-      _closeModal();
+      closeModal();
     }
 
     return Container(
@@ -32,12 +32,12 @@ class DeleteSelectionModal extends StatelessWidget {
             children: [
               FButton(
                 label: 'Cancel',
-                onSelect: _closeModal,
+                onSelect: closeModal,
               ),
               FButton(
                 selected: true,
                 label: 'Yes',
-                onSelect: _confirm,
+                onSelect: confirm,
               ),
             ],
           ),

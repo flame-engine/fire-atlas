@@ -15,11 +15,11 @@ class SlideContainer extends StatefulWidget {
     this.to = Offset.zero,
     this.duration = const Duration(seconds: 1),
     this.curve = Curves.easeInExpo,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
-  _SlideContainer createState() => _SlideContainer();
+  State createState() => _SlideContainer();
 }
 
 class _SlideContainer extends State<SlideContainer>

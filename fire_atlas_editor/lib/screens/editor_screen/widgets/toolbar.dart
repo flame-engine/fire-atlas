@@ -28,7 +28,7 @@ class _ToolbarSlice extends Equatable {
 }
 
 class Toolbar extends StatelessWidget {
-  const Toolbar({Key? key}) : super(key: key);
+  const Toolbar({super.key});
 
   Future<void> _launchURL(FireAtlas atlas) async {
     final bytes = atlas.serialize();
@@ -41,7 +41,7 @@ class Toolbar extends StatelessWidget {
   @override
   Widget build(BuildContext ctx) {
     return SliceWatcher<FireAtlasState, _ToolbarSlice>(
-      slicer: (state) => _ToolbarSlice.fromState(state),
+      slicer: _ToolbarSlice.fromState,
       builder: (ctx, store, slice) => FContainer(
         height: 60,
         child: Column(
