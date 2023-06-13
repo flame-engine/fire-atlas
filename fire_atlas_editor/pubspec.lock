@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: d6347d54a2d8028e0437e3c099f66fdb8ae02c4720c1e7534c9f24c10351f85d
+      sha256: "0c8368c9b3f0abbc193b9d6133649a614204b528982bebc7026372d61677ce3a"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.6"
+    version: "3.3.7"
   async:
     dependency: transitive
     description:
@@ -173,26 +173,26 @@ packages:
     dependency: "direct main"
     description:
       name: flame
-      sha256: c38e1be5827aa839c166c6ed08a2733bb4523bf153d8c670739c20c842fa1844
+      sha256: "6954277d14731fa497a7a878bb34cf01c090b20e3ffe5c6e093a7c1f823bfac5"
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.3"
+    version: "1.8.0"
   flame_fire_atlas:
     dependency: "direct main"
     description:
       name: flame_fire_atlas
-      sha256: "87c4afd4719126cea5c6cb466556cf21374c3887425fa14078f87acb08d4dcc8"
+      sha256: "072cc15ee4be55e2363c71f66252b11b7ae4e8e2bf3c2f9e75fbef0de4c794bb"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.5"
+    version: "1.3.6"
   flame_lint:
     dependency: "direct main"
     description:
       name: flame_lint
-      sha256: eadebb2a5a010029c3bbc2b64a9e5bea4d1a8a48a52ce2eee344a6901a5707da
+      sha256: f9d519a8399fc50bdecda5abc4d3ce10bf51e95fa6d93768bb4ce587c03815ef
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.0+2"
+    version: "1.0.0"
   flutter:
     dependency: "direct main"
     description: flutter
