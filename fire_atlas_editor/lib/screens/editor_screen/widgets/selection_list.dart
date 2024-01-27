@@ -124,7 +124,7 @@ class SelectionList extends StatelessWidget {
                           );
                         })
                         .toList()
-                        .cast<Widget>()
+                        .cast<Widget>(),
               ],
             ),
           ),

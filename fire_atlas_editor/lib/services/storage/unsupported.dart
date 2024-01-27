@@ -28,7 +28,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   }
 
   @override
-  Future<String> selectFile() {
+  Future<(String, String)> selectFile() {
     throw 'Unsupported';
   }
 

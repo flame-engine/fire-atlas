@@ -25,6 +25,7 @@ class AtlasOptionsContainer extends StatefulWidget {
 
 class _AtlasOptionsContainerState extends State<AtlasOptionsContainer> {
   String? _imageData;
+  String? _imageName;
   late final TextEditingController atlasNameController;
   late final TextEditingController tileWidthController;
   late final TextEditingController tileHeightController;
@@ -163,10 +164,11 @@ class _AtlasOptionsContainerState extends State<AtlasOptionsContainer> {
                   flex: 5,
                   child: ImageSelectionContainer(
                     imageData: _imageData,
-                    onSelectImage: (imageData) {
-                      Flame.images.clearCache();
+                    imageName: _imageName,
+                    onSelectImage: (imageName, imageData) {
                       setState(() {
                         _imageData = imageData;
+                        _imageName = imageName;
                       });
                     },
                   ),
