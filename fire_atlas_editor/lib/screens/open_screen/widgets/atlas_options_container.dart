@@ -5,7 +5,6 @@ import 'package:fire_atlas_editor/widgets/button.dart';
 import 'package:fire_atlas_editor/widgets/image_selection_container.dart';
 import 'package:fire_atlas_editor/widgets/input_text_row.dart';
 import 'package:fire_atlas_editor/widgets/text.dart';
-import 'package:flame/flame.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:slices/slices.dart';
 
