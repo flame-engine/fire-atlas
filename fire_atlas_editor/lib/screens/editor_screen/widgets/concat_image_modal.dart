@@ -18,6 +18,7 @@ class ConcatImageModal extends StatefulWidget {
 
 class _ConcatImageModalState extends State<ConcatImageModal> {
   String? _imageData;
+  String? _imageName;
   Vector2? _placement;
   Rect? _selection;
 
@@ -40,9 +41,11 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                     right: 10,
                   ),
                   imageData: _imageData,
-                  onSelectImage: (imageData) {
+                  imageName: _imageName,
+                  onSelectImage: (imageName, imageData) {
                     setState(() {
                       _imageData = imageData;
+                      _imageName = imageName;
                     });
                   },
                 ),

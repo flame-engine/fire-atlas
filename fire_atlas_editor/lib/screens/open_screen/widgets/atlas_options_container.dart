@@ -5,7 +5,6 @@ import 'package:fire_atlas_editor/widgets/button.dart';
 import 'package:fire_atlas_editor/widgets/image_selection_container.dart';
 import 'package:fire_atlas_editor/widgets/input_text_row.dart';
 import 'package:fire_atlas_editor/widgets/text.dart';
-import 'package:flame/flame.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:slices/slices.dart';
 
@@ -25,6 +24,7 @@ class AtlasOptionsContainer extends StatefulWidget {
 
 class _AtlasOptionsContainerState extends State<AtlasOptionsContainer> {
   String? _imageData;
+  String? _imageName;
   late final TextEditingController atlasNameController;
   late final TextEditingController tileWidthController;
   late final TextEditingController tileHeightController;
@@ -163,10 +163,11 @@ class _AtlasOptionsContainerState extends State<AtlasOptionsContainer> {
                   flex: 5,
                   child: ImageSelectionContainer(
                     imageData: _imageData,
-                    onSelectImage: (imageData) {
-                      Flame.images.clearCache();
+                    imageName: _imageName,
+                    onSelectImage: (imageName, imageData) {
                       setState(() {
                         _imageData = imageData;
+                        _imageName = imageName;
                       });
                     },
                   ),

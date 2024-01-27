@@ -55,7 +55,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   @override
   Future<LoadedProjectEntry> selectProject() async {
     final fileData = await selectFile();
-    final base64 = fileData.substring(fileData.indexOf(',') + 1);
+    final base64 = fileData.$2.substring(fileData.$2.indexOf(',') + 1);
     final atlas = _readBase64Project(base64);
 
     return LoadedProjectEntry(
@@ -70,8 +70,8 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   }
 
   @override
-  Future<String> selectFile() {
-    final completer = Completer<String>();
+  Future<(String, String)> selectFile() {
+    final completer = Completer<(String, String)>();
     final uploadInput = FileUploadInputElement();
     uploadInput.click();
 
@@ -85,7 +85,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
         reader.onLoadEnd.listen((e) {
           final result = reader.result;
           if (result != null) {
-            completer.complete(result as String);
+            completer.complete((file.name, result as String));
           }
         });
         reader.readAsDataUrl(file);

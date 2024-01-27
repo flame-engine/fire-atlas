@@ -1,6 +1,7 @@
 import 'package:fire_atlas_editor/services/storage/storage.dart';
 import 'package:fire_atlas_editor/store/actions/editor_actions.dart';
 import 'package:fire_atlas_editor/store/store.dart';
+import 'package:flame/flame.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 import 'package:flutter/rendering.dart';
 import 'package:slices/slices.dart';
@@ -48,6 +49,7 @@ class UpdateAtlasImageAction extends AsyncSlicesAction<FireAtlasState> {
     if (state.currentAtlas != null) {
       final atlas = state.currentAtlas!;
 
+      Flame.images.clearCache();
       atlas.imageData = imageData;
       await atlas.loadImage(clearImageData: false);
 

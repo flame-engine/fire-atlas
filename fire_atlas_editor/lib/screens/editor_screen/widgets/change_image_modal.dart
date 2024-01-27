@@ -4,7 +4,6 @@ import 'package:fire_atlas_editor/store/store.dart';
 import 'package:fire_atlas_editor/widgets/button.dart';
 import 'package:fire_atlas_editor/widgets/image_selection_container.dart';
 import 'package:fire_atlas_editor/widgets/text.dart';
-import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:slices/slices.dart';
 
@@ -17,6 +16,7 @@ class ChangeImageModal extends StatefulWidget {
 
 class _ChangeImageModalState extends State<ChangeImageModal> {
   String? _imageData;
+  String? _imageName;
 
   @override
   Widget build(BuildContext ctx) {
@@ -28,10 +28,11 @@ class _ChangeImageModalState extends State<ChangeImageModal> {
           child: ImageSelectionContainer(
             margin: const EdgeInsets.all(30),
             imageData: _imageData,
-            onSelectImage: (imageData) {
-              Flame.images.clearCache();
+            imageName: _imageName,
+            onSelectImage: (imageName, imageData) {
               setState(() {
                 _imageData = imageData;
+                _imageName = imageName;
               });
             },
           ),

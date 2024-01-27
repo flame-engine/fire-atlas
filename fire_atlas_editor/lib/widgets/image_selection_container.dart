@@ -8,16 +8,18 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart' hide Image;
 
-typedef OnSelectImage = void Function(String);
+typedef OnSelectImage = void Function(String, String);
 
 class ImageSelectionContainer extends StatelessWidget {
   final String? imageData;
+  final String? imageName;
   final OnSelectImage onSelectImage;
   final EdgeInsets margin;
 
   const ImageSelectionContainer({
     required this.onSelectImage,
     this.imageData,
+    this.imageName,
     this.margin = const EdgeInsets.only(
       left: 30,
       right: 2.5,
@@ -34,13 +36,11 @@ class ImageSelectionContainer extends StatelessWidget {
         Expanded(
           child: FContainer(
             margin: margin,
-            child: imageData != null
+            child: imageData != null && imageName != null
                 ? FutureBuilder<Image>(
-                    // TODO(erick): image name
-                    future: Flame.images.fromBase64('', imageData!),
+                    future: Flame.images.fromBase64(imageName!, imageData!),
                     builder: (ctx, snapshot) {
                       if (snapshot.hasData) {
-                        Flame.images.clearCache();
                         return SizedBox(
                           width: 200,
                           child: SimpleSpriteWidget(
@@ -61,10 +61,10 @@ class ImageSelectionContainer extends StatelessWidget {
           label: 'Select image',
           onSelect: () async {
             final storage = FireAtlasStorage();
-            final imgDataUrl = await storage.selectFile();
-            onSelectImage(imgDataUrl);
+            final file = await storage.selectFile();
+            onSelectImage(file.$1, file.$2);
           },
-        )
+        ),
       ],
     );
   }

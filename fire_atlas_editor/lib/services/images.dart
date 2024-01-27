@@ -14,7 +14,6 @@ Future<String> concatenateImages(
 ) async {
   final original = await Flame.images.fromBase64('original', originalData);
   final newImage = await Flame.images.fromBase64('newImage', newImageData);
-  Flame.images.clearCache();
 
   final recorder = PictureRecorder();
   final canvas = Canvas(recorder);

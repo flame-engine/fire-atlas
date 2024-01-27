@@ -71,10 +71,10 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   }
 
   @override
-  Future<String> selectFile() async {
+  Future<(String, String)> selectFile() async {
     final file = await _selectDialog();
     final bytes = await file.readAsBytes();
-    return base64Encode(bytes);
+    return (file.name, base64Encode(bytes));
   }
 
   Future<XFile> _selectDialog([XTypeGroup? typeGroup]) async {
