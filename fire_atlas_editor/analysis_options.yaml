@@ -1,6 +1,0 @@
-include: package:flame_lint/analysis_options.yaml
-
-linter:
-  rules:
-    avoid_catches_without_on_clauses: false
-    constant_identifier_names: false
