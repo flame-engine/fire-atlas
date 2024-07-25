@@ -29,7 +29,7 @@ class FButton extends StatelessWidget {
       child: Opacity(
         opacity: disabled ? 0.6 : 1,
         child: ElevatedButton(
-          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(color)),
+          style: ButtonStyle(backgroundColor: WidgetStateProperty.all(color)),
           onPressed: () {
             if (!disabled) {
               onSelect();

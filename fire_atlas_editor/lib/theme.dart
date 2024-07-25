@@ -14,8 +14,8 @@ final darkTheme = ThemeData(
   indicatorColor: _buttonColor,
   visualDensity: VisualDensity.adaptivePlatformDensity,
   checkboxTheme: CheckboxThemeData(
-    checkColor: MaterialStateProperty.all(_buttonColor),
-    fillColor: MaterialStateProperty.all(_darkPrimaryColor),
+    checkColor: WidgetStateProperty.all(_buttonColor),
+    fillColor: WidgetStateProperty.all(_darkPrimaryColor),
   ),
   brightness: Brightness.dark,
 );
