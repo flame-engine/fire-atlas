@@ -55,7 +55,7 @@ class _AnimationPlayerWidget extends State<AnimationPlayerWidget>
   @override
   void initState() {
     super.initState();
-    _ticker = widget.animation.ticker();
+    _ticker = widget.animation.createTicker();
 
     _controller = AnimationController(vsync: this)
       ..addListener(() {

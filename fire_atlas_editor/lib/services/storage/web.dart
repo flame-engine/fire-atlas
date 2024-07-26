@@ -121,6 +121,6 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   FireAtlas _readBase64Project(String base64) {
     final jsonRaw = base64Decode(base64);
 
-    return FireAtlas.deserialize(jsonRaw);
+    return FireAtlas.deserializeBytes(jsonRaw);
   }
 }

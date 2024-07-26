@@ -12,7 +12,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   Future<LoadedProjectEntry> loadProject(String path) async {
     final file = File(path);
     final raw = await file.readAsBytes();
-    final atlas = FireAtlas.deserialize(raw);
+    final atlas = FireAtlas.deserializeBytes(raw);
     return LoadedProjectEntry(path, atlas);
   }
 
@@ -57,7 +57,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
     const typeGroup = XTypeGroup(label: 'fire atlas', extensions: ['fa']);
     final file = await _selectDialog(typeGroup);
     final bytes = await file.readAsBytes();
-    final atlas = FireAtlas.deserialize(bytes);
+    final atlas = FireAtlas.deserializeBytes(bytes);
     return LoadedProjectEntry(file.path, atlas);
   }
 
