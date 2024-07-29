@@ -88,7 +88,7 @@ class UpdateSelectionGroup extends SlicesAction<FireAtlasState> {
       }
     }
 
-    return state;
+    return state.copyWith(hasChanges: true);
   }
 }
 

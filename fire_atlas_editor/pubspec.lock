@@ -180,12 +180,11 @@ packages:
   flame_fire_atlas:
     dependency: "direct main"
     description:
-      path: "packages/flame_fire_atlas"
-      ref: "erick.fire_atlas_group"
-      resolved-ref: "4e0211e15ded5341da3d41c095bc3848551554c0"
-      url: "https://github.com/flame-engine/flame.git"
-    source: git
-    version: "1.5.2"
+      name: flame_fire_atlas
+      sha256: "27ad3bd6c37723d41a6079ea675d77e5ca52670f5a073ba12e0ee5b7b575082f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.3"
   flame_lint:
     dependency: "direct main"
     description:
