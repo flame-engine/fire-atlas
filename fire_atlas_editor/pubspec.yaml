@@ -16,7 +16,7 @@ dependencies:
   file_selector_macos: ^0.9.0+4
   file_selector_windows: ^0.9.1+4
   flame: ^1.18.0
-  flame_fire_atlas: ^1.5.2
+  flame_fire_atlas: ^1.5.3
   flame_lint: ^1.0.0
   flutter:
     sdk: flutter

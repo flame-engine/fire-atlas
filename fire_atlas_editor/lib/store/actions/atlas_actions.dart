@@ -65,6 +65,33 @@ class UpdateAtlasImageAction extends AsyncSlicesAction<FireAtlasState> {
   }
 }
 
+class UpdateSelectionGroup extends SlicesAction<FireAtlasState> {
+  UpdateSelectionGroup({
+    required this.selectionId,
+    this.group,
+  });
+
+  final String selectionId;
+  final String? group;
+
+  @override
+  FireAtlasState perform(
+    SlicesStore<FireAtlasState> store,
+    FireAtlasState state,
+  ) {
+    final atlas = state.currentAtlas;
+    if (atlas != null) {
+      final selection = atlas.selections[selectionId];
+
+      if (selection != null) {
+        atlas.selections[selectionId] = selection.copyWithGroup(group);
+      }
+    }
+
+    return state.copyWith(hasChanges: true);
+  }
+}
+
 class SetSelectionAction extends SlicesAction<FireAtlasState> {
   final List<BaseSelection> selections;
 

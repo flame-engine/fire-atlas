@@ -63,11 +63,11 @@ class FireAtlasStorage extends FireAtlasStorageApi {
 
   @override
   Future<String> selectNewProjectPath(FireAtlas atlas) async {
-    final file = await getSavePath(suggestedName: '${atlas.id}.fa');
+    final file = await getSaveLocation(suggestedName: '${atlas.id}.fa');
     if (file == null) {
       throw 'Nothing selected';
     }
-    return file;
+    return file.path;
   }
 
   @override
