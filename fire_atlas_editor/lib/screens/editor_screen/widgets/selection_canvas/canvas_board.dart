@@ -219,8 +219,8 @@ class CanvasBoardState extends State<CanvasBoard> {
                 onPointerSignal: (s) {
                   if (s is PointerScrollEvent) {
                     setState(() {
-                      _translateX += s.scrollDelta.dx;
-                      _translateY += s.scrollDelta.dy;
+                      _translateX -= s.scrollDelta.dx;
+                      _translateY -= s.scrollDelta.dy;
                     });
                   }
                 },
