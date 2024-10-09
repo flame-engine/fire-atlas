@@ -42,7 +42,11 @@ class _ConcatImageModalState extends State<ConcatImageModal> {
                   ),
                   imageData: _imageData,
                   imageName: _imageName,
-                  onSelectImage: (imageName, imageData) {
+                  onSelectImage: ({
+                    required imageName,
+                    required imagePath,
+                    required imageData,
+                  }) {
                     setState(() {
                       _imageData = imageData;
                       _imageName = imageName;

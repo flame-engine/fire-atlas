@@ -12,9 +12,14 @@ class Nullable<T> {
 @immutable
 class LoadedProjectEntry {
   final String? path;
+  final String? lastUsedImage;
   final FireAtlas project;
 
-  const LoadedProjectEntry(this.path, this.project);
+  const LoadedProjectEntry(
+    this.path,
+    this.project,
+    this.lastUsedImage,
+  );
 
   LastProjectEntry toLastProjectEntry() {
     final currentPath = path;
@@ -29,11 +34,13 @@ class LoadedProjectEntry {
 
   LoadedProjectEntry copyWith({
     String? path,
+    String? lastUsedImage,
     FireAtlas? project,
   }) {
     return LoadedProjectEntry(
       path ?? this.path,
       project ?? this.project,
+      lastUsedImage ?? this.lastUsedImage,
     );
   }
 }

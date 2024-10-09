@@ -73,6 +73,7 @@ class _OpenScreenState extends State<OpenScreen> {
           onConfirm: (
             String atlasName,
             String imageData,
+            String imagePath,
             double tileWidth,
             double tileHeight,
           ) async {
@@ -82,6 +83,7 @@ class _OpenScreenState extends State<OpenScreen> {
               CreateAtlasAction(
                 id: atlasName,
                 imageData: imageData,
+                imagePath: imagePath,
                 tileWidth: tileWidth,
                 tileHeight: tileHeight,
               ),
@@ -155,14 +157,6 @@ class _OpenScreenState extends State<OpenScreen> {
                           Expanded(
                             child: Image.asset('assets/Logo.png'),
                           ),
-                          if (!kIsWeb && Platform.isMacOS)
-                            Container(
-                              width: 300,
-                              child: _Buttons(
-                                importAtlas: _importAtlas,
-                                newAtlas: _newAtlas,
-                              ),
-                            ),
                         ],
                       ),
                       FContainer(

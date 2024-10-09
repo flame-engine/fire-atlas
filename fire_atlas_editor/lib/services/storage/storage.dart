@@ -12,9 +12,15 @@ abstract class FireAtlasStorageApi {
   Future<void> saveProject(LoadedProjectEntry entry);
   Future<List<LastProjectEntry>> lastUsedProjects();
   Future<void> rememberProject(LoadedProjectEntry entry);
+  Future<void> rememberProjectImageFile(
+    String projectId,
+    String imageFile,
+  );
+  Future<String?> getProjectLastImageFile(String projectId);
   Future<String> selectNewProjectPath(FireAtlas atlas);
   Future<LoadedProjectEntry> selectProject();
-  Future<(String, String)> selectFile();
+  Future<(String, String, String)> selectFile();
+  Future<String> readImageData(String path);
   Future<void> exportFile(List<int> bytes, String fileName);
   Future<void> setConfig(String key, String value);
   Future<String> getConfig(String key, String defaultValue);

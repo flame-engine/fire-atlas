@@ -10,7 +10,7 @@ import 'package:slices/slices.dart';
 
 class AtlasOptionsContainer extends StatefulWidget {
   final void Function() onCancel;
-  final Function(String, String, double, double) onConfirm;
+  final Function(String, String, String, double, double) onConfirm;
 
   const AtlasOptionsContainer({
     required this.onCancel,
@@ -25,6 +25,8 @@ class AtlasOptionsContainer extends StatefulWidget {
 class _AtlasOptionsContainerState extends State<AtlasOptionsContainer> {
   String? _imageData;
   String? _imageName;
+  String? _imagePath;
+
   late final TextEditingController atlasNameController;
   late final TextEditingController tileWidthController;
   late final TextEditingController tileHeightController;
@@ -114,6 +116,7 @@ class _AtlasOptionsContainerState extends State<AtlasOptionsContainer> {
     widget.onConfirm(
       atlasName,
       _imageData!,
+      _imagePath!,
       double.parse(tileWidthRaw),
       double.parse(tileHeightRaw),
     );
@@ -164,9 +167,14 @@ class _AtlasOptionsContainerState extends State<AtlasOptionsContainer> {
                   child: ImageSelectionContainer(
                     imageData: _imageData,
                     imageName: _imageName,
-                    onSelectImage: (imageName, imageData) {
+                    onSelectImage: ({
+                      required imageName,
+                      required imagePath,
+                      required imageData,
+                    }) {
                       setState(() {
                         _imageData = imageData;
+                        _imagePath = imagePath;
                         _imageName = imageName;
                       });
                     },

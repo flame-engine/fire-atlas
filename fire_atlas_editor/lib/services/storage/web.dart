@@ -61,7 +61,13 @@ class FireAtlasStorage extends FireAtlasStorageApi {
     return LoadedProjectEntry(
       'ATLAS_${atlas.id}',
       atlas,
+      null,
     );
+  }
+
+  @override
+  Future<String> readImageData(String path) async {
+    throw 'Unsupported';
   }
 
   @override
@@ -70,8 +76,8 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   }
 
   @override
-  Future<(String, String)> selectFile() {
-    final completer = Completer<(String, String)>();
+  Future<(String, String, String)> selectFile() {
+    final completer = Completer<(String, String, String)>();
     final uploadInput = FileUploadInputElement();
     uploadInput.click();
 
@@ -85,7 +91,13 @@ class FireAtlasStorage extends FireAtlasStorageApi {
         reader.onLoadEnd.listen((e) {
           final result = reader.result;
           if (result != null) {
-            completer.complete((file.name, result as String));
+            completer.complete(
+              (
+                file.name,
+                file.relativePath ?? file.name,
+                result as String,
+              ),
+            );
           }
         });
         reader.readAsDataUrl(file);
@@ -122,5 +134,13 @@ class FireAtlasStorage extends FireAtlasStorageApi {
     final jsonRaw = base64Decode(base64);
 
     return FireAtlas.deserializeBytes(jsonRaw);
+  }
+
+  @override
+  Future<void> rememberProjectImageFile(
+    String projectId,
+    String imageFile,
+  ) async {
+    // Noop on web
   }
 }
