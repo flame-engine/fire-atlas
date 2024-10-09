@@ -1,4 +1,3 @@
-
 import 'package:fire_atlas_editor/screens/open_screen/widgets/atlas_options_container.dart';
 import 'package:fire_atlas_editor/screens/open_screen/widgets/support_container.dart';
 import 'package:fire_atlas_editor/screens/widgets/scaffold.dart';
