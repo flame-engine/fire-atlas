@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:fire_atlas_editor/screens/open_screen/widgets/atlas_options_container.dart';
 import 'package:fire_atlas_editor/screens/open_screen/widgets/support_container.dart';
@@ -12,7 +11,6 @@ import 'package:fire_atlas_editor/widgets/button.dart';
 import 'package:fire_atlas_editor/widgets/container.dart';
 import 'package:fire_atlas_editor/widgets/icon_button.dart';
 import 'package:fire_atlas_editor/widgets/text.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:slices/slices.dart';
 
