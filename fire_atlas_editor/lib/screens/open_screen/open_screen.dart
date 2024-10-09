@@ -165,29 +165,28 @@ class _OpenScreenState extends State<OpenScreen> {
                             ),
                         ],
                       ),
-                      if (kIsWeb || !Platform.isMacOS)
-                        FContainer(
-                          width: 400,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: containerChildren,
-                                  ),
+                      FContainer(
+                        width: 400,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: containerChildren,
                                 ),
                               ),
-                              _Buttons(
-                                importAtlas: _importAtlas,
-                                newAtlas: _newAtlas,
-                              ),
-                              const SizedBox(height: 20),
-                            ],
-                          ),
+                            ),
+                            _Buttons(
+                              importAtlas: _importAtlas,
+                              newAtlas: _newAtlas,
+                            ),
+                            const SizedBox(height: 20),
+                          ],
                         ),
+                      ),
                       const SizedBox(height: 20),
                     ],
                   ),
