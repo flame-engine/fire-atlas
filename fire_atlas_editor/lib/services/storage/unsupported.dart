@@ -51,4 +51,19 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   Future<String> getConfig(String key, String defaultValue) {
     throw 'Unsupported';
   }
+
+  @override
+  Future<String?> getProjectLastImageFile(String projectId) {
+    throw 'Unsupported';
+  }
+
+  @override
+  Future<String> readImageData(String path) {
+    throw 'Unsupported';
+  }
+
+  @override
+  Future<void> rememberProjectImageFile(String projectId, String imageFile) {
+    throw 'Unsupported';
+  }
 }

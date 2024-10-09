@@ -20,6 +20,7 @@ class FireAtlasStorage extends FireAtlasStorageApi {
     final entry = LoadedProjectEntry(
       path,
       _readBase64Project(value),
+      null,
     );
 
     return entry;
@@ -142,5 +143,10 @@ class FireAtlasStorage extends FireAtlasStorageApi {
     String imageFile,
   ) async {
     // Noop on web
+  }
+
+  @override
+  Future<String?> getProjectLastImageFile(String projectId) {
+    throw 'Unsupported';
   }
 }
