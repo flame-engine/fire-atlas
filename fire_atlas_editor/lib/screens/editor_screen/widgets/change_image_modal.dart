@@ -16,7 +16,7 @@ class ChangeImageModal extends StatefulWidget {
 
 class _ChangeImageModalState extends State<ChangeImageModal> {
   String? _imageData;
-  String? _imagePath;
+  late String? _imagePath;
   String? _imageName;
 
   @override
@@ -62,7 +62,7 @@ class _ChangeImageModalState extends State<ChangeImageModal> {
                 store.dispatchAsync(
                   UpdateAtlasImageAction(
                     imageData: _imageData!,
-                    imagePath: _imagePath!,
+                    imagePath: _imagePath,
                   ),
                 );
               },

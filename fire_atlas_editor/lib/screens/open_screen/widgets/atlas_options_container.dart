@@ -25,7 +25,7 @@ class AtlasOptionsContainer extends StatefulWidget {
 class _AtlasOptionsContainerState extends State<AtlasOptionsContainer> {
   String? _imageData;
   String? _imageName;
-  String? _imagePath;
+  late String? _imagePath;
 
   late final TextEditingController atlasNameController;
   late final TextEditingController tileWidthController;
