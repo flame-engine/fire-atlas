@@ -17,7 +17,7 @@ dependencies:
   file_selector_windows: ^0.9.1+4
   flame: ^1.18.0
   flame_fire_atlas: ^1.5.3
-  flame_lint: ^1.0.0
+  flame_lint: ^1.2.1
   flutter:
     sdk: flutter
   shared_preferences: ^2.0.17

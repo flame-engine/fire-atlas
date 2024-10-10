@@ -8,7 +8,11 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart' hide Image;
 
-typedef OnSelectImage = void Function(String, String);
+typedef OnSelectImage = void Function({
+  required String imageName,
+  required String imagePath,
+  required String imageData,
+});
 
 class ImageSelectionContainer extends StatelessWidget {
   final String? imageData;
@@ -62,7 +66,11 @@ class ImageSelectionContainer extends StatelessWidget {
           onSelect: () async {
             final storage = FireAtlasStorage();
             final file = await storage.selectFile();
-            onSelectImage(file.$1, file.$2);
+            onSelectImage(
+              imageName: file.$1,
+              imagePath: file.$2,
+              imageData: file.$3,
+            );
           },
         ),
       ],

@@ -9,12 +9,14 @@ import 'package:slices/slices.dart';
 class CreateAtlasAction extends AsyncSlicesAction<FireAtlasState> {
   final String id;
   final String imageData;
+  final String imagePath;
   final double tileWidth;
   final double tileHeight;
 
   CreateAtlasAction({
     required this.id,
     required this.imageData,
+    required this.imagePath,
     required this.tileWidth,
     required this.tileHeight,
   });
@@ -33,7 +35,11 @@ class CreateAtlasAction extends AsyncSlicesAction<FireAtlasState> {
     return state.copyWith(
       hasChanges: true,
       loadedProject: Nullable(
-        LoadedProjectEntry(null, atlas),
+        LoadedProjectEntry(
+          null,
+          atlas,
+          imagePath,
+        ),
       ),
     );
   }
@@ -41,24 +47,72 @@ class CreateAtlasAction extends AsyncSlicesAction<FireAtlasState> {
 
 class UpdateAtlasImageAction extends AsyncSlicesAction<FireAtlasState> {
   final String imageData;
+  final String? imagePath;
 
-  UpdateAtlasImageAction({required this.imageData});
+  UpdateAtlasImageAction({
+    required this.imageData,
+    this.imagePath,
+  });
 
   @override
   Future<FireAtlasState> perform(_, FireAtlasState state) async {
     if (state.currentAtlas != null) {
       final atlas = state.currentAtlas!;
 
-      Flame.images.clearCache();
-      atlas.imageData = imageData;
-      await atlas.loadImage(clearImageData: false);
+      final sameImage = (atlas.imageData == imageData);
+
+      if (!sameImage) {
+        Flame.images.clearCache();
+
+        atlas.imageData = imageData;
+        await atlas.loadImage(clearImageData: false);
+      }
 
       return state.copyWith(
         hasChanges: true,
         loadedProject: Nullable(
-          state.loadedProject.value?.copyWith(project: atlas),
+          state.loadedProject.value?.copyWith(
+            project: atlas,
+            lastUsedImage: imagePath,
+          ),
         ),
       );
+    }
+
+    return state;
+  }
+}
+
+class QuickReplaceImageAction extends AsyncSlicesAction<FireAtlasState> {
+  @override
+  Future<FireAtlasState> perform(_, FireAtlasState state) async {
+    if (state.currentAtlas != null) {
+      final atlas = state.currentAtlas!;
+
+      final imagePath = state.loadedProject.value?.lastUsedImage;
+
+      if (imagePath != null) {
+        final storage = FireAtlasStorage();
+        final imageData = await storage.readImageData(imagePath);
+
+        final sameImage = (atlas.imageData == imageData);
+
+        if (!sameImage) {
+          Flame.images.clearCache();
+
+          atlas.imageData = imageData;
+          await atlas.loadImage(clearImageData: false);
+        }
+
+        return state.copyWith(
+          hasChanges: true,
+          loadedProject: Nullable(
+            state.loadedProject.value?.copyWith(
+              project: atlas,
+            ),
+          ),
+        );
+      }
     }
 
     return state;

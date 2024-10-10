@@ -16,6 +16,7 @@ class ChangeImageModal extends StatefulWidget {
 
 class _ChangeImageModalState extends State<ChangeImageModal> {
   String? _imageData;
+  late String? _imagePath;
   String? _imageName;
 
   @override
@@ -29,9 +30,14 @@ class _ChangeImageModalState extends State<ChangeImageModal> {
             margin: const EdgeInsets.all(30),
             imageData: _imageData,
             imageName: _imageName,
-            onSelectImage: (imageName, imageData) {
+            onSelectImage: ({
+              required imageName,
+              required imagePath,
+              required imageData,
+            }) {
               setState(() {
                 _imageData = imageData;
+                _imagePath = imagePath;
                 _imageName = imageName;
               });
             },
@@ -56,6 +62,7 @@ class _ChangeImageModalState extends State<ChangeImageModal> {
                 store.dispatchAsync(
                   UpdateAtlasImageAction(
                     imageData: _imageData!,
+                    imagePath: _imagePath,
                   ),
                 );
               },

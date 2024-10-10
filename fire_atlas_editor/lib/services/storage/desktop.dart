@@ -13,7 +13,8 @@ class FireAtlasStorage extends FireAtlasStorageApi {
     final file = File(path);
     final raw = await file.readAsBytes();
     final atlas = FireAtlas.deserializeBytes(raw);
-    return LoadedProjectEntry(path, atlas);
+    final lastUsedImage = await getProjectLastImageFile(atlas.id);
+    return LoadedProjectEntry(path, atlas, lastUsedImage);
   }
 
   @override
@@ -53,12 +54,42 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   }
 
   @override
+  Future<void> rememberProjectImageFile(
+    String projectId,
+    String imagePath,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('LAST_IMAGE_$projectId', imagePath);
+  }
+
+  @override
+  Future<String?> getProjectLastImageFile(String projectId) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('LAST_IMAGE_$projectId');
+  }
+
+  @override
   Future<LoadedProjectEntry> selectProject() async {
     const typeGroup = XTypeGroup(label: 'fire atlas', extensions: ['fa']);
     final file = await _selectDialog(typeGroup);
     final bytes = await file.readAsBytes();
     final atlas = FireAtlas.deserializeBytes(bytes);
-    return LoadedProjectEntry(file.path, atlas);
+
+    final lastImage = await getProjectLastImageFile(atlas.id);
+
+    return LoadedProjectEntry(
+      file.path,
+      atlas,
+      lastImage,
+    );
+  }
+
+  @override
+  Future<String> readImageData(String path) async {
+    final file = File(path);
+    final bytes = await file.readAsBytes();
+
+    return base64Encode(bytes);
   }
 
   @override
@@ -71,10 +102,14 @@ class FireAtlasStorage extends FireAtlasStorageApi {
   }
 
   @override
-  Future<(String, String)> selectFile() async {
+  Future<(String, String, String)> selectFile() async {
     final file = await _selectDialog();
     final bytes = await file.readAsBytes();
-    return (file.name, base64Encode(bytes));
+    return (
+      file.name,
+      file.path,
+      base64Encode(bytes),
+    );
   }
 
   Future<XFile> _selectDialog([XTypeGroup? typeGroup]) async {

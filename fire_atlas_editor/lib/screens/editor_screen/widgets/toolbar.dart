@@ -17,14 +17,20 @@ import 'package:slices/slices.dart';
 
 class _ToolbarSlice extends Equatable {
   final FireAtlas? currentAtlas;
+  final String? lastUsedImage;
   final bool hasChanges;
 
   _ToolbarSlice.fromState(FireAtlasState state)
       : currentAtlas = state.currentAtlas,
+        lastUsedImage = state.loadedProject.value?.lastUsedImage,
         hasChanges = state.hasChanges;
 
   @override
-  List<Object?> get props => [currentAtlas?.id, hasChanges];
+  List<Object?> get props => [
+        currentAtlas?.id,
+        lastUsedImage,
+        hasChanges,
+      ];
 }
 
 class Toolbar extends StatelessWidget {
@@ -91,6 +97,15 @@ class Toolbar extends StatelessWidget {
                       },
                       tooltip: 'Update base image',
                     ),
+                    if (!kIsWeb)
+                      FIconButton(
+                        disabled: slice.lastUsedImage == null,
+                        iconData: Icons.fireplace,
+                        onPress: () {
+                          store.dispatchAsync(QuickReplaceImageAction());
+                        },
+                        tooltip: 'Quick replace base image',
+                      ),
                     FIconButton(
                       iconData: Icons.add_photo_alternate,
                       onPress: () {
