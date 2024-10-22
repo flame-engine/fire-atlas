@@ -287,6 +287,49 @@ class RenameAtlasAction extends AsyncSlicesAction<FireAtlasState> {
   }
 }
 
+class RenameSelectionAction extends AsyncSlicesAction<FireAtlasState> {
+  final String oldName;
+  final String newName;
+
+  RenameSelectionAction({
+    required this.newName,
+    required this.oldName,
+  });
+
+  @override
+  Future<FireAtlasState> perform(
+    SlicesStore<FireAtlasState> store,
+    FireAtlasState state,
+  ) async {
+    final atlas = state.currentAtlas;
+    if (atlas == null) {
+      return state;
+    }
+
+    final selection = atlas.selections[oldName];
+    if (selection != null) {
+      final newSelection = selection.copyWithInfo(
+        selection.selection.copyWith(id: newName),
+      );
+
+      atlas.selections.remove(oldName);
+
+      atlas.selections[newName] = newSelection;
+
+      return state.copyWith(
+        hasChanges: true,
+        loadedProject: Nullable(
+          state.loadedProject.value?.copyWith(
+            project: atlas,
+          ),
+        ),
+      );
+    }
+
+    return state;
+  }
+}
+
 class LoadAtlasAction extends AsyncSlicesAction<FireAtlasState> {
   final String path;
 

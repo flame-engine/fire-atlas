@@ -173,18 +173,19 @@ packages:
     dependency: "direct main"
     description:
       name: flame
-      sha256: "79133dc46a3ff870950f41d0dc1598414e7bd7ae2c29bd9f0a9de208d9a70cb7"
+      sha256: baafe5c38075b60577db05e0421c12941695b246547d9aca95166def3f29e57f
       url: "https://pub.dev"
     source: hosted
-    version: "1.18.0"
+    version: "1.21.0"
   flame_fire_atlas:
     dependency: "direct main"
     description:
-      name: flame_fire_atlas
-      sha256: "27ad3bd6c37723d41a6079ea675d77e5ca52670f5a073ba12e0ee5b7b575082f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.5.3"
+      path: "packages/flame_fire_atlas"
+      ref: HEAD
+      resolved-ref: "291af57deb7d742a73438b026ca2f4fd1c6a3454"
+      url: "https://github.com/flame-engine/flame.git"
+    source: git
+    version: "1.6.0"
   flame_lint:
     dependency: "direct main"
     description:
@@ -284,10 +285,10 @@ packages:
     dependency: transitive
     description:
       name: ordered_set
-      sha256: "1bfaaaee0419e43ecc9eaebd410eb4bd5039657b72011de75ff3e2915c9aac60"
+      sha256: fc861bb51fc863cd3e0718e21768af9586e0d5022b91a0fd4437636456cdb7d0
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.3"
+    version: "6.1.1"
   path:
     dependency: transitive
     description:
