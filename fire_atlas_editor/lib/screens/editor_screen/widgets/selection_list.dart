@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:fire_atlas_editor/screens/editor_screen/widgets/delete_selection_modal.dart';
 import 'package:fire_atlas_editor/screens/editor_screen/widgets/edit_selection_folder_modal.dart';
+import 'package:fire_atlas_editor/screens/editor_screen/widgets/rename_selection_modal.dart';
 import 'package:fire_atlas_editor/screens/editor_screen/widgets/selection_canvas/selection_form.dart';
 import 'package:fire_atlas_editor/store/actions/atlas_actions.dart';
 import 'package:fire_atlas_editor/store/actions/editor_actions.dart';
@@ -16,18 +17,19 @@ class _SelectionListSlice extends Equatable {
   final FireAtlas? currentAtlas;
   final BaseSelection? selectedSelection;
 
-  final List<String?> _groups;
+  final List<(String, String?)> _selections;
 
   _SelectionListSlice(this.currentAtlas, this.selectedSelection)
-      : _groups =
-            currentAtlas?.selections.values.map((e) => e.group).toList() ??
-                const [];
+      : _selections = currentAtlas?.selections.values
+                .map((e) => (e.id, e.group))
+                .toList() ??
+            const [];
 
   @override
   List<Object?> get props => [
         currentAtlas?.id,
         selectedSelection?.id,
-        _groups,
+        _selections,
       ];
 }
 
@@ -232,6 +234,22 @@ class _SelectionEntry extends StatelessWidget {
                     );
                   },
                   tooltip: 'Move into Folder',
+                ),
+                FIconButton(
+                  iconData: Icons.drive_file_rename_outline_sharp,
+                  onPress: () {
+                    select(selection);
+                    store.dispatch(
+                      OpenEditorModal(
+                        RenameSelectionModal(
+                          currentName: selection.id,
+                        ),
+                        300,
+                        300,
+                      ),
+                    );
+                  },
+                  tooltip: 'Rename selection',
                 ),
                 FIconButton(
                   iconData: Icons.cancel,
